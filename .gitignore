@@ -1,3 +1,7 @@
+ignorefile1.txt
+ignorefile2.txt
+
+
 # Compiled class file
 *.class
 
