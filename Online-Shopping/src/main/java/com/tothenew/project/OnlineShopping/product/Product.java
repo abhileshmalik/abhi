@@ -18,10 +18,10 @@ public class Product {
     private Long product_id;
     private String productName;
     private String brand;
-    private String product_description;
-    private Boolean is_cancellable;
-    private Boolean is_returnable;
-    private Boolean is_active;
+    private String productDescription;
+    private Boolean isCancellable;
+    private Boolean isReturnable;
+    private Boolean isActive;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
@@ -59,36 +59,36 @@ public class Product {
         this.brand = brand;
     }
 
-    public String getProduct_description() {
-        return product_description;
+    public String getProductDescription() {
+        return productDescription;
     }
 
-    public void setProduct_description(String product_description) {
-        this.product_description = product_description;
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
     }
 
-    public Boolean getIs_cancellable() {
-        return is_cancellable;
+    public Boolean getIsCancellable() {
+        return isCancellable;
     }
 
-    public void setIs_cancellable(Boolean is_cancellable) {
-        this.is_cancellable = is_cancellable;
+    public void setIsCancellable(Boolean isCancellable) {
+        this.isCancellable = isCancellable;
     }
 
-    public Boolean getIs_returnable() {
-        return is_returnable;
+    public Boolean getIsReturnable() {
+        return isReturnable;
     }
 
-    public void setIs_returnable(Boolean is_returnable) {
-        this.is_returnable = is_returnable;
+    public void setIsReturnable(Boolean isReturnable) {
+        this.isReturnable = isReturnable;
     }
 
-    public Boolean getIs_active() {
-        return is_active;
+    public Boolean getIsActive() {
+        return isActive;
     }
 
-    public void setIs_active(Boolean is_active) {
-        this.is_active = is_active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public Category getCategory() {

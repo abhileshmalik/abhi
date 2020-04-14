@@ -104,9 +104,12 @@ public class UserController {
     }
 
     @GetMapping("/customer/home")
-    public String userHome(){
-        //System.out.println(appUser.getName());
-        return "Welcome Customer To Online Shopping Portal";
+    public Customer userHome(){
+        Customer customer = userDaoService.getLoggedInCustomer();
+
+        return customer;
+
+        /*return "Welcome Customer To Online Shopping Portal";*/
     }
 
 

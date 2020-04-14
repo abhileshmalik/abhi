@@ -16,18 +16,18 @@ public class Orders {
     @JoinColumn(name = "customer_user_id")
     private Customer customer;
 
-    private Double amount_paid;
+    private Double amountPaid;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date_created;
+    private Date dateCreated;
 
-    private String payment_method;
-    private String customer_address_city;
-    private String customer_address_state;
-    private String customer_address_country;
-    private String customer_address_address_line;
-    private String customer_address_zip_code;
-    private String customer_address_label;
+    private String paymentMethod;
+    private String customerAddressCity;
+    private String customerAddressState;
+    private String customerAddressCountry;
+    private String customerAddressAddressLine;
+    private String customerAddressZipCode;
+    private String customerAddressLabel;
 
 
     public Long getOrderId() {
@@ -38,77 +38,77 @@ public class Orders {
         this.orderId = orderId;
     }
 
-    public Double getAmount_paid() {
-        return amount_paid;
+    public Double getAmountPaid() {
+        return amountPaid;
     }
 
-    public void setAmount_paid(Double amount_paid) {
-        this.amount_paid = amount_paid;
+    public void setAmountPaid(Double amountPaid) {
+        this.amountPaid = amountPaid;
     }
 
-    public String getCustomer_address_zip_code() {
-        return customer_address_zip_code;
+    public String getCustomerAddressZipCode() {
+        return customerAddressZipCode;
     }
 
-    public void setCustomer_address_zip_code(String customer_address_zip_code) {
-        this.customer_address_zip_code = customer_address_zip_code;
+    public void setCustomerAddressZipCode(String customerAddressZipCode) {
+        this.customerAddressZipCode = customerAddressZipCode;
     }
 
-    public Date getDate_created() {
-        return date_created;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDate_created(Date date_created) {
-        this.date_created = date_created;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
-    public String getPayment_method() {
-        return payment_method;
+    public String getPaymentMethod() {
+        return paymentMethod;
     }
 
-    public void setPayment_method(String payment_method) {
-        this.payment_method = payment_method;
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
-    public String getCustomer_address_city() {
-        return customer_address_city;
+    public String getCustomerAddressCity() {
+        return customerAddressCity;
     }
 
-    public void setCustomer_address_city(String customer_address_city) {
-        this.customer_address_city = customer_address_city;
+    public void setCustomerAddressCity(String customerAddressCity) {
+        this.customerAddressCity = customerAddressCity;
     }
 
-    public String getCustomer_address_state() {
-        return customer_address_state;
+    public String getCustomerAddressState() {
+        return customerAddressState;
     }
 
-    public void setCustomer_address_state(String customer_address_state) {
-        this.customer_address_state = customer_address_state;
+    public void setCustomerAddressState(String customerAddressState) {
+        this.customerAddressState = customerAddressState;
     }
 
-    public String getCustomer_address_country() {
-        return customer_address_country;
+    public String getCustomerAddressCountry() {
+        return customerAddressCountry;
     }
 
-    public void setCustomer_address_country(String customer_address_country) {
-        this.customer_address_country = customer_address_country;
+    public void setCustomerAddressCountry(String customerAddressCountry) {
+        this.customerAddressCountry = customerAddressCountry;
     }
 
-    public String getCustomer_address_address_line() {
-        return customer_address_address_line;
+    public String getCustomerAddressAddressLine() {
+        return customerAddressAddressLine;
     }
 
-    public void setCustomer_address_address_line(String customer_address_address_line) {
-        this.customer_address_address_line = customer_address_address_line;
+    public void setCustomerAddressAddressLine(String customerAddressAddressLine) {
+        this.customerAddressAddressLine = customerAddressAddressLine;
     }
 
 
-    public String getCustomer_address_label() {
-        return customer_address_label;
+    public String getCustomerAddressLabel() {
+        return customerAddressLabel;
     }
 
-    public void setCustomer_address_label(String customer_address_label) {
-        this.customer_address_label = customer_address_label;
+    public void setCustomerAddressLabel(String customerAddressLabel) {
+        this.customerAddressLabel = customerAddressLabel;
     }
 
     public Customer getCustomer() {

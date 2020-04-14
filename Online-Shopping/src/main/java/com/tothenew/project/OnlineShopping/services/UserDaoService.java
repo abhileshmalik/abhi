@@ -7,6 +7,8 @@ import com.tothenew.project.OnlineShopping.security.GrantAuthorityImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -74,7 +76,7 @@ public class UserDaoService {
         User user = userRepository.findByUsername(username);
         System.out.println(user);
         if (username != null) {
-            return new AppUser(user.getUser_id(),user.getFirst_name(),user.getUsername(), user.getPassword(),user.getEnabled(),user.getNonLockedLocked(), Arrays.asList(new GrantAuthorityImpl(user.getRole())));
+            return new AppUser(user.getUser_id(),user.getFirstName(),user.getUsername(), user.getPassword(),user.getEnabled(),user.getNonLockedLocked(), Arrays.asList(new GrantAuthorityImpl(user.getRole())));
         } else {
             throw new RuntimeException();
         }
@@ -188,14 +190,27 @@ public class UserDaoService {
         else {
             return "Error! Please try again";
         }
-
-
-
     }
 
     @Modifying
     @Transactional
     public void deleteToken(String confirmationToken) {
         confirmationTokenRepository.deleteByConfirmationToken(confirmationToken);
+    }
+
+    public Customer getLoggedInCustomer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = (AppUser) authentication.getPrincipal();
+        String username = appUser.getUsername();
+        Customer customer = (Customer) userRepository.findByUsername(username);
+        return customer;
+    }
+
+    public Seller getLoggedInSeller() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = (AppUser) authentication.getPrincipal();
+        String username = appUser.getUsername();
+        Seller seller = (Seller) userRepository.findByUsername(username);
+        return seller;
     }
 }

@@ -66,11 +66,13 @@ public class ProductDaoService {
                 //category.setProducts(products);
 
                 products.forEach(e -> e.setCategory(category));
+                products.forEach(e-> e.setIsActive(true));
             }
             else
             {
                 throw new ResourceNotFoundException("Invalid Category name");
             }
+
 
             productRepository.saveAll(products);
             return products;

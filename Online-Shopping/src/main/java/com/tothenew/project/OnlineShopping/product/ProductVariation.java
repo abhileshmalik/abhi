@@ -1,6 +1,5 @@
 package com.tothenew.project.OnlineShopping.product;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -13,8 +12,8 @@ public class ProductVariation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long product_variant_id;
-    private String variant_name;
-    private Integer quantity_available;
+    private String variantName;
+    private Integer quantityAvailable;
     private Double price;
     private Boolean isActive;
 
@@ -32,12 +31,12 @@ public class ProductVariation {
         this.product_variant_id = product_variant_id;
     }
 
-    public Integer getQuantity_available() {
-        return quantity_available;
+    public Integer getQuantityAvailable() {
+        return quantityAvailable;
     }
 
-    public void setQuantity_available(Integer quantity_available) {
-        this.quantity_available = quantity_available;
+    public void setQuantityAvailable(Integer quantityAvailable) {
+        this.quantityAvailable = quantityAvailable;
     }
 
     public Double getPrice() {
@@ -48,12 +47,12 @@ public class ProductVariation {
         this.price = price;
     }
 
-    public String getVariant_name() {
-        return variant_name;
+    public String getVariantName() {
+        return variantName;
     }
 
-    public void setVariant_name(String variant_name) {
-        this.variant_name = variant_name;
+    public void setVariantName(String variantName) {
+        this.variantName = variantName;
     }
 
     public Boolean getActive() {

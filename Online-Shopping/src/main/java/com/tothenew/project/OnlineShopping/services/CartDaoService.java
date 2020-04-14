@@ -45,8 +45,8 @@ public class CartDaoService {
 
                 cart.setProductVariation(productVariation1);
 
-                cartRepository.save(cart);
 
+                cartRepository.save(cart);
                 return cart;
 
             }

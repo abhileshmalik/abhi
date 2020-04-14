@@ -16,9 +16,9 @@ public class Cart {
     @JoinColumn(name = "customer_user_id")
     private Customer customer;
 
-    Integer quantity;
+    private Integer quantity;
 
-    Boolean isWishlistItem;
+    private Boolean isWishlistItem;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_variation_id")

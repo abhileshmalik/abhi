@@ -12,7 +12,6 @@ import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.Optional;
 
@@ -50,23 +49,21 @@ public class OrderDaoService {
             orders.setCustomer(customer1);
 
             Address address = new Address();
-            String address_label = orders.getCustomer_address_label();
+            String address_label = orders.getCustomerAddressLabel();
             Optional<Address> address1 = addressRepository.findByAdd(address_label, customer_user_id);
             if (address1.isPresent()) {
                 address = address1.get();
 
-                orders.setCustomer_address_address_line(address.getHouse_number());
-                orders.setCustomer_address_city(address.getCity());
-                orders.setCustomer_address_country(address.getCountry());
-                orders.setCustomer_address_state(address.getState());
-                orders.setCustomer_address_zip_code(address.getZip_code());
-                orders.setDate_created(new Date());
-
-                orderRepository.save(orders);
+                orders.setCustomerAddressAddressLine(address.getAddressLine());
+                orders.setCustomerAddressCity(address.getCity());
+                orders.setCustomerAddressState(address.getState());
+                orders.setCustomerAddressCountry(address.getCountry());
+                orders.setCustomerAddressZipCode(address.getZipCode());
+                orders.setDateCreated(new Date());
 
             }
             else {
-                throw new ResourceNotFoundException("Address not found");
+                throw new ResourceNotFoundException("Address not found, Check Address Label");
             }
 
             Optional<Cart> cartId = cartRepository.findById(cart_id);
@@ -84,7 +81,18 @@ public class OrderDaoService {
 
                 orderProduct.setPrice(product_variation.getPrice());
 
+                Double amount = orderProduct.getPrice() * cart.getQuantity();
+                orders.setAmountPaid(amount);
+
+                Integer originalqty = product_variation.getQuantityAvailable();
+                Integer reducedqty = cart.getQuantity();
+
+
+                product_variation.setQuantityAvailable(originalqty-reducedqty);
+
+                productVariationRepository.save(product_variation);
                 orderProductRepository.save(orderProduct);
+                orderRepository.save(orders);
 
                 return orders;
             } else {

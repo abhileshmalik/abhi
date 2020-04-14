@@ -7,24 +7,24 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Seller extends User {
 
-    private String company_name;
-    private String company_contact;
+    private String companyName;
+    private String companyContact;
     private String gstin;
 
-    public String getCompany_name() {
-        return company_name;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setCompany_name(String company_name) {
-        this.company_name = company_name;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
-    public String getCompany_contact() {
-        return company_contact;
+    public String getCompanyContact() {
+        return companyContact;
     }
 
-    public void setCompany_contact(String company_contact) {
-        this.company_contact = company_contact;
+    public void setCompanyContact(String companyContact) {
+        this.companyContact = companyContact;
     }
 
     public String getGstin() {

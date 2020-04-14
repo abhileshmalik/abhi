@@ -11,17 +11,12 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
-    private String house_number;
-    private String area;
+    private String addressLine;
     private String city;
     private String state;
     private String country;
-    private String zip_code;
+    private String zipCode;
     private String label;
-
-/*    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;*/
 
     public Long getId() {
         return id;
@@ -31,12 +26,12 @@ public class Address {
         this.id = id;
     }
 
-    public String getHouse_number() {
-        return house_number;
+    public String getAddressLine() {
+        return addressLine;
     }
 
-    public void setHouse_number(String house_number) {
-        this.house_number = house_number;
+    public void setAddressLine(String addressLine) {
+        this.addressLine = addressLine;
     }
 
     public String getCity() {
@@ -63,12 +58,12 @@ public class Address {
         this.country = country;
     }
 
-    public String getZip_code() {
-        return zip_code;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setZip_code(String zip_code) {
-        this.zip_code = zip_code;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
     public String getLabel() {
@@ -79,19 +74,5 @@ public class Address {
         this.label = label;
     }
 
-    public String getArea() {
-        return area;
-    }
 
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-/*    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }*/
 }
