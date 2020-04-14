@@ -1,0 +1,13 @@
+package com.tothenew.project.OnlineShopping.repos;
+
+import com.tothenew.project.OnlineShopping.entities.ResetPasswordToken;
+import com.tothenew.project.OnlineShopping.entities.User;
+import org.springframework.data.repository.CrudRepository;
+
+public interface ResetPasswordRepository extends CrudRepository<ResetPasswordToken,Integer> {
+
+    ResetPasswordToken findByUser(User user);
+
+    ResetPasswordToken findByToken(String resetToken);
+
+}
