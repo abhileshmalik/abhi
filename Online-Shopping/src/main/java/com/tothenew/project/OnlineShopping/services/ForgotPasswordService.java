@@ -1,12 +1,12 @@
 package com.tothenew.project.OnlineShopping.services;
 
 import com.tothenew.project.OnlineShopping.dto.ForgotPasswordDto;
-import com.tothenew.project.OnlineShopping.entities.ResetPasswordToken;
 import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.exception.TokenExpiredException;
 import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
 import com.tothenew.project.OnlineShopping.repos.ResetPasswordRepository;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
+import com.tothenew.project.OnlineShopping.tokens.ResetPasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

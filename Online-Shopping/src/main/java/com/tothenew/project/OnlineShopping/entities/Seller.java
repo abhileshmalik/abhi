@@ -1,7 +1,7 @@
 package com.tothenew.project.OnlineShopping.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "user_id")
@@ -10,6 +10,7 @@ public class Seller extends User {
     private String companyName;
     private String companyContact;
     private String gstin;
+
 
     public String getCompanyName() {
         return companyName;
@@ -34,4 +35,5 @@ public class Seller extends User {
     public void setGstin(String gstin) {
         this.gstin = gstin;
     }
+
 }

@@ -1,9 +1,17 @@
 package com.tothenew.project.OnlineShopping.dto;
 
+import com.tothenew.project.OnlineShopping.validations.Password;
+import com.tothenew.project.OnlineShopping.validations.PasswordMatches;
+import javax.validation.constraints.NotNull;
+
+@PasswordMatches
 public class ForgotPasswordDto {
 
+    @NotNull
+    @Password
     private String password;
 
+    @NotNull
     private String confirmPassword;
 
     public String getPassword() {

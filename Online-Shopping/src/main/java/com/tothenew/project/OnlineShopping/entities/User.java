@@ -24,9 +24,11 @@ public class User {
     private Boolean isEnabled;
     private String role;
 
+    @JsonIgnore
+    private Integer attempts=0;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-//  @JsonIgnore
     private Set<Address> addresses;
 
     public Long getUser_id() {
@@ -93,14 +95,6 @@ public class User {
         isActive = active;
     }
 
-    public Set<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(Set<Address> addresses) {
-        this.addresses = addresses;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -131,6 +125,22 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(Set<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public Integer getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(Integer attempts) {
+        this.attempts = attempts;
     }
 
     /*    public void addAddresses(Address address) {

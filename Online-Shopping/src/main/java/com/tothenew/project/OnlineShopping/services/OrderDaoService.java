@@ -36,7 +36,7 @@ public class OrderDaoService {
     @Autowired
     private OrderProductRepository orderProductRepository;
 
-    public Orders addToOrder(Long customer_user_id, Orders orders, Long cart_id){
+    public Orders addToOrder(Orders orders, Long customer_user_id, Long cart_id){
 
         Optional<User> customer = userRepository.findById(customer_user_id);
         if(customer.isPresent()) {
@@ -86,7 +86,6 @@ public class OrderDaoService {
 
                 Integer originalqty = product_variation.getQuantityAvailable();
                 Integer reducedqty = cart.getQuantity();
-
 
                 product_variation.setQuantityAvailable(originalqty-reducedqty);
 

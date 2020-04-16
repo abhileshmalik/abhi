@@ -15,7 +15,7 @@ public class ProductVariation {
     private String variantName;
     private Integer quantityAvailable;
     private Double price;
-    private Boolean isActive;
+    private Boolean is_active;
 
 /*
     @ManyToOne
@@ -55,12 +55,12 @@ public class ProductVariation {
         this.variantName = variantName;
     }
 
-    public Boolean getActive() {
-        return isActive;
+    public Boolean getIs_active() {
+        return is_active;
     }
 
-    public void setActive(Boolean active) {
-        isActive = active;
+    public void setIs_active(Boolean is_active) {
+        this.is_active = is_active;
     }
 
     /*    public Product getProduct() {

@@ -1,5 +1,6 @@
-package com.tothenew.project.OnlineShopping.entities;
+package com.tothenew.project.OnlineShopping.tokens;
 
+import com.tothenew.project.OnlineShopping.entities.User;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -8,12 +9,13 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-public class ResetPasswordToken {
+public class ConfirmationToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer tokenId;
-    private String token;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long tokenId;
+
+    private String confirmationToken;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
@@ -25,33 +27,32 @@ public class ResetPasswordToken {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    public ResetPasswordToken() { }
+    public ConfirmationToken () { }
 
-    public ResetPasswordToken(User user) {
-
+    public ConfirmationToken(User user) {
         this.user = user;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Timestamp(calendar.getTime().getTime()));
         createdDate = new Date(calendar.getTime().getTime());
-        calendar.add(Calendar.HOUR,2);
+        calendar.add(Calendar.MINUTE,10);
         expiryDate = new Date(calendar.getTime().getTime());
-        token = UUID.randomUUID().toString();
+        confirmationToken = UUID.randomUUID().toString();
     }
 
-    public Integer getTokenId() {
+    public long getTokenId() {
         return tokenId;
     }
 
-    public void setTokenId(Integer tokenId) {
+    public void setTokenId(long tokenId) {
         this.tokenId = tokenId;
     }
 
-    public String getToken() {
-        return token;
+    public String getConfirmationToken() {
+        return confirmationToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setConfirmationToken(String confirmationToken) {
+        this.confirmationToken = confirmationToken;
     }
 
     public Date getCreatedDate() {
@@ -62,14 +63,6 @@ public class ResetPasswordToken {
         this.createdDate = createdDate;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public Date getExpiryDate() {
         return expiryDate;
     }
@@ -77,14 +70,13 @@ public class ResetPasswordToken {
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
-    public void calculateToken(){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
-        createdDate = new Date(calendar.getTime().getTime());
-        calendar.add(Calendar.HOUR,2);
-        expiryDate = new Date(calendar.getTime().getTime());
-        token = UUID.randomUUID().toString();
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

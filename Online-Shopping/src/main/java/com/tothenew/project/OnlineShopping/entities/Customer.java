@@ -1,7 +1,7 @@
 package com.tothenew.project.OnlineShopping.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "user_id")
@@ -16,4 +16,5 @@ public class Customer extends User{
     public void setContact(String contact) {
         this.contact = contact;
     }
+
 }

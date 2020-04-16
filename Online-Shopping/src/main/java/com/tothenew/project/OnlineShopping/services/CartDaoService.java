@@ -26,7 +26,8 @@ public class CartDaoService {
     @Autowired
     private ProductVariationRepository productVariationRepository;
 
-    public Cart addToCart(Long customer_user_id, Cart cart, Long productVariation_id) {
+
+    public Cart addToCart( Cart cart, Long customer_user_id, Long productVariation_id) {
 
         Optional<User> customer = userRepository.findById(customer_user_id);
         if (customer.isPresent()) {
@@ -43,12 +44,17 @@ public class CartDaoService {
                 ProductVariation productVariation1 = new ProductVariation();
                 productVariation1 = productVariation.get();
 
-                cart.setProductVariation(productVariation1);
-
-
-                cartRepository.save(cart);
-                return cart;
-
+                Integer qty = cart.getQuantity();
+                if(qty<productVariation1.getQuantityAvailable())
+                {
+                    cart.setProductVariation(productVariation1);
+                    cartRepository.save(cart);
+                    return cart;
+                }
+                else
+                {
+                    throw new ResourceNotFoundException("Ordered Quantity is greater than available stock in Warehouse.");
+                }
             }
             else {
                 throw new ResourceNotFoundException("Invalid Product Variation ID");

@@ -1,9 +1,14 @@
 package com.tothenew.project.OnlineShopping.services;
 
+import com.tothenew.project.OnlineShopping.dto.CustomerRegisterDto;
+import com.tothenew.project.OnlineShopping.dto.SellerRegisterDto;
 import com.tothenew.project.OnlineShopping.entities.*;
+import com.tothenew.project.OnlineShopping.exception.TokenExpiredException;
 import com.tothenew.project.OnlineShopping.repos.ConfirmationTokenRepository;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
 import com.tothenew.project.OnlineShopping.security.GrantAuthorityImpl;
+import com.tothenew.project.OnlineShopping.tokens.ConfirmationToken;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -83,10 +89,10 @@ public class UserDaoService {
 
     }
 
-    public String saveNewCustomer(Customer customer) {
+    public String saveNewCustomer(CustomerRegisterDto customerRegisterDto) {
 
-        User existingEmail = userRepository.findByEmailIgnoreCase(customer.getEmail());
-        User existingUsername = userRepository.findByUsername(customer.getUsername());
+        User existingEmail = userRepository.findByEmailIgnoreCase(customerRegisterDto.getEmail());
+        User existingUsername = userRepository.findByUsername(customerRegisterDto.getUsername());
 
         if(existingEmail != null)
         {
@@ -99,6 +105,9 @@ public class UserDaoService {
         }
         else
         {
+            ModelMapper modelMapper = new ModelMapper();
+            Customer customer= modelMapper.map(customerRegisterDto, Customer.class);
+
             String hpass = customer.getPassword();
             customer.setPassword(passwordEncoder.encode(hpass));
             customer.setDeleted(false);
@@ -126,10 +135,10 @@ public class UserDaoService {
         }
     }
 
-    public String saveNewSeller(Seller seller){
+    public String saveNewSeller(SellerRegisterDto sellerRegisterDto){
 
-        User existingEmail = userRepository.findByEmailIgnoreCase(seller.getEmail());
-        User existingUsername = userRepository.findByUsername(seller.getUsername());
+        User existingEmail = userRepository.findByEmailIgnoreCase(sellerRegisterDto.getEmail());
+        User existingUsername = userRepository.findByUsername(sellerRegisterDto.getUsername());
 
         if(existingEmail != null)
         {
@@ -142,6 +151,9 @@ public class UserDaoService {
         }
         else
         {
+            ModelMapper modelMapper = new ModelMapper();
+            Seller seller= modelMapper.map(sellerRegisterDto, Seller.class);
+
             String hpass = seller.getPassword();
             seller.setPassword(passwordEncoder.encode(hpass));
             seller.setDeleted(false);
@@ -169,34 +181,30 @@ public class UserDaoService {
         }
     }
 
-
+    @Transactional
     public String confirmUserAccount(String confirmationToken){
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
-        if(token != null)
-        {
-            User user = userRepository.findByEmailIgnoreCase(token.getUser().getEmail());
-            user.setEnabled(true);
 
-            //confirmationTokenRepository.deleteByConfirmationToken(confirmationToken);  //Deleting token for particular user
+        if (token != null) {
+            Date presentDate = new Date();
+            if (token.getExpiryDate().getTime() - presentDate.getTime() <= 0) {
+                throw new TokenExpiredException("Token has been expired");
+            } else {
+                User user = userRepository.findByEmailIgnoreCase(token.getUser().getEmail());
+                user.setEnabled(true);
+                userRepository.save(user);
+                confirmationTokenRepository.deleteConfirmationToken(confirmationToken);
 
-            userRepository.save(user);
-
-            deleteToken(confirmationToken);
-
-            return " Thank You," +
-                    " Your account is successfully verified ";
-
+                return " Thank You," +
+                        " Your account is successfully verified ";
+            }
         }
+
         else {
             return "Error! Please try again";
         }
     }
 
-    @Modifying
-    @Transactional
-    public void deleteToken(String confirmationToken) {
-        confirmationTokenRepository.deleteByConfirmationToken(confirmationToken);
-    }
 
     public Customer getLoggedInCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

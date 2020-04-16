@@ -18,7 +18,7 @@ public class Cart {
 
     private Integer quantity;
 
-    private Boolean isWishlistItem;
+    private Boolean is_wishlist_item;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_variation_id")
@@ -48,12 +48,12 @@ public class Cart {
         this.quantity = quantity;
     }
 
-    public Boolean getWishlistItem() {
-        return isWishlistItem;
+    public Boolean getIs_wishlist_item() {
+        return is_wishlist_item;
     }
 
-    public void setWishlistItem(Boolean wishlistItem) {
-        isWishlistItem = wishlistItem;
+    public void setIs_wishlist_item(Boolean is_wishlist_item) {
+        this.is_wishlist_item = is_wishlist_item;
     }
 
     public ProductVariation getProductVariation() {

@@ -1,5 +1,7 @@
 package com.tothenew.project.OnlineShopping.controller;
 
+import com.tothenew.project.OnlineShopping.dto.CustomerRegisterDto;
+import com.tothenew.project.OnlineShopping.dto.SellerRegisterDto;
 import com.tothenew.project.OnlineShopping.entities.AppUser;
 import com.tothenew.project.OnlineShopping.entities.Customer;
 import com.tothenew.project.OnlineShopping.entities.Seller;
@@ -11,6 +13,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -58,14 +61,14 @@ public class UserController {
     }
 
     @PostMapping(path = "/customerregistration")
-    public String createCustomer(@RequestBody Customer customer) {
-        String message = userDaoService.saveNewCustomer(customer);
+    public String createCustomer(@Valid @RequestBody CustomerRegisterDto customerRegisterDto) {
+        String message = userDaoService.saveNewCustomer(customerRegisterDto);
         return message;
     }
 
     @PostMapping(path = "/sellerregistration")
-    public String createSeller(@RequestBody Seller seller) {
-        String message = userDaoService.saveNewSeller(seller);
+    public String createSeller(@Valid @RequestBody SellerRegisterDto sellerRegisterDto) {
+        String message = userDaoService.saveNewSeller(sellerRegisterDto);
         return message;
     }
 
@@ -99,17 +102,26 @@ public class UserController {
 
     @GetMapping("/seller/home")
     public String sellerHome(){
-        //System.out.println(appUser.getUid());
         return "Welcome Seller To Online Shopping Portal";
     }
 
     @GetMapping("/customer/home")
-    public Customer userHome(){
-        Customer customer = userDaoService.getLoggedInCustomer();
+    public String customerHome(){
+        return "Welcome Customer To Online Shopping Portal";
+    }
 
+
+    @GetMapping("/seller/home/profile")
+    public Seller sellerProfile(){
+        Seller seller = userDaoService.getLoggedInSeller();
+        return seller;
+    }
+
+    @GetMapping("/customer/home/profile")
+    public Customer customerProfile(){
+        Customer customer = userDaoService.getLoggedInCustomer();
         return customer;
 
-        /*return "Welcome Customer To Online Shopping Portal";*/
     }
 
 
