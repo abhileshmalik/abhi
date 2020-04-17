@@ -8,6 +8,8 @@ import com.tothenew.project.OnlineShopping.services.ProductDaoService;
 import com.tothenew.project.OnlineShopping.product.Product;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -47,11 +49,14 @@ public class ProductController {
 
 
     @PostMapping("/save-product/category/{category_name}")
-    public void saveProduct(@RequestBody List<Product> products, @PathVariable String category_name){
+    public ResponseEntity<Object> saveProduct(@RequestBody List<Product> products, @PathVariable String category_name){
         Seller seller = userDaoService.getLoggedInSeller();
         Long seller_user_id = seller.getUser_id();
         List<Product> product1= productDaoService.addNewProduct(seller_user_id, products, category_name);
+
+        return new ResponseEntity<>(product1, HttpStatus.CREATED);
     }
+
 
 
     @GetMapping("/product/{product_id}")

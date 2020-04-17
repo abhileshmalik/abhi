@@ -1,11 +1,13 @@
 package com.tothenew.project.OnlineShopping.entities;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonFilter("userfilter")
 public class User {
 
     @Id
@@ -103,11 +105,11 @@ public class User {
         this.username = username;
     }
 
-    public Boolean getNonLockedLocked() {
+    public Boolean getNonLocked() {
         return isNonLocked;
     }
 
-    public void setNonLockedLocked(Boolean locked) {
+    public void setNonLocked(Boolean locked) {
         isNonLocked = locked;
     }
 

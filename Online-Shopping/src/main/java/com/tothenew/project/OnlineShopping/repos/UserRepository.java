@@ -3,6 +3,7 @@ package com.tothenew.project.OnlineShopping.repos;
 import com.tothenew.project.OnlineShopping.entities.Customer;
 import com.tothenew.project.OnlineShopping.entities.Seller;
 import com.tothenew.project.OnlineShopping.entities.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -17,10 +18,10 @@ public interface UserRepository extends CrudRepository<User, Long> {
     User findByEmailIgnoreCase(String email);
 
     @Query("from Customer")
-    List<Customer> findCustomers();
+    List<Customer> findCustomers(Pageable pageable);
 
     @Query("from Seller")
-    List<Seller> findSellers();
+    List<Seller> findSellers(Pageable pageable);
 
 
 }

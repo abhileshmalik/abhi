@@ -10,7 +10,7 @@ import com.tothenew.project.OnlineShopping.security.GrantAuthorityImpl;
 import com.tothenew.project.OnlineShopping.tokens.ConfirmationToken;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,13 +46,13 @@ public class UserDaoService {
         return users;
     }
 
-    public List<Customer> findAllCustomers() {
-        List<Customer> customers = (List<Customer>) userRepository.findCustomers();
+    public List<Customer> findAllCustomers(String page, String size) {
+        List<Customer> customers = (List<Customer>) userRepository.findCustomers(PageRequest.of(Integer.parseInt(page), Integer.parseInt(size)));
         return customers;
     }
 
-    public List<Seller> findAllSellers() {
-        List<Seller> sellers = (List<Seller>) userRepository.findSellers();
+    public List<Seller> findAllSellers(String page, String size) {
+        List<Seller> sellers = (List<Seller>) userRepository.findSellers(PageRequest.of(Integer.parseInt(page),Integer.parseInt(size)));
         return sellers;
     }
 
@@ -62,8 +62,9 @@ public class UserDaoService {
         user.setDeleted(false);
         user.setActive(true);
         user.setEnabled(true);
-        user.setNonLockedLocked(true);
-
+        user.setNonLocked(true);
+        user.setAttempts(0);
+        user.setRole("ROLE_ADMIN");
         userList.add(user);
         userRepository.save(user);
         return user;
@@ -82,7 +83,7 @@ public class UserDaoService {
         User user = userRepository.findByUsername(username);
         System.out.println(user);
         if (username != null) {
-            return new AppUser(user.getUser_id(),user.getFirstName(),user.getUsername(), user.getPassword(),user.getEnabled(),user.getNonLockedLocked(), Arrays.asList(new GrantAuthorityImpl(user.getRole())));
+            return new AppUser(user.getUser_id(),user.getFirstName(),user.getUsername(), user.getPassword(),user.getEnabled(),user.getNonLocked(), Arrays.asList(new GrantAuthorityImpl(user.getRole())));
         } else {
             throw new RuntimeException();
         }
@@ -113,7 +114,7 @@ public class UserDaoService {
             customer.setDeleted(false);
             customer.setActive(true);
             customer.setEnabled(false);
-            customer.setNonLockedLocked(true);
+            customer.setNonLocked(true);
             customer.setRole("ROLE_USER");
 
             userRepository.save(customer);
@@ -159,7 +160,7 @@ public class UserDaoService {
             seller.setDeleted(false);
             seller.setActive(true);
             seller.setEnabled(false);
-            seller.setNonLockedLocked(true);
+            seller.setNonLocked(true);
             seller.setRole("ROLE_SELLER");
 
             userRepository.save(seller);

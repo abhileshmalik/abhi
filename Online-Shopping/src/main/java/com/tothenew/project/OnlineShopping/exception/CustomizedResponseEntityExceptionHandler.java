@@ -33,14 +33,20 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public final ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),request.getDescription(false));
 
         return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(LockedException.class)
+    public final ResponseEntity<Object> handleLockedException(LockedException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),request.getDescription(false));
+
+        return new ResponseEntity(exceptionResponse, HttpStatus.LOCKED);
+    }
+
     @ExceptionHandler(TokenExpiredException.class)
-    public final ResponseEntity<Object> handleTokenExpiredException(ResourceNotFoundException ex, WebRequest request){
+    public final ResponseEntity<Object> handleTokenExpiredException(TokenExpiredException ex, WebRequest request){
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),request.getDescription(false));
 
         return new ResponseEntity(exceptionResponse, HttpStatus.SERVICE_UNAVAILABLE);

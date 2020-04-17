@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.tothenew.project.OnlineShopping.services.CategoryDaoService;
 import com.tothenew.project.OnlineShopping.product.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +19,7 @@ public class CategoryController {
     @Autowired
     private CategoryDaoService categoryDaoService;
 
-   // @GetMapping("/category")
+    //@GetMapping("/category")
     public List<Category> retrieveAllCategories() {
         return categoryDaoService.findAll();
     }
@@ -38,13 +40,17 @@ public class CategoryController {
     }
 
     @PostMapping("/add-category")
-    public void saveCategory(@RequestBody Category category){
+    public ResponseEntity<Object> saveCategory(@RequestBody Category category){
         Category category1= categoryDaoService.saveNewCategory(category);
+
+        return new ResponseEntity<>(category1, HttpStatus.CREATED);
     }
 
     @PostMapping("/add-category/{parentCategory}")
-    public void saveSubCategory(@PathVariable String parentCategory, @RequestBody List<Category> subCategory){
+    public ResponseEntity<Object> saveSubCategory(@PathVariable String parentCategory, @RequestBody List<Category> subCategory){
         List<Category> category1= categoryDaoService.saveNewSubCategory(parentCategory, subCategory);
+
+        return new ResponseEntity<>(category1, HttpStatus.CREATED);
     }
 
 

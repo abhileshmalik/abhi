@@ -73,7 +73,7 @@ public class ForgotPasswordService {
             String pass = forgotPasswordDto.getPassword();
             user.setPassword(passwordEncoder.encode(pass));
             user.setEnabled(true);
-            user.setNonLockedLocked(true);
+            user.setNonLocked(true);
             userRepository.save(user);
             String emailId = user.getEmail();
             String subject = "Password Updated !!";
