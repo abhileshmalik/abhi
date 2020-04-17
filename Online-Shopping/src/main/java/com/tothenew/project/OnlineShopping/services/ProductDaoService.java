@@ -43,7 +43,7 @@ public class ProductDaoService {
     }*/
 
 
-    public List<Product> addNewProduct(Long seller_user_id,List<Product> products, String category_name){
+    public String addNewProduct(Long seller_user_id,List<Product> products, String category_name){
 
         Optional<User> seller=userRepository.findById(seller_user_id);
         if (seller.isPresent()) {
@@ -75,7 +75,7 @@ public class ProductDaoService {
 
 
             productRepository.saveAll(products);
-            return products;
+            return " Products Added Successfully ";
         }
         else
             throw new UserNotFoundException("Invalid Seller ID");

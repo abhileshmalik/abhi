@@ -24,12 +24,12 @@ public class CategoryDaoService {
         return categoryRepository.findAllSubCategories();
     }
 
-    public Category saveNewCategory(Category category) {
+    public String saveNewCategory(Category category) {
         categoryRepository.save(category);
-        return category;
+        return "Category Added Successfully";
     }
 
-    public List<Category> saveNewSubCategory(String parentCategory, List<Category> subCategory){
+    public String saveNewSubCategory(String parentCategory, List<Category> subCategory){
         Optional<Category> parent_Category=categoryRepository.findByName(parentCategory);
 
         Category category=new Category();
@@ -41,7 +41,7 @@ public class CategoryDaoService {
         subCategory.forEach(e->e.setSubcategory(finalCategory));
 
         categoryRepository.saveAll(subCategory);
-        return subCategory;
+        return "Sub-Category Added Successfully";
     }
 
 }

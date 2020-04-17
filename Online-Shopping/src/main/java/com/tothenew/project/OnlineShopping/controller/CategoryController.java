@@ -30,26 +30,26 @@ public class CategoryController {
 
     @GetMapping("/productcategories")
     public MappingJacksonValue retrieveCategoryList() {
-        SimpleBeanPropertyFilter filter2 = SimpleBeanPropertyFilter.filterOutAllExcept("name");
-        FilterProvider filterProvider = new SimpleFilterProvider().addFilter("categoryfilter",filter2);
+        SimpleBeanPropertyFilter filter5 = SimpleBeanPropertyFilter.filterOutAllExcept("name");
+        FilterProvider filterProvider5 = new SimpleFilterProvider().addFilter("categoryfilter",filter5);
 
-        MappingJacksonValue mapping=new MappingJacksonValue(retrieveAllSubCategories());
-        mapping.setFilters(filterProvider);
+        MappingJacksonValue mapping5=new MappingJacksonValue(retrieveAllSubCategories());
+        mapping5.setFilters(filterProvider5);
 
-        return mapping;
+        return mapping5;
     }
 
     @PostMapping("/add-category")
     public ResponseEntity<Object> saveCategory(@RequestBody Category category){
-        Category category1= categoryDaoService.saveNewCategory(category);
-        return new ResponseEntity<>(category1, HttpStatus.CREATED);
+        String message= categoryDaoService.saveNewCategory(category);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
     @PostMapping("/add-category/{parentCategory}")
     public ResponseEntity<Object> saveSubCategory(@PathVariable String parentCategory, @RequestBody List<Category> subCategory){
-        List<Category> category1= categoryDaoService.saveNewSubCategory(parentCategory, subCategory);
+        String message = categoryDaoService.saveNewSubCategory(parentCategory, subCategory);
 
-        return new ResponseEntity<>(category1, HttpStatus.CREATED);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
 

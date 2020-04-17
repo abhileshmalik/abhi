@@ -104,20 +104,20 @@ public class UserController {
                 "lastName","username", "contact","isActive","isNonLocked");
 
         FilterProvider filterProvider1 = new SimpleFilterProvider().addFilter("userfilter",filter1);
-        MappingJacksonValue mapping = new MappingJacksonValue(customerProfile());
-        mapping.setFilters(filterProvider1);
+        MappingJacksonValue mapping1 = new MappingJacksonValue(customerProfile());
+        mapping1.setFilters(filterProvider1);
 
-        return mapping;
+        return mapping1;
     }
 
     @GetMapping("/customer/home/profile/address")
     public MappingJacksonValue customeraddressview() {
-        SimpleBeanPropertyFilter filter1 = SimpleBeanPropertyFilter.filterOutAllExcept("addresses");
+        SimpleBeanPropertyFilter filter2 = SimpleBeanPropertyFilter.filterOutAllExcept("addresses");
 
-        FilterProvider filterProvider1 = new SimpleFilterProvider().addFilter("userfilter",filter1);
-        MappingJacksonValue mapping = new MappingJacksonValue(customerProfile());
-        mapping.setFilters(filterProvider1);
-        return mapping;
+        FilterProvider filterProvider2 = new SimpleFilterProvider().addFilter("userfilter",filter2);
+        MappingJacksonValue mapping2 = new MappingJacksonValue(customerProfile());
+        mapping2.setFilters(filterProvider2);
+        return mapping2;
     }
 
 

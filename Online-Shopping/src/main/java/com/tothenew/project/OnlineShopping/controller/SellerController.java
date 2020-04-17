@@ -48,10 +48,10 @@ public class SellerController {
     @GetMapping("/seller/home/profile")
     public MappingJacksonValue sellerprofileview() {
 
-        SimpleBeanPropertyFilter filter1 = SimpleBeanPropertyFilter.filterOutAllExcept("email","firstName","middleName",
+        SimpleBeanPropertyFilter filter8 = SimpleBeanPropertyFilter.filterOutAllExcept("email","firstName","middleName",
                 "lastName","username", "companyName", "companyContact", "gstin","isActive","isNonLocked");
 
-        FilterProvider filterProvider1 = new SimpleFilterProvider().addFilter("userfilter",filter1);
+        FilterProvider filterProvider1 = new SimpleFilterProvider().addFilter("userfilter",filter8);
         MappingJacksonValue mapping = new MappingJacksonValue(sellerProfile());
         mapping.setFilters(filterProvider1);
 
@@ -60,9 +60,9 @@ public class SellerController {
 
     @GetMapping("/seller/home/profile/address")
     public MappingJacksonValue selleraddressview() {
-        SimpleBeanPropertyFilter filter1 = SimpleBeanPropertyFilter.filterOutAllExcept("addresses");
+        SimpleBeanPropertyFilter filter9 = SimpleBeanPropertyFilter.filterOutAllExcept("addresses");
 
-        FilterProvider filterProvider1 = new SimpleFilterProvider().addFilter("userfilter",filter1);
+        FilterProvider filterProvider1 = new SimpleFilterProvider().addFilter("userfilter",filter9);
         MappingJacksonValue mapping = new MappingJacksonValue(sellerProfile());
         mapping.setFilters(filterProvider1);
         return mapping;

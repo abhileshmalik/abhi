@@ -53,28 +53,28 @@ public class UserDaoService {
     public MappingJacksonValue findAllCustomers(String page, String size) {
         List<Customer> customers = (List<Customer>) userRepository.findCustomers(PageRequest.of(Integer.parseInt(page), Integer.parseInt(size)));
 
-        SimpleBeanPropertyFilter filter1=SimpleBeanPropertyFilter.filterOutAllExcept("user_id","firstName","middleName",
+        SimpleBeanPropertyFilter filter3=SimpleBeanPropertyFilter.filterOutAllExcept("user_id","firstName","middleName",
                 "lastName","email","isActive","contact", "isNonLocked", "isEnabled");
 
-        FilterProvider filterProvider=new SimpleFilterProvider().addFilter("userFilter",filter1);
+        FilterProvider filterProvider4=new SimpleFilterProvider().addFilter("userfilter",filter3);
 
-        MappingJacksonValue mapping=new MappingJacksonValue(customers);
-        mapping.setFilters(filterProvider);
-        return mapping;
+        MappingJacksonValue mapping3=new MappingJacksonValue(customers);
+        mapping3.setFilters(filterProvider4);
+        return mapping3;
     }
 
     public MappingJacksonValue findAllSellers(String page, String size) {
         List<Seller> sellers = (List<Seller>) userRepository.findSellers(PageRequest.of(Integer.parseInt(page),Integer.parseInt(size)));
 
-        SimpleBeanPropertyFilter filter2=SimpleBeanPropertyFilter.filterOutAllExcept("user_id","firstName","middleName",
+        SimpleBeanPropertyFilter filter4=SimpleBeanPropertyFilter.filterOutAllExcept("user_id","firstName","middleName",
                 "lastName","email","isActive","companyName","companyContact","gstin", "isNonLocked", "isEnabled");
 
-        FilterProvider filterProvider=new SimpleFilterProvider().addFilter("userFilter",filter2);
+        FilterProvider filterProvider4=new SimpleFilterProvider().addFilter("userfilter",filter4);
 
-        MappingJacksonValue mapping=new MappingJacksonValue(sellers);
-        mapping.setFilters(filterProvider);
+        MappingJacksonValue mapping4=new MappingJacksonValue(sellers);
+        mapping4.setFilters(filterProvider4);
 
-        return mapping;
+        return mapping4;
     }
 
     public User saveNewUser(User user) {

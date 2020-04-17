@@ -35,16 +35,16 @@ public class ProductController {
     @GetMapping("/products/{category_name}")
     public MappingJacksonValue retrieveProductList(@PathVariable String category_name) {
 
-        SimpleBeanPropertyFilter filter1 = SimpleBeanPropertyFilter.filterOutAllExcept("productName","brand",
+        SimpleBeanPropertyFilter filter6 = SimpleBeanPropertyFilter.filterOutAllExcept("productName","brand",
                 "productDescription","isCancellable","isReturnable","variations");
 
-        FilterProvider filterProvider1 = new SimpleFilterProvider().addFilter("productfilter",filter1);
+        FilterProvider filterProvider7 = new SimpleFilterProvider().addFilter("productfilter",filter6);
 
-        MappingJacksonValue mapping = new MappingJacksonValue(findCategorywiseProducts(category_name));
+        MappingJacksonValue mapping6 = new MappingJacksonValue(findCategorywiseProducts(category_name));
 
-        mapping.setFilters(filterProvider1);
+        mapping6.setFilters(filterProvider7);
 
-        return mapping;
+        return mapping6;
     }
 
 
@@ -52,24 +52,24 @@ public class ProductController {
     public ResponseEntity<Object> saveProduct(@RequestBody List<Product> products, @PathVariable String category_name){
         Seller seller = userDaoService.getLoggedInSeller();
         Long seller_user_id = seller.getUser_id();
-        List<Product> product1= productDaoService.addNewProduct(seller_user_id, products, category_name);
+        String message = productDaoService.addNewProduct(seller_user_id, products, category_name);
 
-        return new ResponseEntity<>(product1, HttpStatus.CREATED);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
 
 
     @GetMapping("/product/{product_id}")
     public MappingJacksonValue retrieveProduct(@PathVariable Long product_id) {
-        SimpleBeanPropertyFilter filter3 = SimpleBeanPropertyFilter.filterOutAllExcept("productName","brand",
+        SimpleBeanPropertyFilter filter7 = SimpleBeanPropertyFilter.filterOutAllExcept("productName","brand",
                 "productDescription","isCancellable","isReturnable","variations");
 
-        FilterProvider filterProvider = new SimpleFilterProvider().addFilter("productfilter",filter3);
+        FilterProvider filterProvider7 = new SimpleFilterProvider().addFilter("productfilter",filter7);
 
-        MappingJacksonValue mapping1=new MappingJacksonValue(viewProduct(product_id));
-        mapping1.setFilters(filterProvider);
+        MappingJacksonValue mapping7=new MappingJacksonValue(viewProduct(product_id));
+        mapping7.setFilters(filterProvider7);
 
-        return mapping1;
+        return mapping7;
     }
 
     public Product viewProduct(Long product_id) {
