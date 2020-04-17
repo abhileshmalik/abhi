@@ -4,6 +4,7 @@ import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
 import com.tothenew.project.OnlineShopping.services.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,9 +15,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.Collections;
 
+@Configuration
 public class LockAuthenticationManager implements AuthenticationProvider {
 
     @Autowired

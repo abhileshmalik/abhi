@@ -26,8 +26,8 @@ public class AppUserDetailsService implements UserDetailsService {
         System.out.println("Trying to authenticate user ::" + username);
         //System.out.println("Encrypted Password ::"+encryptedPassword);
         appUser = userDao.loadUserByUsername(username);
-        System.out.println(appUser.getUid());
-        System.out.println(appUser.getName());
+       // System.out.println(appUser.getUid());
+       // System.out.println(appUser.getName());
 
         return appUser;
     }

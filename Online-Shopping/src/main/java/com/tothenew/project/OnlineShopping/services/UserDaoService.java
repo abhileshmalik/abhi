@@ -1,5 +1,8 @@
 package com.tothenew.project.OnlineShopping.services;
 
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.tothenew.project.OnlineShopping.dto.CustomerRegisterDto;
 import com.tothenew.project.OnlineShopping.dto.SellerRegisterDto;
 import com.tothenew.project.OnlineShopping.entities.*;
@@ -11,6 +14,7 @@ import com.tothenew.project.OnlineShopping.tokens.ConfirmationToken;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,14 +50,31 @@ public class UserDaoService {
         return users;
     }
 
-    public List<Customer> findAllCustomers(String page, String size) {
+    public MappingJacksonValue findAllCustomers(String page, String size) {
         List<Customer> customers = (List<Customer>) userRepository.findCustomers(PageRequest.of(Integer.parseInt(page), Integer.parseInt(size)));
-        return customers;
+
+        SimpleBeanPropertyFilter filter1=SimpleBeanPropertyFilter.filterOutAllExcept("user_id","firstName","middleName",
+                "lastName","email","isActive","contact", "isNonLocked", "isEnabled");
+
+        FilterProvider filterProvider=new SimpleFilterProvider().addFilter("userFilter",filter1);
+
+        MappingJacksonValue mapping=new MappingJacksonValue(customers);
+        mapping.setFilters(filterProvider);
+        return mapping;
     }
 
-    public List<Seller> findAllSellers(String page, String size) {
+    public MappingJacksonValue findAllSellers(String page, String size) {
         List<Seller> sellers = (List<Seller>) userRepository.findSellers(PageRequest.of(Integer.parseInt(page),Integer.parseInt(size)));
-        return sellers;
+
+        SimpleBeanPropertyFilter filter2=SimpleBeanPropertyFilter.filterOutAllExcept("user_id","firstName","middleName",
+                "lastName","email","isActive","companyName","companyContact","gstin", "isNonLocked", "isEnabled");
+
+        FilterProvider filterProvider=new SimpleFilterProvider().addFilter("userFilter",filter2);
+
+        MappingJacksonValue mapping=new MappingJacksonValue(sellers);
+        mapping.setFilters(filterProvider);
+
+        return mapping;
     }
 
     public User saveNewUser(User user) {
@@ -69,15 +90,6 @@ public class UserDaoService {
         userRepository.save(user);
         return user;
     }
-
-/*    public Customer createNewCustomer (Customer customer1) {
-        String hpass = customer1.getPassword();
-        customer1.setPassword(passwordEncoder.encode(hpass));
-        customer1.setRole("ROLE_USER");
-        customerList.add(customer1);
-        userRepository.save(customer1);
-        return customer1;
-    }*/
 
     public AppUser loadUserByUsername(String username) {
         User user = userRepository.findByUsername(username);

@@ -42,7 +42,6 @@ public class CategoryController {
     @PostMapping("/add-category")
     public ResponseEntity<Object> saveCategory(@RequestBody Category category){
         Category category1= categoryDaoService.saveNewCategory(category);
-
         return new ResponseEntity<>(category1, HttpStatus.CREATED);
     }
 
