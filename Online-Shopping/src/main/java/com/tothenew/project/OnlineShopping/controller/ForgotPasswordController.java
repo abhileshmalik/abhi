@@ -1,6 +1,6 @@
 package com.tothenew.project.OnlineShopping.controller;
 
-import com.tothenew.project.OnlineShopping.dto.ForgotPasswordDto;
+import com.tothenew.project.OnlineShopping.model.ForgotPasswordModel;
 import com.tothenew.project.OnlineShopping.services.ForgotPasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +18,8 @@ public class ForgotPasswordController {
     }
 
     @PutMapping("/reset-password")
-    public String setPassword(@RequestParam("token") String resetToken, @RequestBody ForgotPasswordDto forgotPasswordDto){
-        String message =forgotPasswordService.updatePassword(resetToken,forgotPasswordDto);
+    public String setPassword(@RequestParam("token") String resetToken, @RequestBody ForgotPasswordModel forgotPasswordModel){
+        String message =forgotPasswordService.updatePassword(resetToken, forgotPasswordModel);
         return message;
     }
 

@@ -3,8 +3,10 @@ package com.tothenew.project.OnlineShopping.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.tothenew.project.OnlineShopping.model.MetadataFieldValueInsertModel;
 import com.tothenew.project.OnlineShopping.services.CategoryDaoService;
 import com.tothenew.project.OnlineShopping.product.Category;
+import com.tothenew.project.OnlineShopping.services.CategoryMetadataFieldService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryDaoService categoryDaoService;
+
+    @Autowired
+    private CategoryMetadataFieldService categoryMetadataFieldService;
 
     //@GetMapping("/category")
     public List<Category> retrieveAllCategories() {
@@ -52,5 +57,15 @@ public class CategoryController {
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
+
+    @PostMapping("/metadata-fields/add")
+    public String addMetaDataField(@RequestParam String fieldName) {
+        return categoryMetadataFieldService.addNewMetadataField(fieldName);
+    }
+
+    @PostMapping("/metadata-fields/addValues/{categoryId}/{metaFieldId}")
+    public String addMetaDataFieldValues(@RequestBody MetadataFieldValueInsertModel fieldValueDtos, @PathVariable Long categoryId, @PathVariable Long metaFieldId) {
+        return categoryMetadataFieldService.addNewMetadataFieldValues(fieldValueDtos, categoryId, metaFieldId);
+    }
 
 }

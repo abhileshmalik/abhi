@@ -1,15 +1,17 @@
-package com.tothenew.project.OnlineShopping.dto;
+package com.tothenew.project.OnlineShopping.model;
 
 import com.tothenew.project.OnlineShopping.entities.Address;
-import com.tothenew.project.OnlineShopping.validations.*;
+import com.tothenew.project.OnlineShopping.validations.Email;
+import com.tothenew.project.OnlineShopping.validations.Password;
+import com.tothenew.project.OnlineShopping.validations.PasswordMatches;
+import com.tothenew.project.OnlineShopping.validations.Phone;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
 @PasswordMatches
-public class SellerRegisterDto {
+public class CustomerRegisterModel {
 
     @NotNull
     @Column(unique = true)
@@ -24,11 +26,13 @@ public class SellerRegisterDto {
     private String lastName;
 
     @Email
+    @Column(unique = true)
     private String email;
 
-    @NotNull
-    @Size(max = 1, message = "Only one address is required")
     private Set<Address> addresses;
+
+    @Phone
+    private String contact;
 
     @NotNull
     @Password
@@ -36,18 +40,6 @@ public class SellerRegisterDto {
 
     @NotNull
     private String confirmPassword;
-
-    @NotNull
-    @Column(unique = true)
-    @GST
-    private String gstin;
-
-    @NotNull
-    @Column(unique = true)
-    private String companyName;
-
-    @Phone
-    private String companyContact;
 
     public String getUsername() {
         return username;
@@ -89,6 +81,14 @@ public class SellerRegisterDto {
         this.email = email;
     }
 
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
     public Set<Address> getAddresses() {
         return addresses;
     }
@@ -111,29 +111,5 @@ public class SellerRegisterDto {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
-    }
-
-    public String getGstin() {
-        return gstin;
-    }
-
-    public void setGstin(String gstin) {
-        this.gstin = gstin;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getCompanyContact() {
-        return companyContact;
-    }
-
-    public void setCompanyContact(String companyContact) {
-        this.companyContact = companyContact;
     }
 }

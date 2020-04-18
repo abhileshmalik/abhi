@@ -1,6 +1,6 @@
 package com.tothenew.project.OnlineShopping.services;
 
-import com.tothenew.project.OnlineShopping.dto.ForgotPasswordDto;
+import com.tothenew.project.OnlineShopping.model.ForgotPasswordModel;
 import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.exception.TokenExpiredException;
 import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
@@ -56,7 +56,7 @@ public class ForgotPasswordService {
         return "A link has been sent to your email for password reset.";
     }
 
-    public String updatePassword(String resetToken, ForgotPasswordDto forgotPasswordDto){
+    public String updatePassword(String resetToken, ForgotPasswordModel forgotPasswordModel){
         ResetPasswordToken resetPasswordToken= resetPasswordRepository.findByToken(resetToken);
 
         if(resetPasswordToken==null) {
@@ -70,7 +70,7 @@ public class ForgotPasswordService {
         else {
             User user = userRepository.findByEmailIgnoreCase(resetPasswordToken.getUser().getEmail());
 
-            String pass = forgotPasswordDto.getPassword();
+            String pass = forgotPasswordModel.getPassword();
             user.setPassword(passwordEncoder.encode(pass));
             user.setEnabled(true);
             user.setNonLocked(true);

@@ -27,7 +27,7 @@ public class AdminDaoService {
         if (user1.isPresent()) {
             User user = user1.get();
 
-            if (user.getActive() == false) {
+            if (!user.getActive()) {                    //Check if its false
                 user.setActive(true);
                 userRepository.save(user);
                 SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -55,7 +55,7 @@ public class AdminDaoService {
         if (user1.isPresent()) {
 
             User user = user1.get();
-            if(user.getActive()==true)
+            if(user.getActive())
             {
                 user.setActive(false);
                 userRepository.save(user);

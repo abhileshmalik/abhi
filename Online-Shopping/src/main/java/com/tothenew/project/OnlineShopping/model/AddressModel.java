@@ -1,6 +1,6 @@
-package com.tothenew.project.OnlineShopping.dto;
+package com.tothenew.project.OnlineShopping.model;
 
-public class AddressDto {
+public class AddressModel {
 
     private String addressLine;
     private String city;

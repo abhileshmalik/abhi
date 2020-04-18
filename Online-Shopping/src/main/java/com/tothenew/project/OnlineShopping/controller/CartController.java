@@ -26,8 +26,8 @@ public class CartController {
         Customer customer = userDaoService.getLoggedInCustomer();
         Long customer_user_id = customer.getUser_id();
 
-        Cart cart1= cartDaoService.addToCart(cart, customer_user_id, productVariation_id);
+        String message = cartDaoService.addToCart(cart, customer_user_id, productVariation_id);
 
-        return new ResponseEntity<>(cart1, HttpStatus.CREATED);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 }

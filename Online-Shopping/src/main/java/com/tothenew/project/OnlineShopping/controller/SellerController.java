@@ -3,13 +3,15 @@ package com.tothenew.project.OnlineShopping.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.tothenew.project.OnlineShopping.dto.AddressDto;
-import com.tothenew.project.OnlineShopping.dto.SellerRegisterDto;
-import com.tothenew.project.OnlineShopping.dto.SellerUpdateDto;
+import com.tothenew.project.OnlineShopping.model.AddressModel;
+import com.tothenew.project.OnlineShopping.model.SellerRegisterModel;
+import com.tothenew.project.OnlineShopping.model.SellerUpdateModel;
 import com.tothenew.project.OnlineShopping.entities.Seller;
 import com.tothenew.project.OnlineShopping.services.SellerDaoService;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -27,16 +29,22 @@ public class SellerController {
     @Autowired
     private SellerDaoService sellerDaoService;
 
+    @Autowired
+    private MessageSource messageSource;
 
     @PostMapping(path = "/sellerregistration")
-    public ResponseEntity<Object> createSeller(@Valid @RequestBody SellerRegisterDto sellerRegisterDto) {
-        String message = userDaoService.saveNewSeller(sellerRegisterDto);
+    public ResponseEntity<Object> createSeller(@Valid @RequestBody SellerRegisterModel sellerRegisterModel) {
+        String message = userDaoService.saveNewSeller(sellerRegisterModel);
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
     @GetMapping("/seller/home")
     public String sellerHome(){
-        return "Welcome Seller To Online Shopping Portal";
+        Seller seller = userDaoService.getLoggedInSeller();
+        String name = seller.getFirstName();
+        return messageSource.getMessage("welcome.message",new Object[]{name}, LocaleContextHolder.getLocale());
+
+       // return "Welcome Seller To Online Shopping Portal";
     }
 
 
@@ -69,11 +77,11 @@ public class SellerController {
     }
 
     @PatchMapping("/seller/updateProfile")
-    public String updateSellerDetails(@RequestBody SellerUpdateDto sellerUpdateDto, HttpServletResponse response){
+    public String updateSellerDetails(@RequestBody SellerUpdateModel sellerUpdateModel, HttpServletResponse response){
         Seller seller= userDaoService.getLoggedInSeller();
         Long id = seller.getUser_id();
 
-        String message = sellerDaoService.updateSeller(sellerUpdateDto,id);
+        String message = sellerDaoService.updateSeller(sellerUpdateModel,id);
         if (!message.equals("Profile updated successfully")) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return "Error";
@@ -82,12 +90,12 @@ public class SellerController {
             return message;
     }
 
-    @PutMapping("/seller/updateProfile/address{address_id}")
-    public String updateCustomerAddress(@RequestBody AddressDto addressDto, @PathVariable Long address_id, HttpServletResponse response)
+    @PutMapping("/seller/updateProfile/address/{address_id}")
+    public String updateCustomerAddress(@RequestBody AddressModel addressModel, @PathVariable Long address_id, HttpServletResponse response)
     {
         Seller seller= userDaoService.getLoggedInSeller();
 
-        String message = sellerDaoService.updateAddress(addressDto,address_id);
+        String message = sellerDaoService.updateAddress(addressModel,address_id);
         if (!message.equals("Address updated")) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }

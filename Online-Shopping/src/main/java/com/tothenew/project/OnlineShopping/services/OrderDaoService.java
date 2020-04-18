@@ -36,71 +36,73 @@ public class OrderDaoService {
     @Autowired
     private OrderProductRepository orderProductRepository;
 
-    public Orders addToOrder(Orders orders, Long customer_user_id, Long cart_id){
+    public String addToOrder(Orders orders,Long customer_user_id, Long cart_id) {
 
-        Optional<User> customer = userRepository.findById(customer_user_id);
-        if(customer.isPresent()) {
-            User user = new User();
-            user = customer.get();
+        Optional<Cart> cartId = cartRepository.findById(cart_id);
 
-            Customer customer1 = new Customer();
-            customer1 = (Customer) user;
+        if (cartId.isPresent()) {
+            Cart cart = new Cart();
+            cart = cartId.get();
 
-            orders.setCustomer(customer1);
+            Customer customer = cart.getCustomer();
 
-            Address address = new Address();
-            String address_label = orders.getCustomerAddressLabel();
-            Optional<Address> address1 = addressRepository.findByAdd(address_label, customer_user_id);
-            if (address1.isPresent()) {
-                address = address1.get();
+            if (customer.getUser_id().equals(customer_user_id)) {
+                orders.setCustomer(customer);
 
-                orders.setCustomerAddressAddressLine(address.getAddressLine());
-                orders.setCustomerAddressCity(address.getCity());
-                orders.setCustomerAddressState(address.getState());
-                orders.setCustomerAddressCountry(address.getCountry());
-                orders.setCustomerAddressZipCode(address.getZipCode());
-                orders.setDateCreated(new Date());
+                Address address = new Address();
+                String address_label = orders.getCustomerAddressLabel();
+                Optional<Address> address1 = addressRepository.findByAdd(address_label, customer_user_id);
+                if (address1.isPresent()) {
+                    address = address1.get();
 
+                    orders.setCustomerAddressAddressLine(address.getAddressLine());
+                    orders.setCustomerAddressCity(address.getCity());
+                    orders.setCustomerAddressState(address.getState());
+                    orders.setCustomerAddressCountry(address.getCountry());
+                    orders.setCustomerAddressZipCode(address.getZipCode());
+                    orders.setDateCreated(new Date());
+
+                } else {
+                    throw new ResourceNotFoundException("Address not found, Check Address Label");
+                }
+            } else {
+                throw new ResourceNotFoundException("Cart not associated to current customer");
             }
-            else {
-                throw new ResourceNotFoundException("Address not found, Check Address Label");
-            }
 
-            Optional<Cart> cartId = cartRepository.findById(cart_id);
+            OrderProduct orderProduct = new OrderProduct();
+            orderProduct.setOrder(orders);
+            orderProduct.setProductVariation(cart.getProductVariation());
+            orderProduct.setQuantity(cart.getQuantity());
 
-            if (cartId.isPresent()) {
-                Cart cart = new Cart();
-                cart = cartId.get();
-
-                OrderProduct orderProduct = new OrderProduct();
-                orderProduct.setOrder(orders);
-                orderProduct.setProductVariation(cart.getProductVariation());
-                orderProduct.setQuantity(cart.getQuantity());
-
-                ProductVariation product_variation = cart.getProductVariation();
-
+            ProductVariation product_variation = cart.getProductVariation();
+            if (product_variation.getIs_active()) {
                 orderProduct.setPrice(product_variation.getPrice());
 
                 Double amount = orderProduct.getPrice() * cart.getQuantity();
                 orders.setAmountPaid(amount);
 
                 Integer originalqty = product_variation.getQuantityAvailable();
-                Integer reducedqty = cart.getQuantity();
+                Integer orderedqty = cart.getQuantity();
 
-                product_variation.setQuantityAvailable(originalqty-reducedqty);
+                if (originalqty > orderedqty) {
+                    product_variation.setQuantityAvailable(originalqty - orderedqty);
 
-                productVariationRepository.save(product_variation);
-                orderProductRepository.save(orderProduct);
-                orderRepository.save(orders);
+                    productVariationRepository.save(product_variation);
+                    orderProductRepository.save(orderProduct);
+                    orderRepository.save(orders);
 
-                return orders;
-            } else {
-                throw new ResourceNotFoundException("Invalid Cart ID");
+                    return "Order Placed Successfully.... " +
+                            "Thank You for Choosing Online-Shopping portal";
+                }
+                else {
+                    throw new ResourceNotFoundException("Sorry the Requested quantity is not yet available in warehouse.");
+                }
             }
-        }
-        else
-        {
-            throw new UserNotFoundException("Invalid Customer ID");
+            else {
+                throw new ResourceNotFoundException("Requested variant is unavailable at the moment");
+            }
+        } else {
+            throw new ResourceNotFoundException("Invalid Cart ID");
         }
     }
 }

@@ -54,9 +54,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/category").permitAll()
                 .antMatchers("/productcategories").permitAll()
 
-                .antMatchers("/products").permitAll()
                 .antMatchers("/products/{category_name}").permitAll()
-                .antMatchers("/product/{product_name}").permitAll()
                 .antMatchers("/confirm").permitAll()
                 .antMatchers("/confirm-account").permitAll()
                 .antMatchers("/forgot-password").permitAll()
@@ -72,12 +70,16 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/seller/home/profile").hasAnyRole("SELLER")
                 .antMatchers("/seller/home/profile/address").hasAnyRole("SELLER")
                 .antMatchers("/seller/updateProfile").hasAnyRole("SELLER")
-                .antMatchers("/seller/updateProfile/address{address_id}").hasAnyRole("SELLER")
+                .antMatchers("/seller/updateProfile/address/{address_id}").hasAnyRole("SELLER")
                 .antMatchers("/save-product/category/{category_name}").hasAnyRole("SELLER")
 
                 .antMatchers("/customer/home").hasAnyRole("USER")
                 .antMatchers("/customer/home/profile").hasAnyRole("USER")
                 .antMatchers("/customer/home/profile/address").hasAnyRole("USER")
+                .antMatchers("/customer/updateProfile").hasAnyRole("USER")
+                .antMatchers("/customer/addAddress").hasAnyRole("USER")
+                .antMatchers("/customer/deleteAddress/{address_id}").hasAnyRole("USER")
+                .antMatchers("/customer/updateAddress/{address_id}").hasAnyRole("USER")
                 .antMatchers("/add-to-cart/{productVariation_id}").hasAnyRole("USER")
                 .antMatchers("/order/{cart_id}").hasAnyRole("USER")
                 .antMatchers("/addreview/{product_id}").hasAnyRole("USER")
@@ -90,6 +92,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/sellers").hasAnyRole("ADMIN")
                 .antMatchers("/admin/activateuser/{uid}").hasAnyRole("ADMIN")
                 .antMatchers("/admin/deactivateuser/{uid}").hasAnyRole("ADMIN")
+                .antMatchers("/metadata-fields/add").hasAnyRole("ADMIN")
+                .antMatchers("/metadata-fields/addValues/{categoryId}/{metaFieldId}")
+                .hasAnyRole("ADMIN")
+
                 .antMatchers("/add-category").hasAnyRole("ADMIN")
                 .antMatchers("/add-category/{parentCategory}").hasAnyRole("ADMIN")
 

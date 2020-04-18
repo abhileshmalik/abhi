@@ -1,10 +1,10 @@
-package com.tothenew.project.OnlineShopping.dto;
+package com.tothenew.project.OnlineShopping.model;
 
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
 
-public class ProductReviewDto {
+public class ProductReviewModel {
 
     private String review;
 

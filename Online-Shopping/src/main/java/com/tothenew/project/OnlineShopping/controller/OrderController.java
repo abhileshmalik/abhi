@@ -26,8 +26,8 @@ public class OrderController {
         Customer customer = userDaoService.getLoggedInCustomer();
         Long customer_user_id = customer.getUser_id();
 
-        Orders orders1 = orderDaoService.addToOrder(orders, customer_user_id, cart_id);
+        String message = orderDaoService.addToOrder(orders, customer_user_id, cart_id);
 
-        return new ResponseEntity<>(orders1, HttpStatus.CREATED);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 }

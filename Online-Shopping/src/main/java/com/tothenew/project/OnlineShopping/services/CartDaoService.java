@@ -27,7 +27,7 @@ public class CartDaoService {
     private ProductVariationRepository productVariationRepository;
 
 
-    public Cart addToCart( Cart cart, Long customer_user_id, Long productVariation_id) {
+    public String addToCart( Cart cart, Long customer_user_id, Long productVariation_id) {
 
         Optional<User> customer = userRepository.findById(customer_user_id);
         if (customer.isPresent()) {
@@ -43,17 +43,19 @@ public class CartDaoService {
             if (productVariation.isPresent()) {
                 ProductVariation productVariation1 = new ProductVariation();
                 productVariation1 = productVariation.get();
-
-                Integer qty = cart.getQuantity();
-                if(qty<productVariation1.getQuantityAvailable())
-                {
-                    cart.setProductVariation(productVariation1);
-                    cartRepository.save(cart);
-                    return cart;
+                if (productVariation1.getIs_active()) {
+                    Integer qty = cart.getQuantity();
+                    if (qty < productVariation1.getQuantityAvailable()) {
+                        cart.setProductVariation(productVariation1);
+                        cartRepository.save(cart);
+                        return "Item Added to cart Successfully ";
+                    } else {
+                        throw new ResourceNotFoundException("Ordered Quantity is greater than available stock in Warehouse.");
+                    }
                 }
                 else
                 {
-                    throw new ResourceNotFoundException("Ordered Quantity is greater than available stock in Warehouse.");
+                    throw new ResourceNotFoundException("Requested variant is unavailable at the moment");
                 }
             }
             else {

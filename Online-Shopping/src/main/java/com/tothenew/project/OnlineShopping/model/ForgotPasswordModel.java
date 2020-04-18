@@ -1,11 +1,11 @@
-package com.tothenew.project.OnlineShopping.dto;
+package com.tothenew.project.OnlineShopping.model;
 
 import com.tothenew.project.OnlineShopping.validations.Password;
 import com.tothenew.project.OnlineShopping.validations.PasswordMatches;
 import javax.validation.constraints.NotNull;
 
 @PasswordMatches
-public class ForgotPasswordDto {
+public class ForgotPasswordModel {
 
     @NotNull
     @Password

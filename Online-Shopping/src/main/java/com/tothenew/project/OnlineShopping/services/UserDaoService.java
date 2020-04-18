@@ -3,10 +3,15 @@ package com.tothenew.project.OnlineShopping.services;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.tothenew.project.OnlineShopping.dto.CustomerRegisterDto;
-import com.tothenew.project.OnlineShopping.dto.SellerRegisterDto;
+import com.tothenew.project.OnlineShopping.model.AddressModel;
+import com.tothenew.project.OnlineShopping.model.CustomerRegisterModel;
+import com.tothenew.project.OnlineShopping.model.CustomerUpdateModel;
+import com.tothenew.project.OnlineShopping.model.SellerRegisterModel;
 import com.tothenew.project.OnlineShopping.entities.*;
+import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
 import com.tothenew.project.OnlineShopping.exception.TokenExpiredException;
+import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
+import com.tothenew.project.OnlineShopping.repos.AddressRepository;
 import com.tothenew.project.OnlineShopping.repos.ConfirmationTokenRepository;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
 import com.tothenew.project.OnlineShopping.security.GrantAuthorityImpl;
@@ -14,6 +19,7 @@ import com.tothenew.project.OnlineShopping.tokens.ConfirmationToken;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
@@ -21,18 +27,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 public class UserDaoService {
 
     @Autowired
     private  UserRepository userRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
@@ -51,7 +56,7 @@ public class UserDaoService {
     }
 
     public MappingJacksonValue findAllCustomers(String page, String size) {
-        List<Customer> customers = (List<Customer>) userRepository.findCustomers(PageRequest.of(Integer.parseInt(page), Integer.parseInt(size)));
+        List<Customer> customers = (List<Customer>) userRepository.findCustomers(PageRequest.of(Integer.parseInt(page),Integer.parseInt(size)));
 
         SimpleBeanPropertyFilter filter3=SimpleBeanPropertyFilter.filterOutAllExcept("user_id","firstName","middleName",
                 "lastName","email","isActive","contact", "isNonLocked", "isEnabled");
@@ -102,10 +107,10 @@ public class UserDaoService {
 
     }
 
-    public String saveNewCustomer(CustomerRegisterDto customerRegisterDto) {
+    public String saveNewCustomer(CustomerRegisterModel customerRegisterModel) {
 
-        User existingEmail = userRepository.findByEmailIgnoreCase(customerRegisterDto.getEmail());
-        User existingUsername = userRepository.findByUsername(customerRegisterDto.getUsername());
+        User existingEmail = userRepository.findByEmailIgnoreCase(customerRegisterModel.getEmail());
+        User existingUsername = userRepository.findByUsername(customerRegisterModel.getUsername());
 
         if(existingEmail != null)
         {
@@ -119,7 +124,7 @@ public class UserDaoService {
         else
         {
             ModelMapper modelMapper = new ModelMapper();
-            Customer customer= modelMapper.map(customerRegisterDto, Customer.class);
+            Customer customer= modelMapper.map(customerRegisterModel, Customer.class);
 
             String hpass = customer.getPassword();
             customer.setPassword(passwordEncoder.encode(hpass));
@@ -148,10 +153,10 @@ public class UserDaoService {
         }
     }
 
-    public String saveNewSeller(SellerRegisterDto sellerRegisterDto){
+    public String saveNewSeller(SellerRegisterModel sellerRegisterModel){
 
-        User existingEmail = userRepository.findByEmailIgnoreCase(sellerRegisterDto.getEmail());
-        User existingUsername = userRepository.findByUsername(sellerRegisterDto.getUsername());
+        User existingEmail = userRepository.findByEmailIgnoreCase(sellerRegisterModel.getEmail());
+        User existingUsername = userRepository.findByUsername(sellerRegisterModel.getUsername());
 
         if(existingEmail != null)
         {
@@ -165,7 +170,7 @@ public class UserDaoService {
         else
         {
             ModelMapper modelMapper = new ModelMapper();
-            Seller seller= modelMapper.map(sellerRegisterDto, Seller.class);
+            Seller seller= modelMapper.map(sellerRegisterModel, Seller.class);
 
             String hpass = seller.getPassword();
             seller.setPassword(passwordEncoder.encode(hpass));
@@ -233,5 +238,108 @@ public class UserDaoService {
         String username = appUser.getUsername();
         Seller seller = (Seller) userRepository.findByUsername(username);
         return seller;
+    }
+
+
+    @Transactional
+    @Modifying
+    public String updateCustomer(CustomerUpdateModel customerUpdateModel, Long id){
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isPresent()){
+            Customer customer1= (Customer) user.get();
+
+            if (customerUpdateModel.getUsername() != null)
+                customer1.setUsername(customerUpdateModel.getUsername());
+
+            if(customerUpdateModel.getFirstName() != null)
+                customer1.setFirstName(customerUpdateModel.getFirstName());
+
+            if(customerUpdateModel.getMiddleName() != null)
+                customer1.setMiddleName(customerUpdateModel.getMiddleName());
+
+            if(customerUpdateModel.getLastName() != null)
+                customer1.setLastName(customerUpdateModel.getLastName());
+
+            if(customerUpdateModel.getContact() != null)
+                customer1.setContact(customerUpdateModel.getContact());
+
+            if (customerUpdateModel.getEmail() != null)
+                customer1.setEmail(customerUpdateModel.getEmail());
+
+            userRepository.save(customer1);
+            return "Profile updated successfully";
+        }
+        else
+            throw new UserNotFoundException("User not found");
+
+    }
+
+
+    @Transactional
+    @Modifying
+    public String addAddress(AddressModel addressModel, Long id){
+
+        Optional<User> user = userRepository.findById(id);
+        User user1= user.get();
+
+        Address address = new Address();
+        address.setAddressLine(addressModel.getAddressLine());
+        address.setCity(addressModel.getCity());
+        address.setState(addressModel.getState());
+        address.setCountry(addressModel.getCountry());
+        address.setZipCode(addressModel.getZipCode());
+        address.setLabel(addressModel.getLabel());
+        address.setUser(user1);
+        addressRepository.save(address);
+        return "Address added";
+    }
+
+    @Transactional
+    @Modifying
+    public String deleteAddress(Long address_id, Long user_id){
+        Optional<Address> address = addressRepository.findById(address_id);
+        Optional<User> id = userRepository.findById(user_id);
+
+        if (address.isPresent()){
+            addressRepository.deleteAdd(user_id, address_id);
+            return "Address deleted";
+        }
+        else
+            throw new ResourceNotFoundException("Invalid Address Id");
+    }
+
+    @Transactional
+    @Modifying
+    public  String updateAddress(AddressModel addressModel, Long addressId){
+        Optional<Address> address = addressRepository.findById(addressId);
+
+        if (address.isPresent()){
+            Address savedAddress= address.get();
+
+            if(addressModel.getAddressLine() != null)
+                savedAddress.setAddressLine(addressModel.getAddressLine());
+
+            if(addressModel.getCity() != null)
+                savedAddress.setCity(addressModel.getCity());
+
+            if(addressModel.getState() != null)
+                savedAddress.setState(addressModel.getState());
+
+            if(addressModel.getCountry() != null)
+                savedAddress.setCountry(addressModel.getCountry());
+
+            if(addressModel.getZipCode() != null)
+                savedAddress.setZipCode(addressModel.getZipCode());
+
+            if(addressModel.getLabel() != null)
+                savedAddress.setLabel(addressModel.getLabel());
+
+            return "Address updated";
+        }
+        else {
+            throw new ResourceNotFoundException("Invalid Address Id");
+        }
+
     }
 }

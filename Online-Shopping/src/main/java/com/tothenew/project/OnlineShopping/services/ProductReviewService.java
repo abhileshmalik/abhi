@@ -1,6 +1,6 @@
 package com.tothenew.project.OnlineShopping.services;
 
-import com.tothenew.project.OnlineShopping.dto.ProductReviewDto;
+import com.tothenew.project.OnlineShopping.model.ProductReviewModel;
 import com.tothenew.project.OnlineShopping.entities.Customer;
 import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
@@ -28,7 +28,7 @@ public class ProductReviewService {
     @Autowired
     private ProductRepository productRepository;
 
-    public String addReview(ProductReviewDto productReviewDto, Long customer_user_id, Long product_id){
+    public String addReview(ProductReviewModel productReviewModel, Long customer_user_id, Long product_id){
 
         Optional<User> customer = userRepository.findById(customer_user_id);
         Optional<Product> product= productRepository.findById(product_id);
@@ -47,7 +47,7 @@ public class ProductReviewService {
             customer1=(Customer)user;
 
             ModelMapper modelMapper = new ModelMapper();
-            ProductReview productReview= modelMapper.map(productReviewDto, ProductReview.class);
+            ProductReview productReview= modelMapper.map(productReviewModel, ProductReview.class);
 
             productReview.setCustomer(customer1);
 

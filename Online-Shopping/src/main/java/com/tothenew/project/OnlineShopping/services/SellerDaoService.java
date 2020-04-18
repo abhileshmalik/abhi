@@ -1,7 +1,7 @@
 package com.tothenew.project.OnlineShopping.services;
 
-import com.tothenew.project.OnlineShopping.dto.AddressDto;
-import com.tothenew.project.OnlineShopping.dto.SellerUpdateDto;
+import com.tothenew.project.OnlineShopping.model.AddressModel;
+import com.tothenew.project.OnlineShopping.model.SellerUpdateModel;
 import com.tothenew.project.OnlineShopping.entities.Address;
 import com.tothenew.project.OnlineShopping.entities.Seller;
 import com.tothenew.project.OnlineShopping.entities.User;
@@ -28,35 +28,35 @@ public class SellerDaoService {
 
     @Transactional
     @Modifying
-    public String updateSeller(SellerUpdateDto sellerUpdateDto, Long id){
+    public String updateSeller(SellerUpdateModel sellerUpdateModel, Long id){
         Optional<User> seller = userRepository.findById(id);
 
         if (seller.isPresent()){
             Seller seller1= (Seller) seller.get();
 
-            if (sellerUpdateDto.getUsername() != null)
-                seller1.setUsername(sellerUpdateDto.getUsername());
+            if (sellerUpdateModel.getUsername() != null)
+                seller1.setUsername(sellerUpdateModel.getUsername());
 
-            if(sellerUpdateDto.getFirstName() != null)
-                seller1.setFirstName(sellerUpdateDto.getFirstName());
+            if(sellerUpdateModel.getFirstName() != null)
+                seller1.setFirstName(sellerUpdateModel.getFirstName());
 
-            if(sellerUpdateDto.getMiddleName() != null)
-                seller1.setMiddleName(sellerUpdateDto.getMiddleName());
+            if(sellerUpdateModel.getMiddleName() != null)
+                seller1.setMiddleName(sellerUpdateModel.getMiddleName());
 
-            if(sellerUpdateDto.getLastName() != null)
-                seller1.setLastName(sellerUpdateDto.getLastName());
+            if(sellerUpdateModel.getLastName() != null)
+                seller1.setLastName(sellerUpdateModel.getLastName());
 
-            if (sellerUpdateDto.getEmail() != null)
-                seller1.setEmail(sellerUpdateDto.getEmail());
+            if (sellerUpdateModel.getEmail() != null)
+                seller1.setEmail(sellerUpdateModel.getEmail());
 
-            if(sellerUpdateDto.getGstin() != null)
-                seller1.setGstin(sellerUpdateDto.getGstin());
+            if(sellerUpdateModel.getGstin() != null)
+                seller1.setGstin(sellerUpdateModel.getGstin());
 
-            if (sellerUpdateDto.getCompanyName() != null)
-                seller1.setCompanyName(sellerUpdateDto.getCompanyName());
+            if (sellerUpdateModel.getCompanyName() != null)
+                seller1.setCompanyName(sellerUpdateModel.getCompanyName());
 
-            if (sellerUpdateDto.getCompanyContact() != null)
-                seller1.setCompanyContact(sellerUpdateDto.getCompanyContact());
+            if (sellerUpdateModel.getCompanyContact() != null)
+                seller1.setCompanyContact(sellerUpdateModel.getCompanyContact());
 
             userRepository.save(seller1);
             return "Profile updated successfully";
@@ -68,29 +68,29 @@ public class SellerDaoService {
 
     @Transactional
     @Modifying
-    public  String updateAddress(AddressDto addressDto , Long addressId){
+    public  String updateAddress(AddressModel addressModel, Long addressId){
         Optional<Address> address = addressRepository.findById(addressId);
 
         if (address.isPresent()){
             Address savedAddress= address.get();
 
-            if(addressDto.getAddressLine() != null)
-                savedAddress.setAddressLine(addressDto.getAddressLine());
+            if(addressModel.getAddressLine() != null)
+                savedAddress.setAddressLine(addressModel.getAddressLine());
 
-            if(addressDto.getCity() != null)
-                savedAddress.setCity(addressDto.getCity());
+            if(addressModel.getCity() != null)
+                savedAddress.setCity(addressModel.getCity());
 
-            if(addressDto.getState() != null)
-                savedAddress.setState(addressDto.getState());
+            if(addressModel.getState() != null)
+                savedAddress.setState(addressModel.getState());
 
-            if(addressDto.getCountry() != null)
-                savedAddress.setCountry(addressDto.getCountry());
+            if(addressModel.getCountry() != null)
+                savedAddress.setCountry(addressModel.getCountry());
 
-            if(addressDto.getZipCode() != null)
-                savedAddress.setZipCode(addressDto.getZipCode());
+            if(addressModel.getZipCode() != null)
+                savedAddress.setZipCode(addressModel.getZipCode());
 
-            if(addressDto.getLabel() != null)
-                savedAddress.setLabel(addressDto.getLabel());
+            if(addressModel.getLabel() != null)
+                savedAddress.setLabel(addressModel.getLabel());
 
             return "Address updated";
         }

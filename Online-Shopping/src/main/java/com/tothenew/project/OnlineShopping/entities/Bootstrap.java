@@ -19,7 +19,7 @@ public class Bootstrap implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        /*PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         //Admin Creation
         User user = new User();
         user.setUser_id(1L);
@@ -33,7 +33,7 @@ public class Bootstrap implements ApplicationRunner {
         user.setNonLocked(true);
         user.setDeleted(false);
         user.setRole("ROLE_ADMIN");
-        userRepository.save(user);
+        userRepository.save(user);*/
 
     }
 }

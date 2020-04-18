@@ -35,6 +35,9 @@ public class Product {
     @JoinColumn(name = "seller_user_id")
     private Seller seller;
 
+    @OneToMany(mappedBy ="product", fetch = FetchType.EAGER)
+    private Set<ProductReview> reviews;
+
     public Long getProduct_id() {
         return product_id;
     }
@@ -113,5 +116,13 @@ public class Product {
 
     public void setSeller(Seller seller) {
         this.seller = seller;
+    }
+
+    public Set<ProductReview> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<ProductReview> reviews) {
+        this.reviews = reviews;
     }
 }
