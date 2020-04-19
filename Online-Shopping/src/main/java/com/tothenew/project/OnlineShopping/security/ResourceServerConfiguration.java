@@ -54,7 +54,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/category").permitAll()
                 .antMatchers("/productcategories").permitAll()
 
-                .antMatchers("/products/{category_name}").permitAll()
                 .antMatchers("/confirm").permitAll()
                 .antMatchers("/confirm-account").permitAll()
                 .antMatchers("/forgot-password").permitAll()
@@ -71,6 +70,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/seller/home/profile/address").hasAnyRole("SELLER")
                 .antMatchers("/seller/updateProfile").hasAnyRole("SELLER")
                 .antMatchers("/seller/updateProfile/address/{address_id}").hasAnyRole("SELLER")
+                .antMatchers("/seller/updateproduct/{pid}").hasAnyRole("SELLER")
+                .antMatchers("/seller/updateproduct/variant/{vid}").hasAnyRole("SELLER")
+                .antMatchers("/seller/deleteproduct/{pid}").hasAnyRole("SELLER")
+                .antMatchers("/seller/products").hasAnyRole("SELLER")
                 .antMatchers("/save-product/category/{category_name}").hasAnyRole("SELLER")
 
                 .antMatchers("/customer/home").hasAnyRole("USER")
@@ -87,11 +90,16 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/product/{product_id}").hasAnyRole("USER")
                 .antMatchers("/product/variant/{vid}").hasAnyRole("USER")
 
+                .antMatchers("/products/{category_name}").hasAnyRole("USER","ADMIN")
+
                 .antMatchers("/admin/home").hasAnyRole("ADMIN")
                 .antMatchers("/customers").hasAnyRole("ADMIN")
                 .antMatchers("/sellers").hasAnyRole("ADMIN")
                 .antMatchers("/admin/activateuser/{uid}").hasAnyRole("ADMIN")
                 .antMatchers("/admin/deactivateuser/{uid}").hasAnyRole("ADMIN")
+                .antMatchers("/admin/enableSeller/{sellerId}").hasAnyRole("ADMIN")
+                .antMatchers("/admin/activateproduct/{pid}").hasAnyRole("ADMIN")
+                .antMatchers("/admin/deactivateproduct/{pid}").hasAnyRole("ADMIN")
                 .antMatchers("/metadata-fields/add").hasAnyRole("ADMIN")
                 .antMatchers("/metadata-fields/addValues/{categoryId}/{metaFieldId}")
                 .hasAnyRole("ADMIN")

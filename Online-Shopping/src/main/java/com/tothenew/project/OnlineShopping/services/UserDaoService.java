@@ -3,6 +3,7 @@ package com.tothenew.project.OnlineShopping.services;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.tothenew.project.OnlineShopping.exception.BadRequestException;
 import com.tothenew.project.OnlineShopping.model.AddressModel;
 import com.tothenew.project.OnlineShopping.model.CustomerRegisterModel;
 import com.tothenew.project.OnlineShopping.model.CustomerUpdateModel;
@@ -182,20 +183,17 @@ public class UserDaoService {
 
             userRepository.save(seller);
 
-            ConfirmationToken confirmationToken = new ConfirmationToken(seller);
-
-            confirmationTokenRepository.save(confirmationToken);
-
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(seller.getEmail());
-            mailMessage.setSubject("Complete Registration!");
+            mailMessage.setSubject("Registration Successful!");
             mailMessage.setFrom("online-shopping@gmail.com");
-            mailMessage.setText("To confirm your account, please click here : "
-                    +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
+            mailMessage.setText("Hello Seller, Thank You for choosing Online-Shopping Portal." +
+                    " Your has been registered successfully please wait for some time" +
+                    " So that your account can be enabled by our team after verification  : ");
 
             emailSenderService.sendEmail(mailMessage);
 
-            return "Registration Successful, Please verify your account via Activation link sent on your registered email";
+            return "Registration Successful, ";
         }
     }
 
@@ -221,6 +219,42 @@ public class UserDaoService {
         else {
             return "Error! Please try again";
         }
+    }
+
+    @Transactional
+    public String enableSellerAccount(Long sellerId){
+        Optional<User> user = userRepository.findById(sellerId);
+
+        if (user.isPresent()) {
+            User user1 = user.get();
+            if(user1.getRole().equals("ROLE_SELLER")) {
+                Seller seller = new Seller();
+                seller = (Seller) user.get();
+
+                if (!seller.getEnabled()) {
+                    seller.setEnabled(true);
+                    userRepository.save(seller);
+
+                    SimpleMailMessage mailMessage = new SimpleMailMessage();
+                    mailMessage.setTo(seller.getEmail());
+                    mailMessage.setSubject("Account Enabled");
+                    mailMessage.setText("Your account has been enabled by admin.");
+                    emailSenderService.sendEmail(mailMessage);
+
+                    return "Seller Account Enabled successfully";
+                }
+                else
+                {
+                    return "Seller Already Enabled";
+                }
+            }
+            else {
+                throw new BadRequestException("Entered ID is not a SellerID but a customer ID");
+
+            }
+        }
+        else
+            throw new UserNotFoundException("Seller ID not found");
     }
 
 

@@ -3,6 +3,7 @@ package com.tothenew.project.OnlineShopping.controller;
 import com.tothenew.project.OnlineShopping.entities.Customer;
 import com.tothenew.project.OnlineShopping.entities.Seller;
 import com.tothenew.project.OnlineShopping.services.AdminDaoService;
+import com.tothenew.project.OnlineShopping.services.ProductDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,6 +17,10 @@ public class AdminController {
 
     @Autowired
     private AdminDaoService adminDaoService;
+
+    @Autowired
+    private ProductDaoService productDaoService;
+
 
     @GetMapping("/admin/home")
     public String adminHome(){
@@ -33,6 +38,20 @@ public class AdminController {
         String message = adminDaoService.deactivateUser(uid);
         return  message;
     }
+
+    @PatchMapping("/admin/activateproduct/{pid}")
+    public String productActivation(@PathVariable Long pid) {
+        String message = productDaoService.activateProduct(pid);
+        return  message;
+    }
+
+    @PatchMapping("/admin/deactivateproduct/{pid}")
+    public String productDeactivation(@PathVariable Long pid) {
+        String message = productDaoService.deactivateProduct(pid);
+        return  message;
+    }
+
+
 
 
 }

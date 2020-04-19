@@ -43,8 +43,6 @@ public class SellerController {
         Seller seller = userDaoService.getLoggedInSeller();
         String name = seller.getFirstName();
         return messageSource.getMessage("welcome.message",new Object[]{name}, LocaleContextHolder.getLocale());
-
-       // return "Welcome Seller To Online Shopping Portal";
     }
 
 
@@ -57,7 +55,7 @@ public class SellerController {
     public MappingJacksonValue sellerprofileview() {
 
         SimpleBeanPropertyFilter filter8 = SimpleBeanPropertyFilter.filterOutAllExcept("email","firstName","middleName",
-                "lastName","username", "companyName", "companyContact", "gstin","isActive","isNonLocked");
+                "lastName","username", "companyName", "companyContact", "gstin", "isActive","isNonLocked");
 
         FilterProvider filterProvider1 = new SimpleFilterProvider().addFilter("userfilter",filter8);
         MappingJacksonValue mapping = new MappingJacksonValue(sellerProfile());
@@ -94,8 +92,9 @@ public class SellerController {
     public String updateCustomerAddress(@RequestBody AddressModel addressModel, @PathVariable Long address_id, HttpServletResponse response)
     {
         Seller seller= userDaoService.getLoggedInSeller();
+        Long sellerid = seller.getUser_id();
 
-        String message = sellerDaoService.updateAddress(addressModel,address_id);
+        String message = sellerDaoService.updateAddress(addressModel,address_id, sellerid);
         if (!message.equals("Address updated")) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }

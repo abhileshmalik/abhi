@@ -1,5 +1,6 @@
 package com.tothenew.project.OnlineShopping.services;
 
+import com.tothenew.project.OnlineShopping.exception.BadRequestException;
 import com.tothenew.project.OnlineShopping.model.AddressModel;
 import com.tothenew.project.OnlineShopping.model.SellerUpdateModel;
 import com.tothenew.project.OnlineShopping.entities.Address;
@@ -68,31 +69,38 @@ public class SellerDaoService {
 
     @Transactional
     @Modifying
-    public  String updateAddress(AddressModel addressModel, Long addressId){
+    public  String updateAddress(AddressModel addressModel, Long addressId, Long sellerid ){
         Optional<Address> address = addressRepository.findById(addressId);
 
-        if (address.isPresent()){
-            Address savedAddress= address.get();
+        if (address.isPresent()) {
+            Address savedAddress = address.get();
 
-            if(addressModel.getAddressLine() != null)
-                savedAddress.setAddressLine(addressModel.getAddressLine());
+            Long s_id = savedAddress.getUser().getUser_id();
 
-            if(addressModel.getCity() != null)
-                savedAddress.setCity(addressModel.getCity());
+            if (s_id.equals(sellerid)) {
+                if (addressModel.getAddressLine() != null)
+                    savedAddress.setAddressLine(addressModel.getAddressLine());
 
-            if(addressModel.getState() != null)
-                savedAddress.setState(addressModel.getState());
+                if (addressModel.getCity() != null)
+                    savedAddress.setCity(addressModel.getCity());
 
-            if(addressModel.getCountry() != null)
-                savedAddress.setCountry(addressModel.getCountry());
+                if (addressModel.getState() != null)
+                    savedAddress.setState(addressModel.getState());
 
-            if(addressModel.getZipCode() != null)
-                savedAddress.setZipCode(addressModel.getZipCode());
+                if (addressModel.getCountry() != null)
+                    savedAddress.setCountry(addressModel.getCountry());
 
-            if(addressModel.getLabel() != null)
-                savedAddress.setLabel(addressModel.getLabel());
+                if (addressModel.getZipCode() != null)
+                    savedAddress.setZipCode(addressModel.getZipCode());
 
-            return "Address updated";
+                if (addressModel.getLabel() != null)
+                    savedAddress.setLabel(addressModel.getLabel());
+
+                return "Address updated";
+            }
+            else {
+                throw new BadRequestException("Address not associated to current seller");
+            }
         }
         else {
             throw new ResourceNotFoundException("Invalid Address Id");

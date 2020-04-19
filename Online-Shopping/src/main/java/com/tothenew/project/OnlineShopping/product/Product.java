@@ -35,7 +35,7 @@ public class Product {
     @JoinColumn(name = "seller_user_id")
     private Seller seller;
 
-    @OneToMany(mappedBy ="product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy ="product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<ProductReview> reviews;
 
     public Long getProduct_id() {

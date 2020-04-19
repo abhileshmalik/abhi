@@ -45,6 +45,8 @@ public class UserController {
         return userDaoService.findAll();
     }
 
+    ///////////////// Admin API's Part //////////////////////////////
+
     @GetMapping("/customers")
     public MappingJacksonValue retrieveAllCustomers(@RequestHeader(defaultValue = "0") String page, @RequestHeader(defaultValue = "10")String size) {
         return userDaoService.findAllCustomers(page, size);
@@ -53,6 +55,11 @@ public class UserController {
     @GetMapping("/sellers")
     public MappingJacksonValue retrieveAllSellers(@RequestHeader(defaultValue = "0") String page, @RequestHeader(defaultValue = "10")String size) {
         return userDaoService.findAllSellers(page, size);
+    }
+
+    @PostMapping(path = "/admin/enableSeller/{sellerId}")
+    public String enableSellerAccount(@PathVariable Long sellerId){
+        return userDaoService.enableSellerAccount(sellerId);
     }
 
 
