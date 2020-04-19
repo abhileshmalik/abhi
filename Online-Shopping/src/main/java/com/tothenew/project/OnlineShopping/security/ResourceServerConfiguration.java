@@ -60,6 +60,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/reset-password").permitAll()
                 .antMatchers("/account-unlock/{username}").permitAll()
                 .antMatchers("/do-unlock").permitAll()
+                .antMatchers("/customer/uploadImage").permitAll()
 
                 .antMatchers("/registration").anonymous()
                 .antMatchers("/customerregistration").anonymous()

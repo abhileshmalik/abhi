@@ -25,6 +25,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -82,7 +83,7 @@ public class UserDaoService {
 
         return mapping4;
     }
-
+    // Can be used for creating Admin via URL
     public User saveNewUser(User user) {
         String hpass = user.getPassword();
         user.setPassword(passwordEncoder.encode(hpass));
@@ -100,12 +101,17 @@ public class UserDaoService {
     public AppUser loadUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
         System.out.println(user);
-        if (username != null) {
-            return new AppUser(user.getUser_id(),user.getFirstName(),user.getUsername(), user.getPassword(),user.getEnabled(),user.getNonLocked(), Arrays.asList(new GrantAuthorityImpl(user.getRole())));
-        } else {
-            throw new RuntimeException();
+        if(user!= null) {
+            if (username != null) {
+                return new AppUser(user.getUser_id(), user.getFirstName(), user.getUsername(), user.getPassword(), user.getEnabled(), user.getNonLocked(), Arrays.asList(new GrantAuthorityImpl(user.getRole())));
+            }
+            else {
+                throw new UsernameNotFoundException("Username cannot be blank...");
+            }
+        } else
+        {
+            throw new UserNotFoundException("Invalid Username Entered");
         }
-
     }
 
     public String saveNewCustomer(CustomerRegisterModel customerRegisterModel) {
@@ -282,9 +288,6 @@ public class UserDaoService {
 
         if (user.isPresent()){
             Customer customer1= (Customer) user.get();
-
-            if (customerUpdateModel.getUsername() != null)
-                customer1.setUsername(customerUpdateModel.getUsername());
 
             if(customerUpdateModel.getFirstName() != null)
                 customer1.setFirstName(customerUpdateModel.getFirstName());

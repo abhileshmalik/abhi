@@ -42,7 +42,7 @@ public class ProductController {
     public MappingJacksonValue retrieveProductList(@PathVariable String category_name) {
 
         SimpleBeanPropertyFilter filter6 = SimpleBeanPropertyFilter.filterOutAllExcept("productName","brand",
-                "productDescription","isCancellable","isReturnable");
+                "productDescription","isCancellable","isReturnable","variations");
 
         FilterProvider filterProvider6 = new SimpleFilterProvider().addFilter("productfilter",filter6);
 
@@ -62,7 +62,6 @@ public class ProductController {
 
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
-
 
 
     @GetMapping("/product/{product_id}")

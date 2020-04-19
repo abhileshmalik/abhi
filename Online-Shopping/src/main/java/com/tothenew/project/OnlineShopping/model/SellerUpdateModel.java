@@ -5,7 +5,6 @@ import com.tothenew.project.OnlineShopping.validations.GST;
 
 public class SellerUpdateModel {
 
-    private String username;
     private String firstName;
     private String middleName;
     private String lastName;
@@ -15,14 +14,6 @@ public class SellerUpdateModel {
     private String gstin;
     private String companyName;
     private String companyContact;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getFirstName() {
         return firstName;

@@ -64,11 +64,14 @@ public class UserController {
 
 
 
-    @PostMapping(path = "/registration")
+/*    @PostMapping(path = "/registration")
     public ResponseEntity<Object> createUser(@RequestBody User user){
         User newUser = userDaoService.saveNewUser(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
-    }
+    }*/
+
+
+ //////////////// Customer APIs ////////////////////////////
 
     @PostMapping(path = "/customerregistration")
     public ResponseEntity<Object> createCustomer(@Valid @RequestBody CustomerRegisterModel customerRegisterModel) {
@@ -100,6 +103,8 @@ public class UserController {
     public String index(){
         return "Welcome To Online Shopping Portal";
     }
+
+
 
     @GetMapping("/customer/home")
     public String customerHome(){

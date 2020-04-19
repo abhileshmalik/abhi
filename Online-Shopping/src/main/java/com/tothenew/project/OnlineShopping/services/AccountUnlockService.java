@@ -4,8 +4,11 @@ import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 public class AccountUnlockService {
@@ -32,6 +35,8 @@ public class AccountUnlockService {
         return "Mail has been sent to you. Click on link to unlock your account";
     }
 
+    @Transactional
+    @Modifying
     public String unlockAccountSuccess(String username){
 
         User user=userRepository.findByUsername(username);

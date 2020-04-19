@@ -35,9 +35,6 @@ public class SellerDaoService {
         if (seller.isPresent()){
             Seller seller1= (Seller) seller.get();
 
-            if (sellerUpdateModel.getUsername() != null)
-                seller1.setUsername(sellerUpdateModel.getUsername());
-
             if(sellerUpdateModel.getFirstName() != null)
                 seller1.setFirstName(sellerUpdateModel.getFirstName());
 
