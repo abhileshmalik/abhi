@@ -56,6 +56,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
                 .antMatchers("/confirm").permitAll()
                 .antMatchers("/confirm-account").permitAll()
+                .antMatchers("/resendactToken").permitAll()
                 .antMatchers("/forgot-password").permitAll()
                 .antMatchers("/reset-password").permitAll()
                 .antMatchers("/account-unlock/{username}").permitAll()
@@ -102,12 +103,13 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/admin/activateproduct/{pid}").hasAnyRole("ADMIN")
                 .antMatchers("/admin/deactivateproduct/{pid}").hasAnyRole("ADMIN")
                 .antMatchers("/metadata-fields/add").hasAnyRole("ADMIN")
+                .antMatchers("/allmetadatafields").hasAnyRole("ADMIN")
                 .antMatchers("/metadata-fields/addValues/{categoryId}/{metaFieldId}")
                 .hasAnyRole("ADMIN")
 
                 .antMatchers("/add-category").hasAnyRole("ADMIN")
                 .antMatchers("/add-category/{parentCategory}").hasAnyRole("ADMIN")
-
+                .antMatchers("/updateCategory/{category}").hasAnyRole("ADMIN")
 
 
                 .antMatchers("/doLogout").hasAnyRole("ADMIN","SELLER","USER")

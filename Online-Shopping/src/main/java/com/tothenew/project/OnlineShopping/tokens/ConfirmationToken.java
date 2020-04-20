@@ -34,7 +34,7 @@ public class ConfirmationToken {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Timestamp(calendar.getTime().getTime()));
         createdDate = new Date(calendar.getTime().getTime());
-        calendar.add(Calendar.MINUTE,10);
+        calendar.add(Calendar.MINUTE,3);
         expiryDate = new Date(calendar.getTime().getTime());
         confirmationToken = UUID.randomUUID().toString();
     }

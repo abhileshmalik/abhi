@@ -22,6 +22,7 @@ public class Product {
     private Boolean isCancellable;
     private Boolean isReturnable;
     private Boolean isActive;
+    private Boolean isDeleted;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
@@ -124,5 +125,13 @@ public class Product {
 
     public void setReviews(Set<ProductReview> reviews) {
         this.reviews = reviews;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

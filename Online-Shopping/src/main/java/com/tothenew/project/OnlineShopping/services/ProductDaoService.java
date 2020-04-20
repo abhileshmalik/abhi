@@ -77,15 +77,16 @@ public class ProductDaoService {
 
                 products.forEach(e -> e.setCategory(category));
                 products.forEach(e-> e.setIsActive(false));
+                products.forEach(e-> e.setDeleted(false));
+
+                productRepository.saveAll(products);
+                return " Products Added Successfully ";
+
             }
             else
             {
                 throw new ResourceNotFoundException("Invalid Category name");
             }
-
-
-            productRepository.saveAll(products);
-            return " Products Added Successfully ";
         }
         else
             throw new UserNotFoundException("Invalid Seller ID");
@@ -228,7 +229,8 @@ public class ProductDaoService {
 
             if (s_id.equals(sellerid)) {
 
-            productRepository.deleteById(pid);
+                savedProduct.setDeleted(true);
+            productRepository.save(savedProduct);
             return "Product Deleted Successfully";
 
             }

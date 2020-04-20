@@ -43,6 +43,7 @@ public class CartDaoService {
             if (productVariation.isPresent()) {
                 ProductVariation productVariation1 = new ProductVariation();
                 productVariation1 = productVariation.get();
+
                 if (productVariation1.getIs_active()) {
                     Integer qty = cart.getQuantity();
                     if (qty < productVariation1.getQuantityAvailable()) {
@@ -61,7 +62,6 @@ public class CartDaoService {
             else {
                 throw new ResourceNotFoundException("Invalid Product Variation ID");
             }
-
         }
         else {
             throw new UserNotFoundException("Invalid customer ID");

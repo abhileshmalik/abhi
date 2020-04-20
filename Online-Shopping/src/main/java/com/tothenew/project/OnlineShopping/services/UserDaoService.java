@@ -379,4 +379,60 @@ public class UserDaoService {
         }
 
     }
+
+    public String resendActivationToken(String email) {
+       // System.out.println(email);
+        User user = userRepository.findByEmailIgnoreCase(email);
+        System.out.println(user.getFirstName());
+        if (user!=null) {
+            Long uid = user.getUser_id();
+            ConfirmationToken token = confirmationTokenRepository.findByUser(uid);
+
+            if (token!=null) {
+                String confirmationToken = token.getConfirmationToken();
+                Date presentDate = new Date();
+                if (token.getExpiryDate().getTime() - presentDate.getTime() <= 0){
+
+                    confirmationTokenRepository.deleteConfirmationToken(confirmationToken);   // Delete old Token
+
+                    ConfirmationToken newConfirmationToken = new ConfirmationToken(user);    // Generate New Token
+
+                    confirmationTokenRepository.save(newConfirmationToken);
+
+                    SimpleMailMessage mailMessage = new SimpleMailMessage();
+                    mailMessage.setTo(user.getEmail());
+                    mailMessage.setSubject("Complete Registration");
+                    mailMessage.setText("To activate your account, please click here : "
+                            +"http://localhost:8080/confirm-account?token="+newConfirmationToken.getConfirmationToken());
+
+                    emailSenderService.sendEmail(mailMessage);
+
+                    return "New Activation Link sent successfully on your registered email";
+
+                }
+                else {
+                    return "Your current Activation Link sent via Email is not expired yet," +
+                            " please use the same old link to Enable your account ";
+                }
+            }
+            else {
+                ConfirmationToken newConfirmationToken = new ConfirmationToken(user);    // Generate New Token
+
+                confirmationTokenRepository.save(newConfirmationToken);
+
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setTo(user.getEmail());
+                mailMessage.setSubject("Complete Registration");
+                mailMessage.setText("To activate your account, please click here : "
+                        +"http://localhost:8080/confirm-account?token="+newConfirmationToken.getConfirmationToken());
+
+                emailSenderService.sendEmail(mailMessage);
+
+                return "New Activation Link sent successfully on your registered email";
+            }
+        }
+        else {
+            throw new UserNotFoundException("Invalid EmailID entered");
+        }
+    }
 }

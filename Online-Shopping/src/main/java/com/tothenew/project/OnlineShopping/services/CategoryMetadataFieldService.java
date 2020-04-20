@@ -14,6 +14,7 @@ import com.tothenew.project.OnlineShopping.utils.StringToMapParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,4 +74,7 @@ public class CategoryMetadataFieldService {
 
     }
 
+    public List<CategoryMetadataField> findAllMetadataFields(){
+        return categoryMetadataFieldRepository.findAll();
+    }
 }

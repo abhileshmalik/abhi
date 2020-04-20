@@ -198,6 +198,15 @@ public class UserController {
         return message;
     }
 
+    @PostMapping("/resendactToken")
+    public String resendActivationToken(@RequestBody String email) {
+
+        String message = userDaoService.resendActivationToken(email);
+
+        return message;
+
+    }
+
 
 
 }
