@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tothenew.project.OnlineShopping.entities.Seller;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -16,8 +17,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long product_id;
+    @NotNull
     private String productName;
+    @NotNull
     private String brand;
+    @NotNull
     private String productDescription;
     private Boolean isCancellable;
     private Boolean isReturnable;

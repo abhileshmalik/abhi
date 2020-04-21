@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -55,7 +57,7 @@ public class ProductController {
 
 
     @PostMapping("/save-product/category/{category_name}")
-    public ResponseEntity<Object> saveProduct(@RequestBody List<Product> products, @PathVariable String category_name){
+    public ResponseEntity<Object> saveProduct(@Valid @RequestBody List<Product> products, @PathVariable String category_name){
         Seller seller = userDaoService.getLoggedInSeller();
         Long seller_user_id = seller.getUser_id();
         String message = productDaoService.addNewProduct(seller_user_id, products, category_name);

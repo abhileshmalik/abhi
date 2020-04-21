@@ -336,7 +336,6 @@ public class UserDaoService {
     @Modifying
     public String deleteAddress(Long address_id, Long user_id){
         Optional<Address> address = addressRepository.findById(address_id);
-        Optional<User> id = userRepository.findById(user_id);
 
         if (address.isPresent()){
             addressRepository.deleteAdd(user_id, address_id);
@@ -348,32 +347,40 @@ public class UserDaoService {
 
     @Transactional
     @Modifying
-    public  String updateAddress(AddressModel addressModel, Long addressId){
+    public  String updateAddress(AddressModel addressModel, Long addressId, Long user_id){
         Optional<Address> address = addressRepository.findById(addressId);
 
-        if (address.isPresent()){
-            Address savedAddress= address.get();
+        if (address.isPresent()) {
+            Address savedAddress = address.get();
 
-            if(addressModel.getAddressLine() != null)
-                savedAddress.setAddressLine(addressModel.getAddressLine());
+            if (savedAddress.getUser().getUser_id().equals(user_id)) {
 
-            if(addressModel.getCity() != null)
-                savedAddress.setCity(addressModel.getCity());
+                if (addressModel.getAddressLine() != null)
+                    savedAddress.setAddressLine(addressModel.getAddressLine());
 
-            if(addressModel.getState() != null)
-                savedAddress.setState(addressModel.getState());
+                if (addressModel.getCity() != null)
+                    savedAddress.setCity(addressModel.getCity());
 
-            if(addressModel.getCountry() != null)
-                savedAddress.setCountry(addressModel.getCountry());
+                if (addressModel.getState() != null)
+                    savedAddress.setState(addressModel.getState());
 
-            if(addressModel.getZipCode() != null)
-                savedAddress.setZipCode(addressModel.getZipCode());
+                if (addressModel.getCountry() != null)
+                    savedAddress.setCountry(addressModel.getCountry());
 
-            if(addressModel.getLabel() != null)
-                savedAddress.setLabel(addressModel.getLabel());
+                if (addressModel.getZipCode() != null)
+                    savedAddress.setZipCode(addressModel.getZipCode());
 
-            return "Address updated";
+                if (addressModel.getLabel() != null)
+                    savedAddress.setLabel(addressModel.getLabel());
+
+                return "Address updated";
+            }
+            else
+            {
+                throw new BadRequestException("Address not associated to the Logged in customer");
+            }
         }
+
         else {
             throw new ResourceNotFoundException("Invalid Address Id");
         }

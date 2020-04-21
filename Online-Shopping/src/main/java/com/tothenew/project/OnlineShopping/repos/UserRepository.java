@@ -18,8 +18,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByEmailIgnoreCase(String email);
 
-    Optional<User> findByEmail(String email);
-
     @Query("from Customer")
     List<Customer> findCustomers(Pageable pageable);
 

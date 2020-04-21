@@ -190,8 +190,9 @@ public class UserController {
     public String updateCustomerAddress(@RequestBody AddressModel addressModel, @PathVariable Long address_id, HttpServletResponse response)
     {
         Customer customer1 = userDaoService.getLoggedInCustomer();
+        Long user_id = customer1.getUser_id();
 
-        String message = userDaoService.updateAddress(addressModel,address_id);
+        String message = userDaoService.updateAddress(addressModel,address_id, user_id);
         if (!message.equals("Address updated")) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }

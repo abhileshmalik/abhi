@@ -52,6 +52,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/category").permitAll()
+                .antMatchers("/allcategories").permitAll()
                 .antMatchers("/productcategories").permitAll()
 
                 .antMatchers("/confirm").permitAll()
@@ -89,9 +90,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/order/{cart_id}").hasAnyRole("USER")
                 .antMatchers("/addreview/{product_id}").hasAnyRole("USER")
 
-                .antMatchers("/product/{product_id}").hasAnyRole("USER")
-                .antMatchers("/product/variant/{vid}").hasAnyRole("USER")
-
+                .antMatchers("/product/{product_id}").hasAnyRole("USER","ADMIN")
+                .antMatchers("/product/variant/{vid}").hasAnyRole("USER","ADMIN")
                 .antMatchers("/products/{category_name}").hasAnyRole("USER","ADMIN")
 
                 .antMatchers("/admin/home").hasAnyRole("ADMIN")
