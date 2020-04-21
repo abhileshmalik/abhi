@@ -27,9 +27,19 @@ public class CategoryController {
     @Autowired
     private CategoryMetadataFieldService categoryMetadataFieldService;
 
-    //@GetMapping("/category")
     public List<Category> retrieveAllCategories() {
         return categoryDaoService.findAll();
+    }
+
+    @GetMapping("/allcategories")
+    public MappingJacksonValue retrievellCategoryList() {
+        SimpleBeanPropertyFilter filter1 = SimpleBeanPropertyFilter.filterOutAllExcept("name","subcategory");
+        FilterProvider filterProvider1 = new SimpleFilterProvider().addFilter("categoryfilter",filter1);
+
+        MappingJacksonValue mapping1=new MappingJacksonValue(retrieveAllCategories());
+        mapping1.setFilters(filterProvider1);
+
+        return mapping1;
     }
 
     public List<Category> retrieveAllSubCategories() {

@@ -61,7 +61,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/reset-password").permitAll()
                 .antMatchers("/account-unlock/{username}").permitAll()
                 .antMatchers("/do-unlock").permitAll()
-                .antMatchers("/customer/uploadImage").permitAll()
 
                 .antMatchers("/registration").anonymous()
                 .antMatchers("/customerregistration").anonymous()
@@ -79,6 +78,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/save-product/category/{category_name}").hasAnyRole("SELLER")
 
                 .antMatchers("/customer/home").hasAnyRole("USER")
+                .antMatchers("/customer/uploadImage").hasAnyRole("USER")
                 .antMatchers("/customer/home/profile").hasAnyRole("USER")
                 .antMatchers("/customer/home/profile/address").hasAnyRole("USER")
                 .antMatchers("/customer/updateProfile").hasAnyRole("USER")
