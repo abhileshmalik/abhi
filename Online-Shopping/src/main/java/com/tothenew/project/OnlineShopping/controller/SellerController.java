@@ -3,10 +3,12 @@ package com.tothenew.project.OnlineShopping.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.tothenew.project.OnlineShopping.entities.Customer;
 import com.tothenew.project.OnlineShopping.model.AddressModel;
 import com.tothenew.project.OnlineShopping.model.SellerRegisterModel;
 import com.tothenew.project.OnlineShopping.model.SellerUpdateModel;
 import com.tothenew.project.OnlineShopping.entities.Seller;
+import com.tothenew.project.OnlineShopping.model.UpdatePasswordModel;
 import com.tothenew.project.OnlineShopping.services.SellerDaoService;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,5 +101,16 @@ public class SellerController {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
         return message;
+    }
+
+    @PostMapping("/seller/updatePassword")
+    public ResponseEntity<Object> updatePassword(@Valid @RequestBody UpdatePasswordModel updatePasswordModel) {
+        Seller seller= userDaoService.getLoggedInSeller();
+        String username = seller.getUsername();
+
+        String message = sellerDaoService.updateSellerPassword(updatePasswordModel,username);
+
+        return new ResponseEntity<>(message, HttpStatus.ACCEPTED);
+
     }
 }

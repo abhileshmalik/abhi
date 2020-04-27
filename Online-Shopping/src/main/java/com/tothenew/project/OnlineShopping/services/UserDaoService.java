@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.tothenew.project.OnlineShopping.exception.BadRequestException;
-import com.tothenew.project.OnlineShopping.model.AddressModel;
-import com.tothenew.project.OnlineShopping.model.CustomerRegisterModel;
-import com.tothenew.project.OnlineShopping.model.CustomerUpdateModel;
-import com.tothenew.project.OnlineShopping.model.SellerRegisterModel;
+import com.tothenew.project.OnlineShopping.model.*;
 import com.tothenew.project.OnlineShopping.entities.*;
 import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
 import com.tothenew.project.OnlineShopping.exception.TokenExpiredException;
@@ -440,6 +437,29 @@ public class UserDaoService {
         }
         else {
             throw new UserNotFoundException("Invalid EmailID entered");
+        }
+    }
+
+    public String updateCustomerPassword(UpdatePasswordModel updatePasswordModel, String username) {
+
+        User user = userRepository.findByUsername(username);
+        String oldPassword = updatePasswordModel.getOldPassword();
+
+        if (passwordEncoder.matches(oldPassword,user.getPassword())){
+            String newpass = passwordEncoder.encode(updatePasswordModel.getOldPassword());
+
+            user.setPassword(newpass);
+
+            String emailId = user.getEmail();
+            String subject = "Password Updated !!";
+            String text = "Your account password has been changed recently," +
+                    " if you have not done this kindly report it to our team.";
+            emailSenderService.sendEmail(emailId, subject, text);
+
+            return "Password Updated Successfully";
+        }
+        else {
+            throw new BadRequestException("Old password does not match with our records");
         }
     }
 }

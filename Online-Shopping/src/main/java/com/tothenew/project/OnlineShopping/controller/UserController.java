@@ -9,6 +9,7 @@ import com.tothenew.project.OnlineShopping.model.CustomerUpdateModel;
 import com.tothenew.project.OnlineShopping.entities.AppUser;
 import com.tothenew.project.OnlineShopping.entities.Customer;
 import com.tothenew.project.OnlineShopping.entities.User;
+import com.tothenew.project.OnlineShopping.model.UpdatePasswordModel;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,9 +41,26 @@ public class UserController {
     AppUser appUser;
 
 
+    @GetMapping("/")
+    public String index(){
+        return "Welcome To Online Shopping Portal";
+    }
+
+
     @GetMapping("/users")
     public List<User> retrieveAllUsers() {
         return userDaoService.findAll();
+    }
+
+    @GetMapping("/doLogout")
+    public String logout(HttpServletRequest request){
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null) {
+            String tokenValue = authHeader.replace("Bearer", "").trim();
+            OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
+            tokenStore.removeAccessToken(accessToken);
+        }
+        return "Logged out successfully";
     }
 
     ///////////////// Admin API's Part //////////////////////////////
@@ -86,22 +104,6 @@ public class UserController {
     {
         String message= userDaoService.confirmUserAccount(confirmationToken);
         return message;
-    }
-
-    @GetMapping("/doLogout")
-    public String logout(HttpServletRequest request){
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader != null) {
-            String tokenValue = authHeader.replace("Bearer", "").trim();
-            OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
-            tokenStore.removeAccessToken(accessToken);
-        }
-        return "Logged out successfully";
-    }
-
-    @GetMapping("/")
-    public String index(){
-        return "Welcome To Online Shopping Portal";
     }
 
 
@@ -189,8 +191,8 @@ public class UserController {
     @PutMapping("/customer/updateAddress/{address_id}")
     public String updateCustomerAddress(@RequestBody AddressModel addressModel, @PathVariable Long address_id, HttpServletResponse response)
     {
-        Customer customer1 = userDaoService.getLoggedInCustomer();
-        Long user_id = customer1.getUser_id();
+        Customer customer = userDaoService.getLoggedInCustomer();
+        Long user_id = customer.getUser_id();
 
         String message = userDaoService.updateAddress(addressModel,address_id, user_id);
         if (!message.equals("Address updated")) {
@@ -205,6 +207,17 @@ public class UserController {
         String message = userDaoService.resendActivationToken(email);
 
         return message;
+
+    }
+
+    @PostMapping("/customer/updatePassword")
+    public ResponseEntity<Object> updatePassword(@RequestBody UpdatePasswordModel updatePasswordModel) {
+        Customer customer = userDaoService.getLoggedInCustomer();
+        String username = customer.getUsername();
+
+        String message = userDaoService.updateCustomerPassword(updatePasswordModel,username);
+
+        return new ResponseEntity<>(message, HttpStatus.ACCEPTED);
 
     }
 

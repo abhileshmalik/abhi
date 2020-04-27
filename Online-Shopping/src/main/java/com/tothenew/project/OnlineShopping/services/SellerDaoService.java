@@ -8,10 +8,13 @@ import com.tothenew.project.OnlineShopping.entities.Seller;
 import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
 import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
+import com.tothenew.project.OnlineShopping.model.UpdatePasswordModel;
 import com.tothenew.project.OnlineShopping.repos.AddressRepository;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,6 +28,11 @@ public class SellerDaoService {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
+
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     @Transactional
@@ -102,6 +110,29 @@ public class SellerDaoService {
         else {
             throw new ResourceNotFoundException("Invalid Address Id");
         }
+    }
 
+    public String updateSellerPassword(UpdatePasswordModel updatePasswordModel, String username) {
+
+        User user = userRepository.findByUsername(username);
+
+        String oldPassword = updatePasswordModel.getOldPassword();
+
+        if (passwordEncoder.matches(oldPassword,user.getPassword())){
+            String newpass = passwordEncoder.encode(updatePasswordModel.getOldPassword());
+
+            user.setPassword(newpass);
+
+            String emailId = user.getEmail();
+            String subject = "Password Updated !!";
+            String text = "Your account password has been changed recently," +
+                    " if you have not done this kindly report it to our team.";
+            emailSenderService.sendEmail(emailId, subject, text);
+
+            return "Password Updated Successfully";
+        }
+        else {
+            return "Old password does not match with our records";
+        }
     }
 }

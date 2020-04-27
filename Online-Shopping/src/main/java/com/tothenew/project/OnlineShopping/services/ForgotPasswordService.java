@@ -24,7 +24,7 @@ public class ForgotPasswordService {
     private ResetPasswordRepository resetPasswordRepository;
 
     @Autowired
-    private EmailSenderService emailService;
+    private EmailSenderService emailSenderService;
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -51,7 +51,7 @@ public class ForgotPasswordService {
         String subject = "Reset your password";
         String text = "To reset your password , please click here "
                 +"http://localhost:8080/reset-password?token="+resetPasswordToken.getToken();
-        emailService.sendEmail(emailId,subject,text);
+        emailSenderService.sendEmail(emailId,subject,text);
 
         return "A link has been sent to your email for password reset.";
     }
@@ -78,7 +78,7 @@ public class ForgotPasswordService {
             String emailId = user.getEmail();
             String subject = "Password Updated !!";
             String text = "Your password has been changed successfully!!";
-            emailService.sendEmail(emailId, subject, text);
+            emailSenderService.sendEmail(emailId, subject, text);
 
             return "Password updated successfully!!!";
         }
