@@ -127,30 +127,36 @@ public class UserDaoService {
             ModelMapper modelMapper = new ModelMapper();
             Customer customer= modelMapper.map(customerRegisterModel, Customer.class);
 
-            String hpass = customer.getPassword();
-            customer.setPassword(passwordEncoder.encode(hpass));
-            customer.setDeleted(false);
-            customer.setActive(true);
-            customer.setEnabled(false);
-            customer.setNonLocked(true);
-            customer.setRole("ROLE_USER");
+            if (customerRegisterModel.getPassword().matches(customerRegisterModel.getConfirmPassword())) {
+                String hpass = customer.getPassword();
+                customer.setPassword(passwordEncoder.encode(hpass));
+                customer.setDeleted(false);
+                customer.setActive(true);
+                customer.setEnabled(false);
+                customer.setNonLocked(true);
+                customer.setRole("ROLE_USER");
 
-            userRepository.save(customer);
+                userRepository.save(customer);
 
-            ConfirmationToken confirmationToken = new ConfirmationToken(customer);
+                ConfirmationToken confirmationToken = new ConfirmationToken(customer);
 
-            confirmationTokenRepository.save(confirmationToken);
+                confirmationTokenRepository.save(confirmationToken);
 
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(customer.getEmail());
-            mailMessage.setSubject("Complete Registration!");
-            mailMessage.setFrom("online-shopping@gmail.com");
-            mailMessage.setText("To confirm your account, please click here : "
-                    +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setTo(customer.getEmail());
+                mailMessage.setSubject("Complete Registration!");
+                mailMessage.setFrom("online-shopping@gmail.com");
+                mailMessage.setText("To confirm your account, please click here : "
+                        +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
 
-            emailSenderService.sendEmail(mailMessage);
+                emailSenderService.sendEmail(mailMessage);
 
-            return "Registration Successful, Please verify your account via Activation link sent on your registered email";
+                return "Registration Successful, Please verify your account via Activation link sent on your registered email";
+            }
+            else
+            {
+                throw new ValidationException("Password and Confirm password should match");
+            }
         }
     }
 
@@ -173,27 +179,33 @@ public class UserDaoService {
             ModelMapper modelMapper = new ModelMapper();
             Seller seller= modelMapper.map(sellerRegisterModel, Seller.class);
 
-            String hpass = seller.getPassword();
-            seller.setPassword(passwordEncoder.encode(hpass));
-            seller.setDeleted(false);
-            seller.setActive(true);
-            seller.setEnabled(false);
-            seller.setNonLocked(true);
-            seller.setRole("ROLE_SELLER");
+            if (sellerRegisterModel.getPassword().matches(sellerRegisterModel.getConfirmPassword())){
+                String hpass = seller.getPassword();
+                seller.setPassword(passwordEncoder.encode(hpass));
+                seller.setDeleted(false);
+                seller.setActive(true);
+                seller.setEnabled(false);
+                seller.setNonLocked(true);
+                seller.setRole("ROLE_SELLER");
 
-            userRepository.save(seller);
+                userRepository.save(seller);
 
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(seller.getEmail());
-            mailMessage.setSubject("Registration Successful!");
-            mailMessage.setFrom("online-shopping@gmail.com");
-            mailMessage.setText("Hello Seller, Thank You for choosing Online-Shopping Portal." +
-                    " Your has been registered successfully please wait for some time" +
-                    " So that your account can be enabled by our team after verification  : ");
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setTo(seller.getEmail());
+                mailMessage.setSubject("Registration Successful!");
+                mailMessage.setFrom("online-shopping@gmail.com");
+                mailMessage.setText("Hello Seller, Thank You for choosing Online-Shopping Portal." +
+                        " Your has been registered successfully please wait for some time" +
+                        " So that your account can be enabled by our team after verification  : ");
 
-            emailSenderService.sendEmail(mailMessage);
+                emailSenderService.sendEmail(mailMessage);
 
-            return "Registration Successful, ";
+                return "Registration Successful, ";
+            }
+            else
+            {
+                throw new ValidationException("Password and Confirm password should match");
+            }
         }
     }
 
