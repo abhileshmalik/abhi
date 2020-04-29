@@ -124,10 +124,9 @@ public class UserDaoService {
         }
         else
         {
-            ModelMapper modelMapper = new ModelMapper();
-            Customer customer= modelMapper.map(customerRegisterModel, Customer.class);
+                ModelMapper modelMapper = new ModelMapper();
+                Customer customer= modelMapper.map(customerRegisterModel, Customer.class);
 
-            if (customerRegisterModel.getPassword().matches(customerRegisterModel.getConfirmPassword())) {
                 String hpass = customer.getPassword();
                 customer.setPassword(passwordEncoder.encode(hpass));
                 customer.setDeleted(false);
@@ -153,59 +152,44 @@ public class UserDaoService {
 
                 return "Registration Successful, Please verify your account via Activation link sent on your registered email";
             }
-            else
-            {
-                throw new ValidationException("Password and Confirm password should match");
-            }
-        }
     }
 
-    public String saveNewSeller(SellerRegisterModel sellerRegisterModel){
+    public String saveNewSeller(SellerRegisterModel sellerRegisterModel) {
 
         User existingEmail = userRepository.findByEmailIgnoreCase(sellerRegisterModel.getEmail());
         User existingUsername = userRepository.findByUsername(sellerRegisterModel.getUsername());
 
-        if(existingEmail != null)
-        {
+        if (existingEmail != null) {
             return "This email ID is already registered with us";
-        }
-        else if (existingUsername != null) {
+        } else if (existingUsername != null) {
             {
                 return "This username is already taken please try something else";
             }
-        }
-        else
-        {
+        } else {
             ModelMapper modelMapper = new ModelMapper();
-            Seller seller= modelMapper.map(sellerRegisterModel, Seller.class);
+            Seller seller = modelMapper.map(sellerRegisterModel, Seller.class);
 
-            if (sellerRegisterModel.getPassword().matches(sellerRegisterModel.getConfirmPassword())){
-                String hpass = seller.getPassword();
-                seller.setPassword(passwordEncoder.encode(hpass));
-                seller.setDeleted(false);
-                seller.setActive(true);
-                seller.setEnabled(false);
-                seller.setNonLocked(true);
-                seller.setRole("ROLE_SELLER");
+            String hpass = seller.getPassword();
+            seller.setPassword(passwordEncoder.encode(hpass));
+            seller.setDeleted(false);
+            seller.setActive(true);
+            seller.setEnabled(false);
+            seller.setNonLocked(true);
+            seller.setRole("ROLE_SELLER");
 
-                userRepository.save(seller);
+            userRepository.save(seller);
 
-                SimpleMailMessage mailMessage = new SimpleMailMessage();
-                mailMessage.setTo(seller.getEmail());
-                mailMessage.setSubject("Registration Successful!");
-                mailMessage.setFrom("online-shopping@gmail.com");
-                mailMessage.setText("Hello Seller, Thank You for choosing Online-Shopping Portal." +
-                        " Your has been registered successfully please wait for some time" +
-                        " So that your account can be enabled by our team after verification  : ");
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(seller.getEmail());
+            mailMessage.setSubject("Registration Successful!");
+            mailMessage.setFrom("online-shopping@gmail.com");
+            mailMessage.setText("Hello Seller, Thank You for choosing Online-Shopping Portal." +
+                    " Your has been registered successfully please wait for some time" +
+                    " So that your account can be enabled by our team after verification  : ");
 
-                emailSenderService.sendEmail(mailMessage);
+            emailSenderService.sendEmail(mailMessage);
 
-                return "Registration Successful, ";
-            }
-            else
-            {
-                throw new ValidationException("Password and Confirm password should match");
-            }
+            return "Registration Successful, ";
         }
     }
 
