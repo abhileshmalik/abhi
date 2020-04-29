@@ -19,11 +19,9 @@ public class AuthenticationManagerProvider extends WebSecurityConfigurerAdapter 
         return super.authenticationManagerBean();
     }
 
-/*
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(lockAuthenticationManager);
     }
-*/
 
 }

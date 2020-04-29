@@ -51,7 +51,7 @@ public class LockAuthenticationManager implements AuthenticationProvider {
 
                 SimpleMailMessage mailMessage = new SimpleMailMessage();
                 mailMessage.setTo(user.getEmail());
-                mailMessage.setSubject("Account Locked");
+                mailMessage.setSubject("Account Locked!");
                 mailMessage.setText("Your account has been locked !! Go to this link to unlock your account - localhost:8080/account-unlock/{username}");
                 emailService.sendEmail(mailMessage);
 

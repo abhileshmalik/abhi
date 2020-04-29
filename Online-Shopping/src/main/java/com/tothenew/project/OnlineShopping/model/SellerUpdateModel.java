@@ -8,9 +8,7 @@ public class SellerUpdateModel {
     private String firstName;
     private String middleName;
     private String lastName;
-    @Email
     private String email;
-    @GST
     private String gstin;
     private String companyName;
     private String companyContact;

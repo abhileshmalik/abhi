@@ -1,13 +1,11 @@
 package com.tothenew.project.OnlineShopping.services;
 
-import com.tothenew.project.OnlineShopping.exception.BadRequestException;
+import com.tothenew.project.OnlineShopping.exception.*;
 import com.tothenew.project.OnlineShopping.model.AddressModel;
 import com.tothenew.project.OnlineShopping.model.SellerUpdateModel;
 import com.tothenew.project.OnlineShopping.entities.Address;
 import com.tothenew.project.OnlineShopping.entities.Seller;
 import com.tothenew.project.OnlineShopping.entities.User;
-import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
-import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
 import com.tothenew.project.OnlineShopping.model.UpdatePasswordModel;
 import com.tothenew.project.OnlineShopping.repos.AddressRepository;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
@@ -52,8 +50,13 @@ public class SellerDaoService {
             if(sellerUpdateModel.getLastName() != null)
                 seller1.setLastName(sellerUpdateModel.getLastName());
 
-            if (sellerUpdateModel.getEmail() != null)
+            if (sellerUpdateModel.getEmail() != null) {
+                if (!sellerUpdateModel.getEmail().matches("^([a-zA-Z0-9_\\-.]+)@([a-zA-Z0-9_\\-.]+)\\.([a-zA-Z]{2,5})$"))
+                    throw new ValidationException("Email ID must be valid! ");
+                if ((userRepository.findByEmailIgnoreCase(sellerUpdateModel.getEmail()) != null))
+                    throw new NotUniqueException("Email ID already exists");
                 seller1.setEmail(sellerUpdateModel.getEmail());
+            }
 
             if(sellerUpdateModel.getGstin() != null)
                 seller1.setGstin(sellerUpdateModel.getGstin());
@@ -61,9 +64,11 @@ public class SellerDaoService {
             if (sellerUpdateModel.getCompanyName() != null)
                 seller1.setCompanyName(sellerUpdateModel.getCompanyName());
 
-            if (sellerUpdateModel.getCompanyContact() != null)
+            if (sellerUpdateModel.getCompanyContact() != null) {
+                if (!sellerUpdateModel.getCompanyContact().matches("^[0-9]*$"))
+                    throw new ValidationException("Phone number must contain numbers only");
                 seller1.setCompanyContact(sellerUpdateModel.getCompanyContact());
-
+            }
             userRepository.save(seller1);
             return "Profile updated successfully";
         }
@@ -119,20 +124,27 @@ public class SellerDaoService {
         String oldPassword = updatePasswordModel.getOldPassword();
 
         if (passwordEncoder.matches(oldPassword,user.getPassword())){
-            String newpass = passwordEncoder.encode(updatePasswordModel.getOldPassword());
+            if (updatePasswordModel.getNewPassword().matches(updatePasswordModel.getConfirmNewPassword())) {
+                String newpass = passwordEncoder.encode(updatePasswordModel.getOldPassword());
 
-            user.setPassword(newpass);
+                user.setPassword(newpass);
+                userRepository.save(user);
 
-            String emailId = user.getEmail();
-            String subject = "Password Updated !!";
-            String text = "Your account password has been changed recently," +
-                    " if you have not done this kindly report it to our team.";
-            emailSenderService.sendEmail(emailId, subject, text);
+                String emailId = user.getEmail();
+                String subject = "Password Updated !!";
+                String text = "Your account password has been changed recently," +
+                        " if you have not done this kindly report it to our team.";
+                emailSenderService.sendEmail(emailId, subject, text);
 
-            return "Password Updated Successfully";
+                return "Password Updated Successfully";
+            }
+            else
+            {
+                throw new ValidationException("password and confirm password not matched !");
+            }
         }
         else {
-            return "Old password does not match with our records";
+            throw new ValidationException("Old password does not match with our records");
         }
     }
 }

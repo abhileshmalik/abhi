@@ -1,5 +1,6 @@
 package com.tothenew.project.OnlineShopping.services;
 
+import com.tothenew.project.OnlineShopping.exception.ValidationException;
 import com.tothenew.project.OnlineShopping.model.ForgotPasswordModel;
 import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.exception.TokenExpiredException;
@@ -70,6 +71,12 @@ public class ForgotPasswordService {
         else {
             User user = userRepository.findByEmailIgnoreCase(resetPasswordToken.getUser().getEmail());
 
+            if(forgotPasswordModel.getPassword().matches(forgotPasswordModel.getConfirmPassword())) {
+
+            }
+            else {
+                throw new ValidationException("password and confirm password not matched !");
+            }
             String pass = forgotPasswordModel.getPassword();
             user.setPassword(passwordEncoder.encode(pass));
             user.setEnabled(true);

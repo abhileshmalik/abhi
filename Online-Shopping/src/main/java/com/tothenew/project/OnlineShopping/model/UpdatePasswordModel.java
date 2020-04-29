@@ -5,14 +5,12 @@ import com.tothenew.project.OnlineShopping.validations.PasswordMatches;
 
 import javax.validation.constraints.NotNull;
 
-@PasswordMatches
 public class UpdatePasswordModel {
 
     @NotNull
     private String oldPassword;
 
     @NotNull
-    @Password
     private String newPassword;
 
     @NotNull

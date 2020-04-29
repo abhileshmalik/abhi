@@ -7,7 +7,6 @@ public class CustomerUpdateModel {
     private String firstName;
     private String middleName;
     private String lastName;
-    @Email
     private String email;
     private String contact;
 

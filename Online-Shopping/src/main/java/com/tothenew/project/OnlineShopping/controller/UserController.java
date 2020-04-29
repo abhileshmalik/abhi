@@ -211,7 +211,7 @@ public class UserController {
     }
 
     @PostMapping("/customer/updatePassword")
-    public ResponseEntity<Object> updatePassword(@RequestBody UpdatePasswordModel updatePasswordModel) {
+    public ResponseEntity<Object> updatePassword(@Valid @RequestBody UpdatePasswordModel updatePasswordModel) {
         Customer customer = userDaoService.getLoggedInCustomer();
         String username = customer.getUsername();
 
