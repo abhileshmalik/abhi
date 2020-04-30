@@ -43,8 +43,6 @@ public class UserController {
 
     AppUser appUser;
 
-    Logger logger= LoggerFactory.getLogger(UserController.class);
-
 
     @GetMapping("/")
     public String index(){
@@ -72,8 +70,7 @@ public class UserController {
 
     @GetMapping("/customers")
     public MappingJacksonValue retrieveAllCustomers(@RequestHeader(defaultValue = "0") String page, @RequestHeader(defaultValue = "10")String size) {
-        logger.error("Error Message");
-        logger.info("Method Accessed");
+       // logger.error("Error Message");
         return userDaoService.findAllCustomers(page, size);
     }
 

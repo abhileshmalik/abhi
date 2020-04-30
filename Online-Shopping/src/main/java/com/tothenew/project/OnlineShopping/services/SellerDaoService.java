@@ -9,6 +9,8 @@ import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.model.UpdatePasswordModel;
 import com.tothenew.project.OnlineShopping.repos.AddressRepository;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,6 +33,8 @@ public class SellerDaoService {
     private EmailSenderService emailSenderService;
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    Logger logger = LoggerFactory.getLogger(SellerDaoService.class);
 
 
     @Transactional
@@ -70,6 +74,9 @@ public class SellerDaoService {
                 seller1.setCompanyContact(sellerUpdateModel.getCompanyContact());
             }
             userRepository.save(seller1);
+
+            logger.info("********** Seller Profile Updated **********");
+
             return "Profile updated successfully";
         }
         else
@@ -106,6 +113,8 @@ public class SellerDaoService {
                 if (addressModel.getLabel() != null)
                     savedAddress.setLabel(addressModel.getLabel());
 
+                logger.info("********** Address Updated **********");
+
                 return "Address updated";
             }
             else {
@@ -135,6 +144,8 @@ public class SellerDaoService {
                 String text = "Your account password has been changed recently," +
                         " if you have not done this kindly report it to our team.";
                 emailSenderService.sendEmail(emailId, subject, text);
+
+                logger.info("********** Password Updated **********");
 
                 return "Password Updated Successfully";
             }

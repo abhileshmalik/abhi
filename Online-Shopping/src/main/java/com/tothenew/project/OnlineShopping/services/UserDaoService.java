@@ -12,6 +12,8 @@ import com.tothenew.project.OnlineShopping.repos.UserRepository;
 import com.tothenew.project.OnlineShopping.security.GrantAuthorityImpl;
 import com.tothenew.project.OnlineShopping.tokens.ConfirmationToken;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
@@ -41,6 +43,8 @@ public class UserDaoService {
     @Autowired
     private EmailSenderService emailSenderService;
 
+    Logger logger = LoggerFactory.getLogger(UserDaoService.class);
+
     public List<User> userList = new ArrayList<>();
     public List<Customer> customerList = new ArrayList<>();
     public List<Seller> sellerList = new ArrayList<>();
@@ -61,6 +65,9 @@ public class UserDaoService {
 
         MappingJacksonValue mapping3=new MappingJacksonValue(customers);
         mapping3.setFilters(filterProvider4);
+
+        logger.info("********** All Customers List Retrieved **********");
+
         return mapping3;
     }
 
@@ -74,6 +81,8 @@ public class UserDaoService {
 
         MappingJacksonValue mapping4=new MappingJacksonValue(sellers);
         mapping4.setFilters(filterProvider4);
+
+        logger.info("********** All Sellers List Retrieved **********");
 
         return mapping4;
     }
@@ -150,6 +159,8 @@ public class UserDaoService {
 
                 emailSenderService.sendEmail(mailMessage);
 
+            logger.info("********** New Customer Registered **********");
+
                 return "Registration Successful, Please verify your account via Activation link sent on your registered email";
             }
     }
@@ -188,6 +199,8 @@ public class UserDaoService {
                     " So that your account can be enabled by our team after verification  : ");
 
             emailSenderService.sendEmail(mailMessage);
+
+            logger.info("********** New Seller Registered **********");
 
             return "Registration Successful, ";
         }
@@ -258,16 +271,14 @@ public class UserDaoService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
         String username = appUser.getUsername();
-        Customer customer = (Customer) userRepository.findByUsername(username);
-        return customer;
+        return (Customer) userRepository.findByUsername(username);
     }
 
     public Seller getLoggedInSeller() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
         String username = appUser.getUsername();
-        Seller seller = (Seller) userRepository.findByUsername(username);
-        return seller;
+        return (Seller) userRepository.findByUsername(username);
     }
 
 
@@ -303,6 +314,9 @@ public class UserDaoService {
             }
 
             userRepository.save(customer1);
+
+            logger.info("********** Customer Profile Updated **********");
+
             return "Profile updated successfully";
         }
         else
@@ -337,6 +351,9 @@ public class UserDaoService {
 
         if (address.isPresent()){
             addressRepository.deleteAdd(user_id, address_id);
+
+            logger.info("********** Address Deleted **********");
+
             return "Address deleted";
         }
         else
@@ -370,6 +387,8 @@ public class UserDaoService {
 
                 if (addressModel.getLabel() != null)
                     savedAddress.setLabel(addressModel.getLabel());
+
+                logger.info("********** Address Updated **********");
 
                 return "Address updated";
             }
@@ -459,6 +478,8 @@ public class UserDaoService {
                 String text = "Your account password has been changed recently," +
                         " if you have not done this kindly report it to our team.";
                 emailSenderService.sendEmail(emailId, subject, text);
+
+                logger.info("********** Password Updated **********");
 
                 return "Password Updated Successfully";
             }
