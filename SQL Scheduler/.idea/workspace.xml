@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9e70206e-6d6e-46ae-989a-3470ad4b0391" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/DBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/DBConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/DriverClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/DriverClass.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ReadFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ReadFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jdbcDemo/TestDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbcDemo/TestDemo.java" afterDir="false" />
-    </list>
+    <list default="true" id="9e70206e-6d6e-46ae-989a-3470ad4b0391" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -48,7 +32,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/mysql-connector-java-8.0.20.jar!/" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Documents/Project/Online-Shopping/build.gradle" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -141,26 +125,26 @@
       <screen x="67" y="27" width="1299" height="741" />
     </state>
     <state x="320" y="27" width="782" height="741" key="CommitChangelistDialog2/67.27.1299.741/1366.0.1600.900@67.27.1299.741" timestamp="1588238267018" />
-    <state x="499" y="154" width="735" height="484" key="FileChooserDialogImpl" timestamp="1588242568506">
+    <state x="499" y="154" width="735" height="484" key="FileChooserDialogImpl" timestamp="1588259000867">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state x="499" y="154" width="735" height="484" key="FileChooserDialogImpl/67.27.1299.741/1366.0.1600.900@67.27.1299.741" timestamp="1588242568506" />
-    <state width="1253" height="264" key="GridCell.Tab.0.bottom" timestamp="1588249449494">
+    <state x="499" y="154" width="735" height="484" key="FileChooserDialogImpl/67.27.1299.741/1366.0.1600.900@67.27.1299.741" timestamp="1588259000867" />
+    <state width="1253" height="264" key="GridCell.Tab.0.bottom" timestamp="1588259003615">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state width="1253" height="264" key="GridCell.Tab.0.bottom/67.27.1299.741/1366.0.1600.900@67.27.1299.741" timestamp="1588249449494" />
-    <state width="1253" height="264" key="GridCell.Tab.0.center" timestamp="1588249449494">
+    <state width="1253" height="264" key="GridCell.Tab.0.bottom/67.27.1299.741/1366.0.1600.900@67.27.1299.741" timestamp="1588259003615" />
+    <state width="1253" height="264" key="GridCell.Tab.0.center" timestamp="1588259003614">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state width="1253" height="264" key="GridCell.Tab.0.center/67.27.1299.741/1366.0.1600.900@67.27.1299.741" timestamp="1588249449494" />
-    <state width="1253" height="264" key="GridCell.Tab.0.left" timestamp="1588249449494">
+    <state width="1253" height="264" key="GridCell.Tab.0.center/67.27.1299.741/1366.0.1600.900@67.27.1299.741" timestamp="1588259003614" />
+    <state width="1253" height="264" key="GridCell.Tab.0.left" timestamp="1588259003614">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state width="1253" height="264" key="GridCell.Tab.0.left/67.27.1299.741/1366.0.1600.900@67.27.1299.741" timestamp="1588249449494" />
-    <state width="1253" height="264" key="GridCell.Tab.0.right" timestamp="1588249449494">
+    <state width="1253" height="264" key="GridCell.Tab.0.left/67.27.1299.741/1366.0.1600.900@67.27.1299.741" timestamp="1588259003614" />
+    <state width="1253" height="264" key="GridCell.Tab.0.right" timestamp="1588259003614">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state width="1253" height="264" key="GridCell.Tab.0.right/67.27.1299.741/1366.0.1600.900@67.27.1299.741" timestamp="1588249449494" />
+    <state width="1253" height="264" key="GridCell.Tab.0.right/67.27.1299.741/1366.0.1600.900@67.27.1299.741" timestamp="1588259003614" />
     <state x="199" y="27" width="1024" height="741" key="SettingsEditor" timestamp="1588242502714">
       <screen x="67" y="27" width="1299" height="741" />
     </state>

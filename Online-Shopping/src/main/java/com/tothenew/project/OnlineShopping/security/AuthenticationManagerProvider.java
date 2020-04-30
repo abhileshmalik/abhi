@@ -10,18 +10,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class AuthenticationManagerProvider extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private LockAuthenticationManager lockAuthenticationManager;
-
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
-/*    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(lockAuthenticationManager);
-    }*/
 
 }

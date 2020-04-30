@@ -1,11 +1,16 @@
 package com.tothenew.project.OnlineShopping.product;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 //@JsonFilter("variantFilter")
+@EntityListeners(AuditingEntityListener.class)
 public class ProductVariation {
 
     @Id
@@ -16,6 +21,14 @@ public class ProductVariation {
     private Integer quantityAvailable;
     private Double price;
     private Boolean is_active;
+
+    @Column
+    @CreatedDate
+    private Date createdDate;
+
+    @Column
+    @LastModifiedDate
+    private Date modifiedDate;
 
 /*
     @ManyToOne

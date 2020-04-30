@@ -4,13 +4,18 @@ package com.tothenew.project.OnlineShopping.product;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tothenew.project.OnlineShopping.entities.Seller;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
 @JsonFilter("productfilter")
+@EntityListeners(AuditingEntityListener.class)
 public class Product {
 
     @Id
@@ -27,6 +32,14 @@ public class Product {
     private Boolean isReturnable;
     private Boolean isActive;
     private Boolean isDeleted;
+
+    @Column
+    @CreatedDate
+    private Date createdDate;
+
+    @Column
+    @LastModifiedDate
+    private Date modifiedDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")

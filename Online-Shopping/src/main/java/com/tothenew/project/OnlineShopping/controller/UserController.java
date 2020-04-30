@@ -11,10 +11,13 @@ import com.tothenew.project.OnlineShopping.entities.Customer;
 import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.model.UpdatePasswordModel;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +42,8 @@ public class UserController {
     private MessageSource messageSource;
 
     AppUser appUser;
+
+    Logger logger= LoggerFactory.getLogger(UserController.class);
 
 
     @GetMapping("/")
@@ -67,6 +72,8 @@ public class UserController {
 
     @GetMapping("/customers")
     public MappingJacksonValue retrieveAllCustomers(@RequestHeader(defaultValue = "0") String page, @RequestHeader(defaultValue = "10")String size) {
+        logger.error("Error Message");
+        logger.info("Method Accessed");
         return userDaoService.findAllCustomers(page, size);
     }
 
@@ -109,6 +116,7 @@ public class UserController {
 
 
     @GetMapping("/customer/home")
+    //@Scheduled(initialDelay = 1000,fixedDelay = 10000)
     public String customerHome(){
         Customer customer = userDaoService.getLoggedInCustomer();
         String name = customer.getFirstName();
