@@ -10,9 +10,14 @@ public class TestDemo {
         Statement myStmt = null;
         ResultSet myRs = null;
 
+        String dbUrl = "jdbc:mysql://localhost:3306/testDb";
+        String user = "root";
+        String pass = "igdefault";
+
+
         try {
             // 1. Get a connection to database
-            myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/testDb", "root" , "igdefault");
+            myConn = DriverManager.getConnection(dbUrl, user, pass);
 
             System.out.println("Database connection successful!\n");
 
@@ -20,7 +25,7 @@ public class TestDemo {
             myStmt = myConn.createStatement();
 
             // 3. Insert a new student
-            System.out.println("Inserting a new employee to database\n");
+            System.out.println("Inserting a new employee to database");
 
             int rowsAffected  = myStmt.executeUpdate(
                     "insert into student " +

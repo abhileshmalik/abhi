@@ -70,11 +70,12 @@ public class ReadFile {
                 File myObj = new File("commands4.txt");
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
+                    Thread.sleep(1000);
                     String data = myReader.nextLine();
                     System.out.println(data);
                 }
                 myReader.close();
-            } catch (FileNotFoundException e) {
+            } catch (FileNotFoundException | InterruptedException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
             }
