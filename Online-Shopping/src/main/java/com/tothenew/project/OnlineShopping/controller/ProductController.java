@@ -10,15 +10,17 @@ import com.tothenew.project.OnlineShopping.services.ProductDaoService;
 import com.tothenew.project.OnlineShopping.product.Product;
 import com.tothenew.project.OnlineShopping.services.ProductVariationDaoService;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
+@Api(value="Product Related APIs")
 @RestController
 public class ProductController {
 
@@ -65,7 +67,7 @@ public class ProductController {
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
-
+    @ApiOperation(value = "Get a Product by Id")
     @GetMapping("/product/{product_id}")
     public MappingJacksonValue retrieveProduct(@PathVariable Long product_id) {
         SimpleBeanPropertyFilter filter7 = SimpleBeanPropertyFilter.filterOutAllExcept("productName","brand",
@@ -110,7 +112,7 @@ public class ProductController {
 
         String message = productDaoService.deleteProduct(pid, sellerid);
 
-        return new ResponseEntity<>(message, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     public List<Product> findSellerwiseProducts(Long sellerid){

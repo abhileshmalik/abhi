@@ -4,6 +4,7 @@ package com.tothenew.project.OnlineShopping.product;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tothenew.project.OnlineShopping.entities.Seller;
+import io.swagger.annotations.ApiModel;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Entity
 @JsonFilter("productfilter")
 @EntityListeners(AuditingEntityListener.class)
+@ApiModel(description = "All details about the Product")
 public class Product {
 
     @Id

@@ -1,10 +1,12 @@
 package com.tothenew.project.OnlineShopping.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
 
 @Entity
+@ApiModel(description = "All details about the User Address")
 public class Address {
 
     @Id

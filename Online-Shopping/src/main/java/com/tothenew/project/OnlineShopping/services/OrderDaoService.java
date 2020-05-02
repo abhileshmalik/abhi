@@ -2,9 +2,7 @@ package com.tothenew.project.OnlineShopping.services;
 
 import com.tothenew.project.OnlineShopping.entities.Address;
 import com.tothenew.project.OnlineShopping.entities.Customer;
-import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
-import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
 import com.tothenew.project.OnlineShopping.orderprocessing.Cart;
 import com.tothenew.project.OnlineShopping.orderprocessing.OrderProduct;
 import com.tothenew.project.OnlineShopping.orderprocessing.Orders;
@@ -12,6 +10,7 @@ import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Date;
 import java.util.Optional;
 

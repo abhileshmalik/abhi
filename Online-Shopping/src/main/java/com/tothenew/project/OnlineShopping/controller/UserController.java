@@ -11,8 +11,7 @@ import com.tothenew.project.OnlineShopping.entities.Customer;
 import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.model.UpdatePasswordModel;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,17 +67,20 @@ public class UserController {
 
     ///////////////// Admin API's Part //////////////////////////////
 
+    @ApiOperation(value = "Admin Module to Retrieve List of all Customers")
     @GetMapping("/customers")
     public MappingJacksonValue retrieveAllCustomers(@RequestHeader(defaultValue = "0") String page, @RequestHeader(defaultValue = "10")String size) {
        // logger.error("Error Message");
         return userDaoService.findAllCustomers(page, size);
     }
 
+    @ApiOperation(value = "Admin Module to Retrieve List of all Sellers")
     @GetMapping("/sellers")
     public MappingJacksonValue retrieveAllSellers(@RequestHeader(defaultValue = "0") String page, @RequestHeader(defaultValue = "10")String size) {
         return userDaoService.findAllSellers(page, size);
     }
 
+    @ApiOperation(value = "Admin Module to Enable a Seller Account")
     @PostMapping(path = "/admin/enableSeller/{sellerId}")
     public String enableSellerAccount(@PathVariable Long sellerId){
         return userDaoService.enableSellerAccount(sellerId);
@@ -95,6 +97,7 @@ public class UserController {
 
  //////////////// Customer APIs ////////////////////////////
 
+    @ApiOperation(value = "API to register new Customers")
     @PostMapping(path = "/customerregistration")
     public ResponseEntity<Object> createCustomer(@Valid @RequestBody CustomerRegisterModel customerRegisterModel) {
         String message = userDaoService.saveNewCustomer(customerRegisterModel);
@@ -106,12 +109,11 @@ public class UserController {
     @RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
     public String confirmUserAccount(@RequestParam("token")String confirmationToken)
     {
-        String message= userDaoService.confirmUserAccount(confirmationToken);
-        return message;
+        return userDaoService.confirmUserAccount(confirmationToken);
     }
 
 
-
+    @ApiOperation(value = "Customer Home Page which supports Internationalized Content")
     @GetMapping("/customer/home")
     //@Scheduled(initialDelay = 1000,fixedDelay = 10000)
     public String customerHome(){
@@ -128,6 +130,7 @@ public class UserController {
         return customer;
     }
 
+    @ApiOperation(value = "View Customer Profile")
     @GetMapping("/customer/home/profile")
     public MappingJacksonValue customerprofileview() {
 
@@ -141,6 +144,7 @@ public class UserController {
         return mapping1;
     }
 
+    @ApiOperation(value = "View Customer Addresses")
     @GetMapping("/customer/home/profile/address")
     public MappingJacksonValue customeraddressview() {
         SimpleBeanPropertyFilter filter2 = SimpleBeanPropertyFilter.filterOutAllExcept("addresses");
@@ -151,7 +155,7 @@ public class UserController {
         return mapping2;
     }
 
-
+    @ApiOperation(value = "Update a customer Profile")
     @PatchMapping ("/customer/updateProfile")
     public String updateCustomerDetails(@RequestBody CustomerUpdateModel customerUpdateModel, HttpServletResponse response){
         Customer customer1 = userDaoService.getLoggedInCustomer();
@@ -166,7 +170,7 @@ public class UserController {
             return message;
     }
 
-
+    @ApiOperation(value = "Add an address")
     @PostMapping("/customer/addAddress")
     public String addCustomerAddress(@RequestBody AddressModel addressModel, HttpServletResponse response)
     {
@@ -180,6 +184,7 @@ public class UserController {
         return message;
     }
 
+    @ApiOperation(value = "Delete an Address of Customer")
     @DeleteMapping("/customer/deleteAddress/{address_id}")
     public String deleteCustomerAddress(@PathVariable Long address_id, HttpServletResponse response)
     {
@@ -193,6 +198,7 @@ public class UserController {
         return message;
     }
 
+    @ApiOperation(value = "Update a customer Address")
     @PutMapping("/customer/updateAddress/{address_id}")
     public String updateCustomerAddress(@RequestBody AddressModel addressModel, @PathVariable Long address_id, HttpServletResponse response)
     {
@@ -206,6 +212,7 @@ public class UserController {
         return message;
     }
 
+
     @PostMapping("/resendactToken")
     public String resendActivationToken(@RequestBody String email) {
 
@@ -215,6 +222,8 @@ public class UserController {
 
     }
 
+
+    @ApiOperation(value = "Update the login password")
     @PostMapping("/customer/updatePassword")
     public ResponseEntity<Object> updatePassword(@Valid @RequestBody UpdatePasswordModel updatePasswordModel) {
         Customer customer = userDaoService.getLoggedInCustomer();
@@ -222,7 +231,7 @@ public class UserController {
 
         String message = userDaoService.updateCustomerPassword(updatePasswordModel,username);
 
-        return new ResponseEntity<>(message, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(message, HttpStatus.OK);
 
     }
 

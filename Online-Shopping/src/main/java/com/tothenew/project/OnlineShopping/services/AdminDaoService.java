@@ -2,8 +2,6 @@ package com.tothenew.project.OnlineShopping.services;
 
 import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
-import com.tothenew.project.OnlineShopping.product.Product;
-import com.tothenew.project.OnlineShopping.repos.ProductRepository;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

@@ -27,9 +27,7 @@ public class ReadFile {
             } catch (FileNotFoundException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -52,9 +50,7 @@ public class ReadFile {
             } catch (FileNotFoundException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -77,9 +73,7 @@ public class ReadFile {
             } catch (FileNotFoundException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -103,9 +97,7 @@ public class ReadFile {
             } catch (FileNotFoundException | InterruptedException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
             }
         }

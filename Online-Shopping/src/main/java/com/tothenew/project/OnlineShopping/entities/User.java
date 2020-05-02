@@ -2,12 +2,15 @@ package com.tothenew.project.OnlineShopping.entities;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonFilter("userfilter")
+@ApiModel(description = "Common details about the Users")
 public class User {
 
     @Id

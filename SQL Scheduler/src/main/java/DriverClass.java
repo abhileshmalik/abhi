@@ -6,10 +6,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class DriverClass extends TimerTask {
+public class DriverClass {
 
-    @Override
-    public void run() {
+
+    public static void main(String[] args) {
+
         ExecutorService pool= Executors.newFixedThreadPool(2);
         //ExecutorService pool = Executors.newCachedThreadPool();
 
@@ -22,6 +23,13 @@ public class DriverClass extends TimerTask {
         pool.execute(readfile2);
         pool.execute(readfile3);
         pool.execute(readfile4);
+
+        try {                                                            // If we use this it will let the current task to
+           pool.awaitTermination(10000, TimeUnit.MILLISECONDS);  // first then it will close the thread pool service,
+        } catch (InterruptedException e) {                              // But since we are using timer so we dont need this function right now.
+            e.printStackTrace();
+        }
+
         pool.shutdown();
 
         try {
@@ -29,23 +37,6 @@ public class DriverClass extends TimerTask {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-/*        try {
-            pool.awaitTermination(10000, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-
-    }
-
-    public static void main(String[] args) {
-
-        TimerTask timerTask = new DriverClass();
-        //running timer task as daemon thread
-        Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask, 0, 10*1000);
-        System.out.println("TimerTask started");
-
-        timerTask.run();
 
     }
 

@@ -1,10 +1,8 @@
 package com.tothenew.project.OnlineShopping.services;
 
 
-import com.tothenew.project.OnlineShopping.exception.BadRequestException;
 import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
 import com.tothenew.project.OnlineShopping.model.ProductVariationUpdateModel;
-import com.tothenew.project.OnlineShopping.product.Product;
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.repos.ProductRepository;
 import com.tothenew.project.OnlineShopping.repos.ProductVariationRepository;

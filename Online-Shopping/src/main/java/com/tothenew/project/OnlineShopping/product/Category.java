@@ -1,6 +1,7 @@
 package com.tothenew.project.OnlineShopping.product;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 import org.springframework.stereotype.Component;
 import javax.persistence.*;
 import java.util.Set;
@@ -8,6 +9,7 @@ import java.util.Set;
 @Component
 @Entity
 @JsonFilter("categoryfilter")
+@ApiModel(description = "All details about the Category")
 public class Category {
 
     @Id
