@@ -224,7 +224,6 @@ public class UserDaoService {
                         " Your account is successfully verified ";
             }
         }
-
         else {
             return "Error! Please try again";
         }

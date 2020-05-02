@@ -57,7 +57,7 @@ public class ProductController {
         return mapping6;
     }
 
-
+    @ApiOperation(value = "Add new Product")
     @PostMapping("/save-product/category/{category_name}")
     public ResponseEntity<Object> saveProduct(@Valid @RequestBody List<Product> products, @PathVariable String category_name){
         Seller seller = userDaoService.getLoggedInSeller();
@@ -86,6 +86,7 @@ public class ProductController {
     }
 
 
+    @ApiOperation(value = "Update Product by Id")
     @PutMapping("/seller/updateproduct/{pid}")
     public ResponseEntity<Object> updateProductDetails(@RequestBody ProductUpdateModel productUpdateModel, @PathVariable Long pid){
         Seller seller = userDaoService.getLoggedInSeller();
@@ -95,6 +96,7 @@ public class ProductController {
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Update Product-Variant by Id")
     @PutMapping("/seller/updateproduct/variant/{vid}")
     public ResponseEntity<Object> updateProductVariant(@RequestBody ProductVariationUpdateModel productVariationUpdateModel, @PathVariable Long vid){
       //  Seller seller = userDaoService.getLoggedInSeller();
@@ -104,6 +106,7 @@ public class ProductController {
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Delete Product by Id")
     @DeleteMapping("/seller/deleteproduct/{pid}")
     public ResponseEntity<Object> deleteProduct(@PathVariable Long pid) {
 
@@ -119,6 +122,8 @@ public class ProductController {
         return productDaoService.findSellerProducts(sellerid);
     }
 
+
+    @ApiOperation(value = "Enlist all products added by Seller")
     @GetMapping("/seller/products")
     public MappingJacksonValue retrieveSellerProducts() {
         Seller seller = userDaoService.getLoggedInSeller();

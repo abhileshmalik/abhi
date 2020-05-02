@@ -115,7 +115,6 @@ public class UserController {
 
     @ApiOperation(value = "Customer Home Page which supports Internationalized Content")
     @GetMapping("/customer/home")
-    //@Scheduled(initialDelay = 1000,fixedDelay = 10000)
     public String customerHome(){
         Customer customer = userDaoService.getLoggedInCustomer();
         String name = customer.getFirstName();
@@ -221,7 +220,6 @@ public class UserController {
         return message;
 
     }
-
 
     @ApiOperation(value = "Update the login password")
     @PostMapping("/customer/updatePassword")

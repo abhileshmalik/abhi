@@ -24,5 +24,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query("from Seller")
     List<Seller> findSellers(Pageable pageable);
 
+    @Query("from Seller")
+    List<Seller> findSellerList();
+
 
 }

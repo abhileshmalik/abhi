@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
 
 @Service
@@ -69,7 +68,7 @@ public class ProductVariationDaoService {
 
             }
           /*  else {
-                throw new BadRequestException("Product not associated to current seller");
+                throw new BadRequestException("Product-Variant not associated to current seller");
             }*/
 
         else {
