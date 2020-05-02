@@ -1,5 +1,6 @@
 package com.tothenew.project.OnlineShopping.repos;
 
+import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.tokens.ConfirmationToken;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +17,7 @@ public interface ConfirmationTokenRepository extends CrudRepository<Confirmation
     @Query(value = "delete from confirmation_token where confirmation_token=:token", nativeQuery = true)
     void deleteConfirmationToken(@Param("token") String token);
 
-    ConfirmationToken findByUser(Long uid);
+    ConfirmationToken findByUser(User user);
 
 
 }

@@ -132,8 +132,13 @@ public class SellerDaoService {
         String oldPassword = updatePasswordModel.getOldPassword();
 
         if (passwordEncoder.matches(oldPassword,user.getPassword())){
-            if (updatePasswordModel.getNewPassword().matches(updatePasswordModel.getConfirmNewPassword())) {
-                String newpass = passwordEncoder.encode(updatePasswordModel.getOldPassword());
+
+            String newPassword = updatePasswordModel.getNewPassword();
+            String confirmNewPassword = updatePasswordModel.getConfirmNewPassword();
+
+            if (newPassword.equals(confirmNewPassword)) {
+
+                String newpass = passwordEncoder.encode(updatePasswordModel.getNewPassword());
 
                 user.setPassword(newpass);
                 userRepository.save(user);
@@ -144,7 +149,7 @@ public class SellerDaoService {
                         " if you have not done this kindly report it to our team.";
                 emailSenderService.sendEmail(emailId, subject, text);
 
-                logger.info("********** Password Updated **********");
+                logger.info("********** Seller Password Updated **********");
 
                 return "Password Updated Successfully";
             }

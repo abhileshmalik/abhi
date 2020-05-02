@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
@@ -24,7 +25,7 @@ public class EmailScheduler {
     Logger logger = LoggerFactory.getLogger(EmailScheduler.class);
 
 
-    //@Scheduled(cron = "24 13 2 * * ?")
+    @Scheduled(cron = "24 13 2 * * ?", zone = "Indian/Maldives")
     //@Scheduled(initialDelay = 1000,fixedDelay = 10000)
     public void run(){
         Iterable<Seller> sellers = userRepository.findSellerList();
