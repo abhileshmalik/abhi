@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CategoryDaoService {
@@ -39,7 +38,18 @@ public class CategoryDaoService {
             categoryRepository.save(category1);
             return "Category saved";
         }
+    }
 
+    public List<Category> viewChildCat(Long categoryid) {
+        Optional<Category> optionalCategory = categoryRepository.findById(categoryid);
+        if (optionalCategory.isPresent())
+        {
+            Category category = optionalCategory.get();
+            Long parentid = category.getSubcategory().getCategory_id();
+            return categoryRepository.findchildCategoriesOfParent(parentid);
+
+        }
+        else throw new ResourceNotFoundException("Invalid Category ID");
     }
 
     public String saveNewSubCategory(String parentCategory, List<CategoryModel> subCategories){

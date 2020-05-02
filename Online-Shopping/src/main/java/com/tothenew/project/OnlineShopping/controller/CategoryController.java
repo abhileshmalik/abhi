@@ -91,4 +91,21 @@ public class CategoryController {
         return categoryMetadataFieldService.addNewMetadataFieldValues(fieldValueDtos, categoryId, metaFieldId);
     }
 
+
+    public List<Category> viewChildCategories(Long categoryid) {
+        return categoryDaoService.viewChildCat(categoryid);
+    }
+
+    @GetMapping("/subcategies/{categoryid}")
+    public MappingJacksonValue viewChildNodes(@PathVariable Long categoryid) {
+        SimpleBeanPropertyFilter filter5 = SimpleBeanPropertyFilter.filterOutAllExcept("name");
+        FilterProvider filterProvider5 = new SimpleFilterProvider().addFilter("categoryfilter",filter5);
+
+        MappingJacksonValue mapping5=new MappingJacksonValue(viewChildCategories(categoryid));
+        mapping5.setFilters(filterProvider5);
+
+        return mapping5;
+    }
+
+
 }

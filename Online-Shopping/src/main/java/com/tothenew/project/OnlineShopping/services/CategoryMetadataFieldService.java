@@ -10,7 +10,7 @@ import com.tothenew.project.OnlineShopping.product.Category;
 import com.tothenew.project.OnlineShopping.repos.CategoryMetadataFieldRepository;
 import com.tothenew.project.OnlineShopping.repos.CategoryMetadataFieldValuesRepository;
 import com.tothenew.project.OnlineShopping.repos.CategoryRepository;
-import com.tothenew.project.OnlineShopping.utils.StringToMapParser;
+import com.tothenew.project.OnlineShopping.utils.StringToSetParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class CategoryMetadataFieldService {
     CategoryMetadataFieldValuesRepository categoryMetadataFieldValuesRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     public String addNewMetadataField(String fieldName){
         CategoryMetadataField categoryMetadataField = categoryMetadataFieldRepository.findByName(fieldName);
@@ -61,7 +61,7 @@ public class CategoryMetadataFieldService {
 
             for(CategoryMetadataFieldModel fieldValuePair : fieldValueDtos.getFieldValues()){
 
-                String values = StringToMapParser.toCommaSeparatedString(fieldValuePair.getValues());
+                String values = StringToSetParser.toCommaSeparatedString(fieldValuePair.getValues());
 
                 categoryFieldValues.setValue(values);
                 categoryFieldValues.setCategory(category1);

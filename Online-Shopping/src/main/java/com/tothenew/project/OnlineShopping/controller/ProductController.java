@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.tothenew.project.OnlineShopping.entities.Seller;
 import com.tothenew.project.OnlineShopping.model.ProductUpdateModel;
+import com.tothenew.project.OnlineShopping.model.ProductVariationModel;
 import com.tothenew.project.OnlineShopping.model.ProductVariationUpdateModel;
+import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.services.ProductDaoService;
 import com.tothenew.project.OnlineShopping.product.Product;
 import com.tothenew.project.OnlineShopping.services.ProductVariationDaoService;
@@ -38,19 +40,22 @@ public class ProductController {
         return productDaoService.findAll();
     }
 
-    public List<Product> findCategorywiseProducts(String category_name){
-        return productDaoService.findCategoryProducts(category_name);
+    public List<Product> findCategorywiseProducts(String category_name, String page, String size){
+        return productDaoService.findCategoryProducts(category_name, page, size);
     }
 
+    @ApiOperation(value = "List All Products based on selected category")
     @GetMapping("/products/{category_name}")
-    public MappingJacksonValue retrieveProductList(@PathVariable String category_name) {
-
+    public MappingJacksonValue retrieveProductList(@PathVariable String category_name,
+                                                   @RequestHeader(defaultValue = "0") String page,
+                                                   @RequestHeader(defaultValue = "10")String size)
+    {
         SimpleBeanPropertyFilter filter6 = SimpleBeanPropertyFilter.filterOutAllExcept("productName","brand",
                 "productDescription","isCancellable","isReturnable","variations");
 
         FilterProvider filterProvider6 = new SimpleFilterProvider().addFilter("productfilter",filter6);
 
-        MappingJacksonValue mapping6 = new MappingJacksonValue(findCategorywiseProducts(category_name));
+        MappingJacksonValue mapping6 = new MappingJacksonValue(findCategorywiseProducts(category_name, page, size));
 
         mapping6.setFilters(filterProvider6);
 
@@ -59,12 +64,23 @@ public class ProductController {
 
     @ApiOperation(value = "Add new Product")
     @PostMapping("/save-product/category/{category_name}")
-    public ResponseEntity<Object> saveProduct(@Valid @RequestBody List<Product> products, @PathVariable String category_name){
+    public ResponseEntity<Object> saveProduct(@Valid @RequestBody List<Product> products,
+                                              @PathVariable String category_name){
+
         Seller seller = userDaoService.getLoggedInSeller();
         Long seller_user_id = seller.getUser_id();
         String message = productDaoService.addNewProduct(seller_user_id, products, category_name);
 
         return new ResponseEntity<>(message, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/save-productVariation/{product_id}")
+    public String saveProductVariation(@Valid @RequestBody ProductVariationModel productVariationModel,
+                                       @PathVariable Long product_id){
+
+        Seller seller = userDaoService.getLoggedInSeller();
+
+        return productDaoService.saveNewProductVariation(productVariationModel, product_id, seller);
     }
 
     @ApiOperation(value = "Get a Product by Id")
@@ -118,6 +134,29 @@ public class ProductController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+    public List<Product> findSimilarproducts(Long pid, String page, String size) {
+        return productDaoService.findSimilarProducts(pid, page, size);
+    }
+
+    @ApiOperation(value = "List all products having same category as given product id")
+    @GetMapping("/similar-products/products/{pid}")
+    public MappingJacksonValue retrieveSimilarProducts(@PathVariable Long pid,
+                                                       @RequestHeader(defaultValue = "0") String page,
+                                                       @RequestHeader(defaultValue = "10") String size) {
+
+        SimpleBeanPropertyFilter filter10 = SimpleBeanPropertyFilter.filterOutAllExcept("productName","brand",
+                "productDescription","isCancellable","isReturnable","variations");
+
+        FilterProvider filterProvider10 = new SimpleFilterProvider().addFilter("productfilter",filter10);
+
+        MappingJacksonValue mapping10 = new MappingJacksonValue(findSimilarproducts(pid, page, size));
+
+        mapping10.setFilters(filterProvider10);
+
+        return mapping10;
+    }
+
+
     public List<Product> findSellerwiseProducts(Long sellerid){
         return productDaoService.findSellerProducts(sellerid);
     }
@@ -140,6 +179,8 @@ public class ProductController {
 
         return mapping10;
     }
+
+
 
 
 

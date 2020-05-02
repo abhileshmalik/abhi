@@ -1,24 +1,28 @@
 package com.tothenew.project.OnlineShopping.services;
 
+import com.google.common.collect.Sets;
+import com.tothenew.project.OnlineShopping.entities.CategoryMetadataField;
 import com.tothenew.project.OnlineShopping.entities.Seller;
 import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.exception.BadRequestException;
 import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
 import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
 import com.tothenew.project.OnlineShopping.model.ProductUpdateModel;
+import com.tothenew.project.OnlineShopping.model.ProductVariationModel;
 import com.tothenew.project.OnlineShopping.product.Category;
 import com.tothenew.project.OnlineShopping.product.Product;
-import com.tothenew.project.OnlineShopping.repos.CategoryRepository;
-import com.tothenew.project.OnlineShopping.repos.ProductRepository;
-import com.tothenew.project.OnlineShopping.repos.UserRepository;
+import com.tothenew.project.OnlineShopping.product.ProductVariation;
+import com.tothenew.project.OnlineShopping.repos.*;
+import com.tothenew.project.OnlineShopping.utils.StringToSetParser;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductDaoService {
@@ -27,7 +31,16 @@ public class ProductDaoService {
     private ProductRepository productRepository;
 
     @Autowired
+    private ProductVariationRepository productVariationRepository;
+
+    @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private CategoryMetadataFieldRepository categoryMetadataFieldRepository;
+
+    @Autowired
+    private CategoryMetadataFieldValuesRepository categoryMetadataFieldValuesRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -43,12 +56,6 @@ public class ProductDaoService {
         List<Product> products = (List<Product>) productRepository.findAll();
         return products;
     }
-
-
-/*    public Product addNewProduct(Product product) {
-        productRepository.save(product);
-        return product;
-    }*/
 
 
     public String addNewProduct(Long seller_user_id,List<Product> products, String category_name){
@@ -90,9 +97,98 @@ public class ProductDaoService {
             throw new UserNotFoundException("Invalid Seller ID");
     }
 
-    public List<Product> findCategoryProducts(String category_name) {
+
+    public String saveNewProductVariation(ProductVariationModel productVariationModel, Long product_id, Seller seller) {
+
+        Long sellerid = seller.getUser_id();
+        Optional<Product> optionalProduct= productRepository.findById(product_id);
+
+        if (optionalProduct.isPresent()) {
+            ModelMapper modelMapper = new ModelMapper();
+            ProductVariation productVariation= modelMapper.map(productVariationModel, ProductVariation.class);
+
+            Product product = optionalProduct.get();
+            Long sid = product.getSeller().getUser_id();
+
+            if (sid.equals(sellerid)) {
+
+                String message= validateNewProductVariation(productVariationModel, product);
+
+                if (message.equals("Success")){
+
+                    if(productVariation.getQuantityAvailable()<=0){
+                        return "Quantity should be greater than 0.";
+                    }
+                    else if(productVariation.getPrice()<=0){
+                        return "Price should be greater than 0";
+                    }
+                    else {
+                        productVariation.setProduct(product);
+                        productVariation.setIs_active(true);
+                        productVariationRepository.save(productVariation);
+                        return "Product Variant saved";
+                    }
+
+                }
+                return message;
+            }
+            else
+            {
+                throw new BadRequestException("Product not associated to logged in seller");
+            }
+        }else{
+            throw new ResourceNotFoundException("Product does not exists");
+        }
+    }
+
+    public String validateNewProductVariation(ProductVariationModel productVariationModel, Product product){
+
+        // check if all the fields are actually related to the product category.
+        Category category = product.getCategory();
+        Map<String, String> attributes = productVariationModel.getAttributes();
+
+        List<String> receivedFields = new ArrayList<>(attributes.keySet());
+        List<String> actualFields = new ArrayList<>();
+        categoryMetadataFieldValuesRepository.findAllFieldsOfCategoryById(category.getCategory_id())
+                .forEach((e)->{
+                    actualFields.add(e[0].toString());
+                });
+
+        if(receivedFields.size() < actualFields.size()){
+            return "Please provide all the fields related to the product category.";
+        }
+
+        receivedFields.removeAll(actualFields);
+        if(receivedFields.isEmpty()){
+            return "Invalid fields found in the data.";
+        }
+
+        // check validity of values of fields.
+        List<String> receivedFieldsCopy = new ArrayList<>(attributes.keySet());
+
+        for (String receivedField : receivedFieldsCopy) {
+
+            CategoryMetadataField field = categoryMetadataFieldRepository.findByName(receivedField);
+
+            List<Object> savedValues = categoryMetadataFieldValuesRepository.findAllValuesOfCategoryField(category.getCategory_id(),field.getId());
+
+            String values = savedValues.get(0).toString();
+            Set<String> actualValueSet = StringToSetParser.toSetOfValues(values);
+
+            String receivedValues = attributes.get(receivedField);
+            Set<String> receivedValueSet = StringToSetParser.toSetOfValues(receivedValues);
+
+            if(!Sets.difference(receivedValueSet, actualValueSet).isEmpty()){
+                return "Invalid value found for field "+receivedField;
+            }
+        }
+        return "Success";
+    }
+
+
+    public List<Product> findCategoryProducts(String category_name, String page, String size) {
         String category=categoryRepository.findByCatName(category_name);
-        return productRepository.findAllProducts(category);
+        return productRepository.findAllProducts(category, PageRequest.of(Integer.parseInt(page),Integer.parseInt(size)));
     }
 
     // Find Product by name....
@@ -106,7 +202,12 @@ public class ProductDaoService {
         Optional<Product> product = productRepository.findById(pid);
         if(product.isPresent()) {
             Product p1 = product.get();
-            return p1;
+            if (p1.getIsActive() && !p1.getDeleted()) {
+                return p1;
+            }
+            else {
+                throw new ResourceNotFoundException("Product is unavailable at the moment");
+            }
         }
         else
             throw new ResourceNotFoundException("Invalid Product ID");
@@ -228,8 +329,8 @@ public class ProductDaoService {
             if (s_id.equals(sellerid)) {
 
                 savedProduct.setDeleted(true);
-            productRepository.save(savedProduct);
-            return "Product Deleted Successfully";
+                productRepository.save(savedProduct);
+                return "Product Deleted Successfully";
 
             }
             else {
@@ -244,6 +345,17 @@ public class ProductDaoService {
 
     public List<Product> findSellerProducts(Long sellerid) {
         return productRepository.findSellerAssociatedProducts(sellerid);
+    }
+
+    public List<Product> findSimilarProducts(Long pid, String page, String size) {
+        Optional<Product> product = productRepository.findById(pid);
+        if(product.isPresent()) {
+            Product product1 = product.get();
+            Long categoryId = product1.getCategory().getCategory_id();
+            return productRepository.findSimilar(categoryId, PageRequest.of(Integer.parseInt(page), Integer.parseInt(size)));
+        }
+        else
+            throw new ResourceNotFoundException("Invalid Product ID");
 
     }
 }

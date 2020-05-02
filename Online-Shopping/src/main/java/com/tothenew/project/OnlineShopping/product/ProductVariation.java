@@ -1,6 +1,7 @@
 package com.tothenew.project.OnlineShopping.product;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tothenew.project.OnlineShopping.utils.HashMapConverter;
 import io.swagger.annotations.ApiModel;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Map;
 
 @Entity
 //@JsonFilter("variantFilter")
@@ -32,11 +34,14 @@ public class ProductVariation {
     @LastModifiedDate
     private Date modifiedDate;
 
-/*
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;
-*/
+
+    @Convert(converter = HashMapConverter.class)
+    private Map<String, Object> productAttributes;
+
 
     public Long getProduct_variant_id() {
         return product_variant_id;
@@ -78,12 +83,19 @@ public class ProductVariation {
         this.is_active = is_active;
     }
 
-    /*    public Product getProduct() {
+    public Map<String, Object> getProductAttributes() {
+        return productAttributes;
+    }
+
+    public void setProductAttributes(Map<String, Object> productAttributes) {
+        this.productAttributes = productAttributes;
+    }
+
+    public Product getProduct() {
         return product;
     }
 
     public void setProduct(Product product) {
         this.product = product;
     }
-*/
 }

@@ -25,7 +25,7 @@ public class EmailScheduler {
     Logger logger = LoggerFactory.getLogger(EmailScheduler.class);
 
 
-    @Scheduled(cron = "24 13 2 * * ?", zone = "Indian/Maldives")
+   // @Scheduled(cron = "45 0 * * * ?")             // It works on UTC Time Zone by default
     //@Scheduled(initialDelay = 1000,fixedDelay = 10000)
     public void run(){
         Iterable<Seller> sellers = userRepository.findSellerList();
@@ -38,6 +38,7 @@ public class EmailScheduler {
             emailSenderService.sendEmail(emailId, subject, text);
 
             logger.info("********** Email sent to all sellers **********");
+
         }
     }
 }

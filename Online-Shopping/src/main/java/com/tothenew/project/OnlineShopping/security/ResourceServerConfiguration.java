@@ -85,6 +85,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/seller/deleteproduct/{pid}").hasAnyRole("SELLER")
                 .antMatchers("/seller/products").hasAnyRole("SELLER")
                 .antMatchers("/save-product/category/{category_name}").hasAnyRole("SELLER")
+                .antMatchers("/save-productVariation/{product_id}").hasAnyRole("SELLER")
 
                 .antMatchers("/customer/home").hasAnyRole("USER")
                 .antMatchers("/customer/uploadImage").hasAnyRole("USER")
@@ -98,10 +99,12 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/add-to-cart/{productVariation_id}").hasAnyRole("USER")
                 .antMatchers("/order/{cart_id}").hasAnyRole("USER")
                 .antMatchers("/addreview/{product_id}").hasAnyRole("USER")
+                .antMatchers("/subcategies/{categoryid}").hasAnyRole("USER")
 
                 .antMatchers("/product/{product_id}").hasAnyRole("USER","ADMIN")
                 .antMatchers("/product/variant/{vid}").hasAnyRole("USER","ADMIN")
                 .antMatchers("/products/{category_name}").hasAnyRole("USER","ADMIN")
+                .antMatchers("/similar-products/products/{pid}").hasAnyRole("USER","ADMIN")
 
                 .antMatchers("/admin/home").hasAnyRole("ADMIN")
                 .antMatchers("/customers").hasAnyRole("ADMIN")
