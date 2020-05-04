@@ -7,7 +7,6 @@ import com.tothenew.project.OnlineShopping.entities.Seller;
 import com.tothenew.project.OnlineShopping.model.ProductUpdateModel;
 import com.tothenew.project.OnlineShopping.model.ProductVariationModel;
 import com.tothenew.project.OnlineShopping.model.ProductVariationUpdateModel;
-import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.services.ProductDaoService;
 import com.tothenew.project.OnlineShopping.product.Product;
 import com.tothenew.project.OnlineShopping.services.ProductVariationDaoService;

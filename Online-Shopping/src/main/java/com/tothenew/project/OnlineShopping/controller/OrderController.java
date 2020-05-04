@@ -4,6 +4,7 @@ import com.tothenew.project.OnlineShopping.entities.Customer;
 import com.tothenew.project.OnlineShopping.orderprocessing.Orders;
 import com.tothenew.project.OnlineShopping.services.OrderDaoService;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public class OrderController {
     @Autowired
     private UserDaoService userDaoService;
 
+
+    @ApiOperation(value = "API to place order from the cart")
     @PostMapping("/order/{cart_id}")
     public ResponseEntity<Object> addToOrder(@RequestBody Orders orders, @PathVariable Long cart_id){
         Customer customer = userDaoService.getLoggedInCustomer();

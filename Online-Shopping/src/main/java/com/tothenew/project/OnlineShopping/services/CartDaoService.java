@@ -5,8 +5,10 @@ import com.tothenew.project.OnlineShopping.entities.User;
 import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
 import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
 import com.tothenew.project.OnlineShopping.orderprocessing.Cart;
+import com.tothenew.project.OnlineShopping.product.Product;
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.repos.CartRepository;
+import com.tothenew.project.OnlineShopping.repos.ProductRepository;
 import com.tothenew.project.OnlineShopping.repos.ProductVariationRepository;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class CartDaoService {
     private UserRepository userRepository;
 
     @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
     private ProductVariationRepository productVariationRepository;
 
 
@@ -39,19 +44,40 @@ public class CartDaoService {
 
             cart.setCustomer(customer1);
 
-            Optional<ProductVariation> productVariation = productVariationRepository.findById(productVariation_id);
-            if (productVariation.isPresent()) {
-                ProductVariation productVariation1 = new ProductVariation();
-                productVariation1 = productVariation.get();
+            Optional<ProductVariation> optionalProductVariation = productVariationRepository.findById(productVariation_id);
+            if (optionalProductVariation.isPresent()) {
+                ProductVariation productVariation = new ProductVariation();
+                productVariation = optionalProductVariation.get();
 
-                if (productVariation1.getIs_active()) {
-                    Integer qty = cart.getQuantity();
-                    if (qty < productVariation1.getQuantityAvailable()) {
-                        cart.setProductVariation(productVariation1);
-                        cartRepository.save(cart);
-                        return "Item Added to cart Successfully ";
-                    } else {
-                        throw new ResourceNotFoundException("Ordered Quantity is greater than available stock in Warehouse.");
+                if (productVariation.getIs_active()) {
+
+                    Long pid = productVariation.getProduct().getProduct_id();
+
+                    Optional<Product> optionalProduct = productRepository.findById(pid);
+                    if (optionalProduct.isPresent()) {
+
+                        Product product = optionalProduct.get();
+
+                        if(!product.getDeleted() && product.getIsActive())
+                        {
+                            Integer qty = cart.getQuantity();
+                            if (qty < productVariation.getQuantityAvailable()) {
+
+                                cart.setProductVariation(productVariation);
+                                cartRepository.save(cart);
+
+                                return "Item Added to cart Successfully ";
+
+                            } else {
+                                throw new ResourceNotFoundException("Ordered Quantity is greater than available stock in Warehouse.");
+                            }
+                        }
+                        else {
+                            throw new ResourceNotFoundException("Sorry, The Requested product is unavailable at the moment.");
+                        }
+                    }
+                    else {
+                        throw new ResourceNotFoundException("Unable to find Product associated to selected variant");
                     }
                 }
                 else

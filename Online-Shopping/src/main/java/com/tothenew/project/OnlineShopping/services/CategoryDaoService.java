@@ -6,6 +6,8 @@ import com.tothenew.project.OnlineShopping.product.Category;
 import com.tothenew.project.OnlineShopping.repos.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.lang.reflect.Type;
@@ -17,6 +19,9 @@ public class CategoryDaoService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    Logger logger = LoggerFactory.getLogger(CategoryDaoService.class);
+
 
     public List<Category> findAll() {
         List<Category> categories = (List<Category>) categoryRepository.findAll();
@@ -36,6 +41,9 @@ public class CategoryDaoService {
             Category category1= modelMapper.map(categoryModel, Category.class);
 
             categoryRepository.save(category1);
+
+            logger.info("********** Added New Category **********");
+
             return "Category saved";
         }
     }
@@ -46,6 +54,9 @@ public class CategoryDaoService {
         {
             Category category = optionalCategory.get();
             Long parentid = category.getSubcategory().getCategory_id();
+
+            logger.info("********** Viewed child categories of same parent **********");
+
             return categoryRepository.findchildCategoriesOfParent(parentid);
 
         }
@@ -69,6 +80,9 @@ public class CategoryDaoService {
             subCategories1.forEach(e->e.setSubcategory(finalCategory));
 
             categoryRepository.saveAll(subCategories1);
+
+            logger.info("********** Added New Sub-Categories **********");
+
             return "Sub-category Added Successfully ";
         }
         else
@@ -86,6 +100,8 @@ public class CategoryDaoService {
             if (category2.getName()!=null)
                 category3.setName(category2.getName());
             categoryRepository.save(category3);
+
+            logger.info("********** Category Name Updated **********");
 
             return "Category updated";
         }

@@ -9,6 +9,8 @@ import com.tothenew.project.OnlineShopping.model.MetadataFieldValueInsertModel;
 import com.tothenew.project.OnlineShopping.services.CategoryDaoService;
 import com.tothenew.project.OnlineShopping.product.Category;
 import com.tothenew.project.OnlineShopping.services.CategoryMetadataFieldService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@Api(value="Category and Metadata fields Related APIs")
 @RestController
 public class CategoryController {
 
@@ -31,8 +34,9 @@ public class CategoryController {
         return categoryDaoService.findAll();
     }
 
+    @ApiOperation(value = "Enlist all categories and sub categories registered")
     @GetMapping("/allcategories")
-    public MappingJacksonValue retrievellCategoryList() {
+    public MappingJacksonValue retrieveAllCategoryList() {
         SimpleBeanPropertyFilter filter1 = SimpleBeanPropertyFilter.filterOutAllExcept("name","subcategory");
         FilterProvider filterProvider1 = new SimpleFilterProvider().addFilter("categoryfilter",filter1);
 
@@ -46,6 +50,7 @@ public class CategoryController {
         return categoryDaoService.findSubCategories();
     }
 
+    @ApiOperation(value = "Enlist all Sub-Categories")
     @GetMapping("/productcategories")
     public MappingJacksonValue retrieveCategoryList() {
         SimpleBeanPropertyFilter filter5 = SimpleBeanPropertyFilter.filterOutAllExcept("name");
@@ -57,12 +62,14 @@ public class CategoryController {
         return mapping5;
     }
 
+    @ApiOperation(value = "Add new Parent Category")
     @PostMapping("/add-category")
     public ResponseEntity<Object> saveCategory(@Valid @RequestBody CategoryModel categoryModel){
         String message= categoryDaoService.saveNewCategory(categoryModel);
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Add new Sub-Categories under given Parent Category")
     @PostMapping("/add-category/{parentCategory}")
     public ResponseEntity<Object> saveSubCategory(@PathVariable String parentCategory, @RequestBody List<CategoryModel> subCategories){
         String message = categoryDaoService.saveNewSubCategory(parentCategory, subCategories);
@@ -70,22 +77,26 @@ public class CategoryController {
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Update any Category name")
     @PutMapping ("/updateCategory/{category}")
     public String updateCategory(@RequestBody CategoryModel categoryModel, @PathVariable String category){
         return categoryDaoService.updateCategory(categoryModel, category);
     }
 
+    @ApiOperation(value = "Add metadata fields for a category")
     @PostMapping("/metadata-fields/add")
     public String addMetaDataField(@RequestParam String fieldName) {
         return categoryMetadataFieldService.addNewMetadataField(fieldName);
     }
 
+    @ApiOperation(value = "View all Metadata fields")
     @GetMapping("/allmetadatafields")
     public List<CategoryMetadataField> findAllMetadataFields(){
         return categoryMetadataFieldService.findAllMetadataFields();
     }
 
 
+    @ApiOperation(value = "Add metadata field values for a category")
     @PostMapping("/metadata-fields/addValues/{categoryId}/{metaFieldId}")
     public String addMetaDataFieldValues(@RequestBody MetadataFieldValueInsertModel fieldValueDtos, @PathVariable Long categoryId, @PathVariable Long metaFieldId) {
         return categoryMetadataFieldService.addNewMetadataFieldValues(fieldValueDtos, categoryId, metaFieldId);
@@ -96,6 +107,7 @@ public class CategoryController {
         return categoryDaoService.viewChildCat(categoryid);
     }
 
+    @ApiOperation(value = "View all child categories for a sub category entered under same parent category")
     @GetMapping("/subcategies/{categoryid}")
     public MappingJacksonValue viewChildNodes(@PathVariable Long categoryid) {
         SimpleBeanPropertyFilter filter5 = SimpleBeanPropertyFilter.filterOutAllExcept("name");

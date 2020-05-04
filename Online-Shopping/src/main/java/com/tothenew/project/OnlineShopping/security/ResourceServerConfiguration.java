@@ -115,7 +115,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/admin/activateproduct/{pid}").hasAnyRole("ADMIN")
                 .antMatchers("/admin/deactivateproduct/{pid}").hasAnyRole("ADMIN")
                 .antMatchers("/metadata-fields/add").hasAnyRole("ADMIN")
-                .antMatchers("/allmetadatafields").hasAnyRole("ADMIN")
                 .antMatchers("/metadata-fields/addValues/{categoryId}/{metaFieldId}")
                 .hasAnyRole("ADMIN")
 
@@ -123,6 +122,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/add-category/{parentCategory}").hasAnyRole("ADMIN")
                 .antMatchers("/updateCategory/{category}").hasAnyRole("ADMIN")
 
+                .antMatchers("/allmetadatafields").hasAnyRole("ADMIN","SELLER")
 
                 .antMatchers("/doLogout").hasAnyRole("ADMIN","SELLER","USER")
                 .anyRequest().authenticated()

@@ -4,6 +4,7 @@ import com.tothenew.project.OnlineShopping.entities.Customer;
 import com.tothenew.project.OnlineShopping.orderprocessing.Cart;
 import com.tothenew.project.OnlineShopping.services.CartDaoService;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public class CartController {
     @Autowired
     private UserDaoService userDaoService;
 
+
+    @ApiOperation(value = "API to add any product-variant to cart and define the quantity as well")
     @PostMapping("/add-to-cart/{productVariation_id}")
     public ResponseEntity<Object> addToCart(@RequestBody Cart cart, @PathVariable Long productVariation_id) {
         Customer customer = userDaoService.getLoggedInCustomer();
