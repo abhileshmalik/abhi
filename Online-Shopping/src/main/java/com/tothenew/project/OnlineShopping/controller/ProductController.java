@@ -115,9 +115,10 @@ public class ProductController {
     @ApiOperation(value = "Update Product-Variant by Id")
     @PutMapping("/seller/updateproduct/variant/{vid}")
     public ResponseEntity<Object> updateProductVariant(@RequestBody ProductVariationUpdateModel productVariationUpdateModel, @PathVariable Long vid){
-      //  Seller seller = userDaoService.getLoggedInSeller();
-      //  Long sellerid = seller.getUser_id();
-        String message = productVariationDaoService.updateProductVariation(productVariationUpdateModel, vid);
+        Seller seller = userDaoService.getLoggedInSeller();
+        Long sellerid = seller.getUser_id();
+
+        String message = productVariationDaoService.updateProductVariation(productVariationUpdateModel, vid, sellerid);
 
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
