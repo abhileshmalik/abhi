@@ -7,6 +7,7 @@ import com.tothenew.project.OnlineShopping.entities.Seller;
 import com.tothenew.project.OnlineShopping.model.ProductUpdateModel;
 import com.tothenew.project.OnlineShopping.model.ProductVariationModel;
 import com.tothenew.project.OnlineShopping.model.ProductVariationUpdateModel;
+import com.tothenew.project.OnlineShopping.model.ProductViewModel;
 import com.tothenew.project.OnlineShopping.services.ProductDaoService;
 import com.tothenew.project.OnlineShopping.product.Product;
 import com.tothenew.project.OnlineShopping.services.ProductVariationDaoService;
@@ -82,6 +83,10 @@ public class ProductController {
         return productDaoService.saveNewProductVariation(productVariationModel, product_id, seller);
     }
 
+    public Product viewProduct(Long product_id) {
+        return productDaoService.findProduct(product_id);
+    }
+
     @ApiOperation(value = "Get a Product by Id")
     @GetMapping("/product/{product_id}")
     public MappingJacksonValue retrieveProduct(@PathVariable Long product_id) {
@@ -96,9 +101,12 @@ public class ProductController {
         return mapping7;
     }
 
-    public Product viewProduct(Long product_id) {
+/*    @GetMapping("/product/{product_id}")
+    public ProductViewModel viewProduct(@PathVariable Long product_id) {
         return productDaoService.findProduct(product_id);
-    }
+    }*/
+
+
 
 
     @ApiOperation(value = "Update Product by Id")

@@ -1,24 +1,42 @@
 package com.tothenew.project.OnlineShopping.services;
 
+import com.tothenew.project.OnlineShopping.entities.CategoryMetadataFieldValues;
+import com.tothenew.project.OnlineShopping.exception.BadRequestException;
 import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
 import com.tothenew.project.OnlineShopping.model.CategoryModel;
+import com.tothenew.project.OnlineShopping.model.FilterCategoryModel;
 import com.tothenew.project.OnlineShopping.product.Category;
+import com.tothenew.project.OnlineShopping.product.Product;
+import com.tothenew.project.OnlineShopping.product.ProductVariation;
+import com.tothenew.project.OnlineShopping.repos.CategoryMetadataFieldValuesRepository;
 import com.tothenew.project.OnlineShopping.repos.CategoryRepository;
+import com.tothenew.project.OnlineShopping.repos.ProductRepository;
+import com.tothenew.project.OnlineShopping.repos.ProductVariationRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CategoryDaoService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ProductVariationRepository productVariationRepository;
+
+    @Autowired
+    private CategoryMetadataFieldValuesRepository categoryMetadataFieldValuesRepository;
+
 
     Logger logger = LoggerFactory.getLogger(CategoryDaoService.class);
 
@@ -107,6 +125,48 @@ public class CategoryDaoService {
         }
         else
             throw new ResourceNotFoundException("Category name does not exist");
+    }
+
+
+    public FilterCategoryModel filterCategoryByCustomer(Long categoryId) {
+        List<Product> productList=productRepository.findSimilar(categoryId, Pageable.unpaged());
+        if (productList.isEmpty())
+            throw new BadRequestException("There is no product related to this category");
+        FilterCategoryModel filterCategoryModel=new FilterCategoryModel();
+        List<CategoryMetadataFieldValues> categoryFieldValuesList=new ArrayList<>();
+        Iterator<CategoryMetadataFieldValues> categoryFieldValuesIterator= categoryMetadataFieldValuesRepository.findAll().iterator();
+        while (categoryFieldValuesIterator.hasNext()) {
+            CategoryMetadataFieldValues currentCategoryFieldValues=categoryFieldValuesIterator.next();
+            if (currentCategoryFieldValues.getCategory().getCategory_id().equals(categoryId)) {
+                categoryFieldValuesList.add(currentCategoryFieldValues);
+            }
+        }
+        Double max=Double.MIN_VALUE;
+        Double min=Double.MAX_VALUE;
+        Set<String> brandsList=new HashSet<>();
+        Iterator<Product> productIterator= productRepository.findSimilar(categoryId,Pageable.unpaged()).iterator();
+        while (productIterator.hasNext()) {
+            Product currentProduct = productIterator.next();
+            if (currentProduct.getCategory().getCategory_id().equals(categoryId)) {
+                brandsList.add(currentProduct.getBrand());
+                Iterator<ProductVariation> productVariantIterator = productVariationRepository.findByProductId(currentProduct.getProduct_id()).iterator();
+                while (productVariantIterator.hasNext()) {
+                    ProductVariation currentVariant = productVariantIterator.next();
+                    if (currentVariant.getPrice() <= min)
+                        min = currentVariant.getPrice();
+                    if (currentVariant.getPrice() >= max)
+                        max = currentVariant.getPrice();
+                }
+            }
+        }
+        filterCategoryModel.setCategoryFieldValues(categoryFieldValuesList);
+        if (max>0)
+            filterCategoryModel.setMaxPrice(max);
+        if(min<Integer.MAX_VALUE)
+            filterCategoryModel.setMinPrice(min);
+        filterCategoryModel.setBrandsList(brandsList);
+
+        return filterCategoryModel;
     }
 
 }

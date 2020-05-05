@@ -1,13 +1,27 @@
 package com.tothenew.project.OnlineShopping.model;
 
-public class ProductUpdateModel {
+public class ProductViewModel {
+
+    private String category;
 
     private String productName;
+
     private String brand;
+
     private String productDescription;
+
     private Boolean isCancellable;
+
     private Boolean isReturnable;
-    private Long imageId;
+
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public String getProductName() {
         return productName;
@@ -47,15 +61,6 @@ public class ProductUpdateModel {
 
     public void setReturnable(Boolean returnable) {
         isReturnable = returnable;
-    }
-
-
-    public Long getImageId() {
-        return imageId;
-    }
-
-    public void setImageId(Long imageId) {
-        this.imageId = imageId;
     }
 
 }

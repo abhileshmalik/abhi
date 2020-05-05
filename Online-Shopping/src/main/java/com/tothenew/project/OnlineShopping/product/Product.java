@@ -3,6 +3,7 @@ package com.tothenew.project.OnlineShopping.product;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tothenew.project.OnlineShopping.entities.Document;
 import com.tothenew.project.OnlineShopping.entities.Seller;
 import io.swagger.annotations.ApiModel;
 import org.springframework.data.annotation.CreatedDate;
@@ -34,6 +35,9 @@ public class Product {
     private Boolean isReturnable;
     private Boolean isActive;
     private Boolean isDeleted;
+
+    @OneToOne
+    private Document imageId;
 
     @Column
     @CreatedDate

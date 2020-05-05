@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.tothenew.project.OnlineShopping.entities.CategoryMetadataField;
 import com.tothenew.project.OnlineShopping.model.CategoryModel;
+import com.tothenew.project.OnlineShopping.model.FilterCategoryModel;
 import com.tothenew.project.OnlineShopping.model.MetadataFieldValueInsertModel;
 import com.tothenew.project.OnlineShopping.services.CategoryDaoService;
 import com.tothenew.project.OnlineShopping.product.Category;
@@ -107,9 +108,9 @@ public class CategoryController {
         return categoryDaoService.viewChildCat(categoryid);
     }
 
-    @ApiOperation(value = "View all child categories for a sub category entered under same parent category")
+    @ApiOperation(value = "View all Leaf categories for a same parent category")
     @GetMapping("/subcategies/{categoryid}")
-    public MappingJacksonValue viewChildNodes(@PathVariable Long categoryid) {
+    public MappingJacksonValue viewLeafCategories(@PathVariable Long categoryid) {
         SimpleBeanPropertyFilter filter5 = SimpleBeanPropertyFilter.filterOutAllExcept("name");
         FilterProvider filterProvider5 = new SimpleFilterProvider().addFilter("categoryfilter",filter5);
 
@@ -118,6 +119,13 @@ public class CategoryController {
 
         return mapping5;
     }
+
+    @ApiOperation(value = "fetch filtering details for a category")
+    @GetMapping("/customer/category/filter/{categoryId}")
+    public FilterCategoryModel filterCategoriesByIdByCustomer(@Valid @PathVariable Long categoryId ){
+        return categoryDaoService.filterCategoryByCustomer(categoryId);
+    }
+
 
 
 }

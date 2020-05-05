@@ -3,13 +3,17 @@ package com.tothenew.project.OnlineShopping.entities;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonFilter("userfilter")
+@EntityListeners(AuditingEntityListener.class)
 @ApiModel(description = "Common details about the Users")
 public class User {
 
@@ -35,6 +39,10 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Set<Address> addresses;
+
+    @Column
+    @CreatedDate
+    private Date createdDate;
 
     public Long getUser_id() {
         return user_id;

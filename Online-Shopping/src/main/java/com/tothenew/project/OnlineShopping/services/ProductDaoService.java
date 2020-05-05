@@ -9,12 +9,14 @@ import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
 import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
 import com.tothenew.project.OnlineShopping.model.ProductUpdateModel;
 import com.tothenew.project.OnlineShopping.model.ProductVariationModel;
+import com.tothenew.project.OnlineShopping.model.ProductViewModel;
 import com.tothenew.project.OnlineShopping.product.Category;
 import com.tothenew.project.OnlineShopping.product.Product;
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.repos.*;
 import com.tothenew.project.OnlineShopping.utils.StringToSetParser;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
@@ -211,6 +213,30 @@ public class ProductDaoService {
         else
             throw new ResourceNotFoundException("Invalid Product ID");
     }
+
+/*    // Find Product by id....  (Using Product view model)
+    public ProductViewModel findProduct(Long pid) {
+        Optional<Product> product = productRepository.findById(pid);
+        if(product.isPresent()) {
+            Product p1 = product.get();
+            if (p1.getIsActive() && !p1.getDeleted()) {
+                // return p1;
+
+                ProductViewModel productViewModel = new ProductViewModel();
+                BeanUtils.copyProperties(p1,productViewModel);
+                productViewModel.setCategory(p1.getCategory().getName());
+                productViewModel.setCancellable(p1.getIsCancellable());
+                productViewModel.setReturnable(p1.getIsReturnable());
+
+                return productViewModel;
+            }
+            else {
+                throw new ResourceNotFoundException("Product is unavailable at the moment");
+            }
+        }
+        else
+            throw new ResourceNotFoundException("Invalid Product ID");
+    }*/
 
     @Transactional
     public String activateProduct(Long pid) {
