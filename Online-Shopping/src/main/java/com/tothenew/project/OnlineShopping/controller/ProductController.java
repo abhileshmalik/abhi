@@ -75,12 +75,13 @@ public class ProductController {
     }
 
     @PostMapping("/save-productVariation/{product_id}")
-    public String saveProductVariation(@Valid @RequestBody ProductVariationModel productVariationModel,
+    public ResponseEntity<Object> saveProductVariation(@Valid @RequestBody ProductVariationModel productVariationModel,
                                        @PathVariable Long product_id){
 
         Seller seller = userDaoService.getLoggedInSeller();
+        String message = productDaoService.saveNewProductVariation(productVariationModel, product_id, seller);
 
-        return productDaoService.saveNewProductVariation(productVariationModel, product_id, seller);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
     public Product viewProduct(Long product_id) {

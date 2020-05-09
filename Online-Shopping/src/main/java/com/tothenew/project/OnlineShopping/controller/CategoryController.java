@@ -88,8 +88,11 @@ public class CategoryController {
 
     @ApiOperation(value = "Add metadata fields for a category")
     @PostMapping("/metadata-fields/add")
-    public String addMetaDataField(@RequestParam String fieldName) {
-        return categoryMetadataFieldService.addNewMetadataField(fieldName);
+    public ResponseEntity<Object> addMetaDataField(@RequestParam String fieldName) {
+
+        String message = categoryMetadataFieldService.addNewMetadataField(fieldName);
+
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "View all Metadata fields")
@@ -101,8 +104,11 @@ public class CategoryController {
 
     @ApiOperation(value = "Add metadata field values for a category")
     @PostMapping("/metadata-fields/addValues/{categoryId}/{metaFieldId}")
-    public String addMetaDataFieldValues(@RequestBody MetadataFieldValueInsertModel fieldValueDtos, @PathVariable Long categoryId, @PathVariable Long metaFieldId) {
-        return categoryMetadataFieldService.addNewMetadataFieldValues(fieldValueDtos, categoryId, metaFieldId);
+    public ResponseEntity<Object> addMetaDataFieldValues(@RequestBody MetadataFieldValueInsertModel fieldValueDtos, @PathVariable Long categoryId, @PathVariable Long metaFieldId) {
+
+        String message = categoryMetadataFieldService.addNewMetadataFieldValues(fieldValueDtos, categoryId, metaFieldId);
+
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
 
@@ -122,10 +128,23 @@ public class CategoryController {
         return mapping5;
     }
 
+    public FilterCategoryModel filterCategoriesByIdByCustomer(Long categoryId){
+        return categoryDaoService.filterCategoryByCustomer(categoryId);
+    }
+
+
     @ApiOperation(value = "fetch filtering details for a category")
     @GetMapping("/customer/category/filter/{categoryId}")
-    public FilterCategoryModel filterCategoriesByIdByCustomer(@Valid @PathVariable Long categoryId ){
-        return categoryDaoService.filterCategoryByCustomer(categoryId);
+    public MappingJacksonValue filteringCategoryDetails(@Valid @PathVariable Long categoryId) {
+        SimpleBeanPropertyFilter filter5 = SimpleBeanPropertyFilter.filterOutAllExcept("category_id","name");
+
+        FilterProvider filterProvider5 = new SimpleFilterProvider().addFilter("categoryfilter",filter5);
+
+        MappingJacksonValue mapping5=new MappingJacksonValue(filterCategoriesByIdByCustomer(categoryId));
+        mapping5.setFilters(filterProvider5);
+
+        return mapping5;
+
     }
 
 

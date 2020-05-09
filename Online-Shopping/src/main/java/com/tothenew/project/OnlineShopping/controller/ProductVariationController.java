@@ -7,6 +7,7 @@ import com.tothenew.project.OnlineShopping.product.ProductVariant;
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.services.ProductVariantService;
 import com.tothenew.project.OnlineShopping.services.ProductVariationDaoService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+@Api(value="Product-Variation Related APIs")
 @RestController
 public class ProductVariationController {
 

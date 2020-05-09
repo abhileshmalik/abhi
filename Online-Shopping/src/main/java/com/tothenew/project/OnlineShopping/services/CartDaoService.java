@@ -6,11 +6,9 @@ import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
 import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
 import com.tothenew.project.OnlineShopping.orderprocessing.Cart;
 import com.tothenew.project.OnlineShopping.product.Product;
+import com.tothenew.project.OnlineShopping.product.ProductVariant;
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
-import com.tothenew.project.OnlineShopping.repos.CartRepository;
-import com.tothenew.project.OnlineShopping.repos.ProductRepository;
-import com.tothenew.project.OnlineShopping.repos.ProductVariationRepository;
-import com.tothenew.project.OnlineShopping.repos.UserRepository;
+import com.tothenew.project.OnlineShopping.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +29,9 @@ public class CartDaoService {
     @Autowired
     private ProductVariationRepository productVariationRepository;
 
+    @Autowired
+    private ProductVariantRepository productVariantRepository;
+
 
     public String addToCart( Cart cart, Long customer_user_id, Long productVariation_id) {
 
@@ -44,7 +45,9 @@ public class CartDaoService {
 
             cart.setCustomer(customer1);
 
+            // variant from Mysql
             Optional<ProductVariation> optionalProductVariation = productVariationRepository.findById(productVariation_id);
+
             if (optionalProductVariation.isPresent()) {
                 ProductVariation productVariation = new ProductVariation();
                 productVariation = optionalProductVariation.get();
@@ -53,25 +56,39 @@ public class CartDaoService {
 
                     Long pid = productVariation.getProduct().getProduct_id();
 
+                    // Finding the Variant from RedisDb
+                    Optional<ProductVariant> optionalProductVariant = productVariantRepository.findById(productVariation_id.toString());
+
                     Optional<Product> optionalProduct = productRepository.findById(pid);
                     if (optionalProduct.isPresent()) {
 
                         Product product = optionalProduct.get();
 
-                        if(!product.getDeleted() && product.getIsActive())
-                        {
-                            Integer qty = cart.getQuantity();
-                            if (qty < productVariation.getQuantityAvailable()) {
+                        if(!product.getDeleted() && product.getIsActive()) {
 
-                                cart.setProductVariation(productVariation);
-                                cartRepository.save(cart);
+                            if (optionalProductVariant.isPresent()) {
 
-                                return "Item Added to cart Successfully ";
+                                ProductVariant productVariant = optionalProductVariant.get();
 
-                            } else {
-                                throw new ResourceNotFoundException("Ordered Quantity is greater than available stock in Warehouse.");
+                                // fetching quantity of variant from Redis instead of mysql;
+                                String RedisVariantQty = productVariant.getQuantityAvailable();
+
+                                Integer originalqty = Integer.parseInt(RedisVariantQty);
+
+                                Integer cartQuantity = cart.getQuantity();
+                                if (cartQuantity < originalqty) {
+                                    cart.setProductVariation(productVariation);
+                                    cartRepository.save(cart);
+
+                                    return "Item Added to cart Successfully ";
+
+                                } else {
+                                    throw new ResourceNotFoundException("Ordered Quantity is greater than available stock in Warehouse.");
+                                }
+                            }  else {
+                                    throw new ResourceNotFoundException("Invalid Variant ID");
                             }
-                        }
+                    }
                         else {
                             throw new ResourceNotFoundException("Sorry, The Requested product is unavailable at the moment.");
                         }

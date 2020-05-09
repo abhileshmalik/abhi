@@ -1,11 +1,13 @@
 package com.tothenew.project.OnlineShopping.orderprocessing;
 
 import com.tothenew.project.OnlineShopping.entities.Customer;
+import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@ApiModel(description = "This is Consolidated Bill or complete order information")
 public class Orders {
 
     @Id

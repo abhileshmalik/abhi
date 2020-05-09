@@ -1,11 +1,13 @@
 package com.tothenew.project.OnlineShopping.orderprocessing;
 
+import io.swagger.annotations.ApiModel;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.Id;
 
 @Document
+@ApiModel(description = "This Entity stores information about all daily emails in MongoDb, scheduled and sent to sellers")
 public class DailyOrderStatusEmail {
 
     @Id

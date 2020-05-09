@@ -29,10 +29,7 @@ public class HashMapConverter implements AttributeConverter<Map<String, Object>,
         Map<String, Object> productVariationInfo = null;
         try {
             productVariationInfo = objectMapper.readValue(productVariationInfoJSON, Map.class);
-            if(productVariationInfo==null)
-            {
-                return null;
-            }
+
         } catch (final IOException e) {
             System.out.println(e);
         }

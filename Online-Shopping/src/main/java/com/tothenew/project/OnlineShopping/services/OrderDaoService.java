@@ -7,11 +7,15 @@ import com.tothenew.project.OnlineShopping.orderprocessing.Cart;
 import com.tothenew.project.OnlineShopping.orderprocessing.OrderProduct;
 import com.tothenew.project.OnlineShopping.orderprocessing.Orders;
 import com.tothenew.project.OnlineShopping.product.Product;
+import com.tothenew.project.OnlineShopping.product.ProductVariant;
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Optional;
 
@@ -23,6 +27,9 @@ public class OrderDaoService {
 
     @Autowired
     private ProductVariationRepository productVariationRepository;
+
+    @Autowired
+    private ProductVariantRepository productVariantRepository;
 
     @Autowired
     private AddressRepository addressRepository;
@@ -39,14 +46,17 @@ public class OrderDaoService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private EmailSenderService emailSenderService;
 
+    @Transactional
+    @Modifying
     public String addToOrder(Orders orders,Long customer_user_id, Long cart_id) {
 
         Optional<Cart> cartId = cartRepository.findById(cart_id);
 
         if (cartId.isPresent()) {
-            Cart cart = new Cart();
-            cart = cartId.get();
+            Cart cart = cartId.get();
 
             Customer customer = cart.getCustomer();
 
@@ -83,6 +93,11 @@ public class OrderDaoService {
 
                 Long pid = product_variation.getProduct().getProduct_id();
 
+                Long vid = product_variation.getProduct_variant_id();
+
+                // Finding the Variant from RedisDb
+                Optional<ProductVariant> optionalProductVariant = productVariantRepository.findById(vid.toString());
+
                 Optional<Product> optionalProduct = productRepository.findById(pid);
                 if (optionalProduct.isPresent()) {
 
@@ -90,26 +105,54 @@ public class OrderDaoService {
 
                     if (!product.getDeleted() && product.getIsActive()) {
 
-                        orderProduct.setPrice(product_variation.getPrice());
-                        Double amount = orderProduct.getPrice() * cart.getQuantity();
-                        orders.setAmountPaid(amount);
+                        if (optionalProductVariant.isPresent()) {
 
-                        Integer originalqty = product_variation.getQuantityAvailable();
-                        Integer orderedqty = cart.getQuantity();
+                            ProductVariant productVariant = optionalProductVariant.get();
 
-                        if (originalqty > orderedqty) {
-                            product_variation.setQuantityAvailable(originalqty - orderedqty);
+                            // fetching quantity of variant from Redis instead of mysql;
+                            String RedisVariantQty =  productVariant.getQuantityAvailable();
 
-                            productVariationRepository.save(product_variation);
-                            orderProductRepository.save(orderProduct);
-                            orderRepository.save(orders);
+                            orderProduct.setPrice(product_variation.getPrice());
+                            Double amount = orderProduct.getPrice() * cart.getQuantity();
+                            orders.setAmountPaid(amount);
 
-                            return "Order Placed Successfully.... " +
-                                    "Thank You for Choosing Online-Shopping portal";
-                        } else {
-                            throw new ResourceNotFoundException("Sorry the Requested quantity is not yet available in warehouse.");
+                            Integer originalqty = Integer.parseInt(RedisVariantQty);
+                            Integer orderedqty = cart.getQuantity();
+
+                            if (originalqty > orderedqty) {
+
+                                int remainingQty = originalqty-orderedqty;
+
+                                //Updating the qty after order in RedisDb....
+                                productVariant.setQuantityAvailable(Integer.toString(remainingQty));
+
+                                productVariantRepository.save(productVariant);
+                                orderProductRepository.save(orderProduct);
+                                orderRepository.save(orders);
+
+                                cartRepository.deleteById(cart_id);
+
+                                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                                mailMessage.setTo(customer.getEmail());
+                                mailMessage.setSubject("Order Placed");
+                                mailMessage.setFrom("online-shopping@gmail.com");
+                                mailMessage.setText("Hello customer, Thank You for choosing Online-Shopping Portal." +
+                                        " Your order has been placed successfully....");
+
+                                emailSenderService.sendEmail(mailMessage);
+
+                                return "Order Placed Successfully.... " +
+                                        "Thank You for Choosing Online-Shopping portal";
+
+                            } else {
+                                throw new ResourceNotFoundException("Sorry the Requested quantity is not yet available in warehouse.");
+                            }
                         }
-                    } else {
+                        else {
+                            throw new ResourceNotFoundException("Invalid Variant ID");
+                        }
+                    }
+                    else {
                         throw new ResourceNotFoundException("Sorry, The Requested product is unavailable at the moment.");
                     }
                 } else {

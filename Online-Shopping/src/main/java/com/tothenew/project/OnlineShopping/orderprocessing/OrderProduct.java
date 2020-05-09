@@ -1,10 +1,12 @@
 package com.tothenew.project.OnlineShopping.orderprocessing;
 
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
+import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
 
 @Entity
+@ApiModel(description = "This contains individual items for consolidated bill")
 public class OrderProduct {
 
     @Id

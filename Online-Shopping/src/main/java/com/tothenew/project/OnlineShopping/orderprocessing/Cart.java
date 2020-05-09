@@ -2,10 +2,12 @@ package com.tothenew.project.OnlineShopping.orderprocessing;
 
 import com.tothenew.project.OnlineShopping.entities.Customer;
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
+import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
 
 @Entity
+@ApiModel(description = "All details about the Cart")
 public class Cart {
 
     @Id

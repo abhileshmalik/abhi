@@ -14,7 +14,7 @@ import java.util.Map;
 @Entity
 @JsonFilter("variantfilter")
 @EntityListeners(AuditingEntityListener.class)
-@ApiModel(description = "All details about the Product-Variant ")
+@ApiModel(description = "All details about the Product-Variation")
 public class ProductVariation {
 
     @Id

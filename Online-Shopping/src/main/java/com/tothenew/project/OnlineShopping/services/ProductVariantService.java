@@ -6,7 +6,9 @@ import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.repos.ProductVariantRepository;
 import com.tothenew.project.OnlineShopping.repos.ProductVariationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -47,11 +49,32 @@ public class ProductVariantService {
     }
 
 
+    @Transactional
+    @Modifying
+    public String updateStoredQuantity (Long variantId, Integer qty) {
+
+        Optional<ProductVariant> optionalProductVariant = productVariantRepository.findById(variantId.toString());
+        if (optionalProductVariant.isPresent()) {
+
+            ProductVariant productVariant = optionalProductVariant.get();
+            productVariant.setQuantityAvailable(qty.toString());
+
+            productVariantRepository.save(productVariant);
+
+            return "Quantity updated for selected Variant";
+
+        }
+        else {
+            throw new ResourceNotFoundException("Invalid Variant ID");
+        }
+
+    }
+
     public ProductVariant viewVariant(String vid) {
 
-        Optional<ProductVariant> optionalProductVariantVariant = productVariantRepository.findById(vid);
-        if (optionalProductVariantVariant.isPresent()) {
-            return optionalProductVariantVariant.get();
+        Optional<ProductVariant> optionalProductVariant = productVariantRepository.findById(vid);
+        if (optionalProductVariant.isPresent()) {
+            return optionalProductVariant.get();
         }
         else {
             throw new ResourceNotFoundException("Invalid Variant ID");

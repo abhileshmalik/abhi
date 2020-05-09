@@ -196,7 +196,7 @@ public class UserDaoService {
             mailMessage.setFrom("online-shopping@gmail.com");
             mailMessage.setText("Hello Seller, Thank You for choosing Online-Shopping Portal." +
                     " Your has been registered successfully please wait for some time" +
-                    " So that your account can be enabled by our team after verification  : ");
+                    " So that your account can be enabled by our team after verification ");
 
             emailSenderService.sendEmail(mailMessage);
 

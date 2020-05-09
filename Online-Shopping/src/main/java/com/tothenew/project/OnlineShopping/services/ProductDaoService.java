@@ -12,6 +12,7 @@ import com.tothenew.project.OnlineShopping.model.ProductVariationModel;
 import com.tothenew.project.OnlineShopping.model.ProductViewModel;
 import com.tothenew.project.OnlineShopping.product.Category;
 import com.tothenew.project.OnlineShopping.product.Product;
+import com.tothenew.project.OnlineShopping.product.ProductVariant;
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.repos.*;
 import com.tothenew.project.OnlineShopping.utils.StringToSetParser;
@@ -34,6 +35,9 @@ public class ProductDaoService {
 
     @Autowired
     private ProductVariationRepository productVariationRepository;
+
+    @Autowired
+    private ProductVariantRepository productVariantRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -128,6 +132,19 @@ public class ProductDaoService {
                         productVariation.setProduct(product);
                         productVariation.setIs_active(true);
                         productVariationRepository.save(productVariation);
+
+                        // Saving the Variant in RedisDb too
+                        ProductVariant productVariant = new ProductVariant();
+
+                        Long vid = productVariation.getProduct_variant_id();
+                        Integer qty = productVariation.getQuantityAvailable();
+
+                        productVariant.setVid(vid.toString());
+                        productVariant.setQuantityAvailable(qty.toString());
+
+                        productVariantRepository.save(productVariant);
+
+
                         return "Product Variant saved";
                     }
                 }
@@ -256,7 +273,7 @@ public class ProductDaoService {
                 mailMessage.setTo(emailid);
                 mailMessage.setSubject("Product Activated!!");
                 mailMessage.setFrom("wishcart@gmail.com");
-                mailMessage.setText("Your product has been Activated by our Team" +
+                mailMessage.setText("Your product has been Activated by our Team," +
                         " Customers can now view it and place orders for same.");
                 emailSenderService.sendEmail((mailMessage));
                 return "Product Activated";
@@ -289,7 +306,7 @@ public class ProductDaoService {
                 mailMessage.setTo(emailid);
                 mailMessage.setSubject("Product Deactivated!!");
                 mailMessage.setFrom("wishcart@gmail.com");
-                mailMessage.setText("Your product has been deactivated by our Team" +
+                mailMessage.setText("Your product has been deactivated by our Team," +
                         "Please contact our team for assistance");
                 emailSenderService.sendEmail((mailMessage));
                 return "Product Deactivated";
