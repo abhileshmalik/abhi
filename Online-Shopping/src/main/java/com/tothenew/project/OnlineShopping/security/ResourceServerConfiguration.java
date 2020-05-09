@@ -56,6 +56,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/category").permitAll()
                 .antMatchers("/allcategories").permitAll()
                 .antMatchers("/productcategories").permitAll()
+                .antMatchers("/save-variant/{id}").permitAll()
+                .antMatchers("/view-variant/{vid}").permitAll()
 
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()

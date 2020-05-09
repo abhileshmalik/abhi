@@ -3,7 +3,9 @@ package com.tothenew.project.OnlineShopping.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.tothenew.project.OnlineShopping.product.ProductVariant;
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
+import com.tothenew.project.OnlineShopping.services.ProductVariantService;
 import com.tothenew.project.OnlineShopping.services.ProductVariationDaoService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class ProductVariationController {
 
     @Autowired
     private ProductVariationDaoService productVariationDaoService;
+
+    @Autowired
+    private ProductVariantService productVariantService;
 
 
     public ProductVariation viewVariant(@PathVariable Long variantId) {
@@ -37,6 +42,22 @@ public class ProductVariationController {
         return mapping1;
 
     }
+
+
+    @GetMapping("/save-variant/{id}")
+    public void save(@PathVariable Long id) {
+
+        String message = productVariantService.saveVariant(id);
+        System.out.println(message);
+
+    }
+
+    @GetMapping("/view-variant/{vid}")
+    public ProductVariant view(@PathVariable String vid) {
+        return productVariantService.viewVariant(vid);
+    }
+
+
 
 
 }
