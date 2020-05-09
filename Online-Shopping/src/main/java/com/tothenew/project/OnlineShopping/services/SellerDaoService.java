@@ -72,6 +72,7 @@ public class SellerDaoService {
                     throw new ValidationException("Phone number must contain numbers only");
                 seller1.setCompanyContact(sellerUpdateModel.getCompanyContact());
             }
+
             userRepository.save(seller1);
 
             logger.info("********** Seller Profile Updated **********");

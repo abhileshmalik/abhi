@@ -28,7 +28,11 @@ public class ProductVariationDaoService {
 
         if (variant1.isPresent()) {
             ProductVariation productVariation = variant1.get();
-            return productVariation;
+            if (productVariation.getIs_active()) {
+                return productVariation;
+            } else {
+             throw new ResourceNotFoundException("Requested Variant is unavailable at the Moment");
+            }
         } else {
             throw new ResourceNotFoundException("Invalid Variant ID");
         }

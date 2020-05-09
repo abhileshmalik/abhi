@@ -3,7 +3,6 @@ package com.tothenew.project.OnlineShopping.product;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tothenew.project.OnlineShopping.entities.Document;
 import com.tothenew.project.OnlineShopping.entities.Seller;
 import io.swagger.annotations.ApiModel;
 import org.springframework.data.annotation.CreatedDate;
@@ -35,9 +34,7 @@ public class Product {
     private Boolean isReturnable;
     private Boolean isActive;
     private Boolean isDeleted;
-
-    @OneToOne
-    private Document imageId;
+    private Long imageId;
 
     @Column
     @CreatedDate
@@ -51,7 +48,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Set<ProductVariation> variations;
 
@@ -156,5 +153,13 @@ public class Product {
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public Long getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
     }
 }

@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Document {
+public class ImageDocument {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

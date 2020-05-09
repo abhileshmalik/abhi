@@ -1,18 +1,18 @@
 package com.tothenew.project.OnlineShopping.product;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tothenew.project.OnlineShopping.utils.HashMapConverter;
 import io.swagger.annotations.ApiModel;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Map;
 
 @Entity
-//@JsonFilter("variantFilter")
+@JsonFilter("variantfilter")
 @EntityListeners(AuditingEntityListener.class)
 @ApiModel(description = "All details about the Product-Variant ")
 public class ProductVariation {
@@ -39,9 +39,9 @@ public class ProductVariation {
     @JoinColumn(name = "product_id")
     private Product product;
 
+
     @Convert(converter = HashMapConverter.class)
     private Map<String, Object> productAttributes;
-
 
     public Long getProduct_variant_id() {
         return product_variant_id;

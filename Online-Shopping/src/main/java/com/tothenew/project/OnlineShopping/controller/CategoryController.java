@@ -25,6 +25,8 @@ import java.util.List;
 @RestController
 public class CategoryController {
 
+   // public static final  SimpleBeanPropertyFilter categorynamefilter =  SimpleBeanPropertyFilter.filterOutAllExcept("name");
+
     @Autowired
     private CategoryDaoService categoryDaoService;
 

@@ -32,6 +32,7 @@ public class User {
     private Boolean isNonLocked;
     private Boolean isEnabled;
     private String role;
+    private Long profileImageId;
 
     @JsonIgnore
     private Integer attempts=0;
@@ -154,6 +155,14 @@ public class User {
 
     public void setAttempts(Integer attempts) {
         this.attempts = attempts;
+    }
+
+    public Long getProfileImageId() {
+        return profileImageId;
+    }
+
+    public void setProfileImageId(Long profileImageId) {
+        this.profileImageId = profileImageId;
     }
 
     /*    public void addAddresses(Address address) {

@@ -18,8 +18,6 @@ import java.util.Locale;
 @EnableScheduling
 public class OnlineShoppingApplication {
 
-	private int maxUploadSizeInMb = 10 * 1024 * 1024; // 10 MB
-
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineShoppingApplication.class, args);
 	}
@@ -31,21 +29,5 @@ public class OnlineShoppingApplication {
 		return localeResolver;
 	}
 
-/*
-	@Bean
-	public TomcatEmbeddedServletContainerFactory tomcatEmbedded() {
-
-		TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
-
-		tomcat.addConnectorCustomizers((TomcatConnectorCustomizer) connector -> {
-			if ((connector.getProtocolHandler() instanceof AbstractHttp11Protocol<?>)) {
-				//-1 means unlimited
-				((AbstractHttp11Protocol<?>) connector.getProtocolHandler()).setMaxSwallowSize(-1);
-			}
-		});
-
-		return tomcat;
-	}
-*/
 
 }

@@ -1,5 +1,6 @@
 package com.tothenew.project.OnlineShopping.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tothenew.project.OnlineShopping.entities.Customer;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class ProductReview {
     @JoinColumn(name = "customer_user_id")
     private Customer customer;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;

@@ -22,6 +22,7 @@ public class Category {
     @JoinColumn(name = "parent_id")
     private Category subcategory;
 
+
     public Long getCategory_id() {
         return category_id;
     }

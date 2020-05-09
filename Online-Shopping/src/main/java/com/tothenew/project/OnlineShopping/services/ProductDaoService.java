@@ -350,13 +350,19 @@ public class ProductDaoService {
         if (product.isPresent()) {
             Product savedProduct = product.get();
             Long s_id = savedProduct.getSeller().getUser_id();
+            Iterable<ProductVariation> variations = productVariationRepository.findByProductId(savedProduct.getProduct_id());
+            Iterator<ProductVariation> variationIterator = variations.iterator();
 
             if (s_id.equals(sellerid)) {
 
+                while(variationIterator.hasNext()){
+                    ProductVariation productVariation = variationIterator.next();
+                    productVariation.setIs_active(true);
+                    productVariationRepository.save(productVariation);
+                }
                 savedProduct.setDeleted(true);
                 productRepository.save(savedProduct);
                 return "Product Deleted Successfully";
-
             }
             else {
                 throw new BadRequestException("Product not associated to current seller");

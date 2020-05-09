@@ -25,6 +25,9 @@ dependencies {
 	implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.2.5.RELEASE'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.2.5.RELEASE'
 
+	// for Redis
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.2.6.RELEASE'
+
 	//for swagger2
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 
