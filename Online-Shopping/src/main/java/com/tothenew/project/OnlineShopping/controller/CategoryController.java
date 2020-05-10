@@ -154,7 +154,7 @@ public class CategoryController {
     }
 
 
-    @ApiOperation(value = "fetch filtering details for a category")
+    @ApiOperation(value = "Fetch filtering details for a category")
     @GetMapping("/customer/category/filter/{categoryId}")
     public MappingJacksonValue filteringCategoryDetails(@Valid @PathVariable Long categoryId) {
         SimpleBeanPropertyFilter filter5 = SimpleBeanPropertyFilter.filterOutAllExcept("category_id","name");
