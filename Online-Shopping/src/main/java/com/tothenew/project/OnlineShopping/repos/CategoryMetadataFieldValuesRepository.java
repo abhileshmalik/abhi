@@ -12,6 +12,8 @@ import java.util.List;
 @Repository
 public interface CategoryMetadataFieldValuesRepository extends CrudRepository<CategoryMetadataFieldValues, CategoryMetadataFieldValuesID> {
 
+    List<CategoryMetadataFieldValues> findAll();
+
     @Query(value = "select f.name from category_metadata_field f inner join " +
             "category_metadata_field_values v on " +
             "f.id=v.category_metadata_field_id " +

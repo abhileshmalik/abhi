@@ -1,8 +1,11 @@
 package com.tothenew.project.OnlineShopping.orderprocessing;
 
+import io.swagger.annotations.ApiModel;
+
 import javax.persistence.*;
 
 @Entity
+@ApiModel(description = "This contains status of every individual order and how to change it")
 public class OrderStatus {
 
     @Id

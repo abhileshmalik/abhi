@@ -77,4 +77,9 @@ public class CategoryMetadataFieldService {
     public List<CategoryMetadataField> findAllMetadataFields(){
         return categoryMetadataFieldRepository.findAll();
     }
+
+    public List<CategoryMetadataFieldValues> findAllFieldValues() {
+        return categoryMetadataFieldValuesRepository.findAll();
+    }
+
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.tothenew.project.OnlineShopping.entities.CategoryMetadataField;
+import com.tothenew.project.OnlineShopping.entities.CategoryMetadataFieldValues;
 import com.tothenew.project.OnlineShopping.model.CategoryModel;
 import com.tothenew.project.OnlineShopping.model.FilterCategoryModel;
 import com.tothenew.project.OnlineShopping.model.MetadataFieldValueInsertModel;
@@ -102,6 +103,26 @@ public class CategoryController {
     }
 
 
+    public List<CategoryMetadataFieldValues> findAllFieldValue(){
+        return categoryMetadataFieldService.findAllFieldValues();
+    }
+
+    @ApiOperation(value = "View all Metadata fields and values for Saved Categories")
+    @GetMapping("/allmetadatafieldValues")
+    public MappingJacksonValue filteringCategoryDetails() {
+        SimpleBeanPropertyFilter filter5 = SimpleBeanPropertyFilter.filterOutAllExcept("category_id","name");
+
+        FilterProvider filterProvider5 = new SimpleFilterProvider().addFilter("categoryfilter",filter5);
+
+        MappingJacksonValue mapping5=new MappingJacksonValue(findAllFieldValue());
+        mapping5.setFilters(filterProvider5);
+
+        return mapping5;
+    }
+
+
+
+
     @ApiOperation(value = "Add metadata field values for a category")
     @PostMapping("/metadata-fields/addValues/{categoryId}/{metaFieldId}")
     public ResponseEntity<Object> addMetaDataFieldValues(@RequestBody MetadataFieldValueInsertModel fieldValueDtos, @PathVariable Long categoryId, @PathVariable Long metaFieldId) {
@@ -144,7 +165,6 @@ public class CategoryController {
         mapping5.setFilters(filterProvider5);
 
         return mapping5;
-
     }
 
 
