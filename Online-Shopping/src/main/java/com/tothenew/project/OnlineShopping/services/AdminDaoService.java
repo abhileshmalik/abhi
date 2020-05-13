@@ -26,7 +26,14 @@ public class AdminDaoService {
     @Transactional
     public String activateUser(Long uid) {
 
-        Optional<User> user1 = userRepository.findById(uid);
+        Optional<User> user1;
+        try {
+            user1 = userRepository.findById(uid);
+        } catch (NullPointerException ex) {
+            logger.error("Exception Recieved", ex);
+            throw new UserNotFoundException("Incorrect User ID");
+        }
+
         if (user1.isPresent()) {
             User user = user1.get();
 

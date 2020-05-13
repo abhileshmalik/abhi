@@ -45,10 +45,8 @@ public class UserDaoService {
 
     Logger logger = LoggerFactory.getLogger(UserDaoService.class);
 
-    public List<User> userList = new ArrayList<>();
-    public List<Customer> customerList = new ArrayList<>();
-    public List<Seller> sellerList = new ArrayList<>();
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
 
     public List<User> findAll() {
         List<User> users = (List<User>) userRepository.findAll();
@@ -86,6 +84,7 @@ public class UserDaoService {
 
         return mapping4;
     }
+
     // Can be used for creating Admin via URL
     public User saveNewUser(User user) {
         String hpass = user.getPassword();
@@ -96,7 +95,6 @@ public class UserDaoService {
         user.setNonLocked(true);
         user.setAttempts(0);
         user.setRole("ROLE_ADMIN");
-        userList.add(user);
         userRepository.save(user);
         return user;
     }
@@ -202,7 +200,7 @@ public class UserDaoService {
 
             logger.info("********** New Seller Registered **********");
 
-            return "Registration Successful, ";
+            return "Registration Successful";
         }
     }
 

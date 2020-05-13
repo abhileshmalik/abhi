@@ -11,6 +11,8 @@ import com.tothenew.project.OnlineShopping.repos.ProductRepository;
 import com.tothenew.project.OnlineShopping.repos.ProductReviewRepository;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,9 @@ public class ProductReviewService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    Logger logger = LoggerFactory.getLogger(ProductReviewService.class);
+
 
     public String addReview(ProductReviewModel productReviewModel, Long customer_user_id, Long product_id){
 
@@ -57,6 +62,8 @@ public class ProductReviewService {
             productReview.setProduct(product1);
 
             productReviewRepository.save(productReview);
+
+            logger.info("********** Product Review Posted by Customer **********");
 
             return "Review posted successfully ....... ";
         }

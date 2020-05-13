@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -165,7 +166,7 @@ public class User {
         this.profileImageId = profileImageId;
     }
 
-    /*    public void addAddresses(Address address) {
+    public void addAddresses(Address address) {
         if (address !=null) {
             if (addresses==null) {
                 addresses = new HashSet<>();
@@ -173,6 +174,6 @@ public class User {
             address.setUser(this);
             addresses.add(address);
         }
-    }*/
+    }
 
 }

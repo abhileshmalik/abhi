@@ -9,6 +9,8 @@ import com.tothenew.project.OnlineShopping.product.Product;
 import com.tothenew.project.OnlineShopping.product.ProductVariant;
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.repos.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,8 @@ public class CartDaoService {
 
     @Autowired
     private ProductVariantRepository productVariantRepository;
+
+    Logger logger = LoggerFactory.getLogger(CartDaoService.class);
 
 
     public String addToCart( Cart cart, Long customer_user_id, Long productVariation_id) {
@@ -79,6 +83,8 @@ public class CartDaoService {
                                 if (cartQuantity < originalqty) {
                                     cart.setProductVariation(productVariation);
                                     cartRepository.save(cart);
+
+                                    logger.info("********** Product Added to cart by Customer **********");
 
                                     return "Item Added to cart Successfully ";
 

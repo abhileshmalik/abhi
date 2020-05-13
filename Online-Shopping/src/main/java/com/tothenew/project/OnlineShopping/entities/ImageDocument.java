@@ -12,11 +12,24 @@ public class ImageDocument {
     private String filename;
     private String path;
     private Boolean status;
+    private String fileType;
+
+    @Lob
+    private byte[] data;
 
     @OneToOne
     private User createdBy;
 
     private Date createdOn;
+
+    public ImageDocument() {
+    }
+
+    public ImageDocument(String filename, String fileType, byte[] data) {
+        this.filename = filename;
+        this.fileType = fileType;
+        this.data = data;
+    }
 
     public Long getId() {
         return id;
@@ -48,6 +61,22 @@ public class ImageDocument {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 
     public User getCreatedBy() {

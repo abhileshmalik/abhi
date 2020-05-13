@@ -44,15 +44,7 @@ public class ProductVariationController {
         return mapping1;
 
     }
-
-
-    @GetMapping("/save-variant/{id}")
-    public void save(@PathVariable Long id) {
-
-        String message = productVariantService.saveVariant(id);
-        System.out.println(message);
-
-    }
+    
 
     @GetMapping("/view-variant/{vid}")
     public ProductVariant view(@PathVariable String vid) {

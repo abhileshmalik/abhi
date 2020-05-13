@@ -8,6 +8,10 @@ group = 'com.tothenew.project'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
+ext.junitVintageVersion  = '4.12.2'
+ext.junitPlatformVersion = '1.0.2'
+ext.junitJupiterVersion  = '5.0.2'
+
 repositories {
 	mavenCentral()
 }
@@ -36,10 +40,16 @@ dependencies {
 
 	compile group: 'org.passay', name: 'passay', version: '1.0'
 	compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.6'
+
+	//for File Uploading
 	compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
 
+	// JUnit Jupiter API and TestEngine implementation
+	testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+	testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
 
 	runtimeOnly 'mysql:mysql-connector-java'
+	testRuntime('mysql:mysql-connector-java')
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}

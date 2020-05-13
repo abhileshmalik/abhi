@@ -10,6 +10,8 @@ import com.tothenew.project.OnlineShopping.product.Product;
 import com.tothenew.project.OnlineShopping.product.ProductVariant;
 import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.repos.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.mail.SimpleMailMessage;
@@ -48,6 +50,9 @@ public class OrderDaoService {
 
     @Autowired
     private EmailSenderService emailSenderService;
+
+    Logger logger = LoggerFactory.getLogger(OrderDaoService.class);
+
 
     @Transactional
     @Modifying
@@ -140,6 +145,8 @@ public class OrderDaoService {
                                         " Your order has been placed successfully....");
 
                                 emailSenderService.sendEmail(mailMessage);
+
+                                logger.info("********** Order Placed for a product by Customer **********");
 
                                 return "Order Placed Successfully.... " +
                                         "Thank You for Choosing Online-Shopping portal";

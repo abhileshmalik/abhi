@@ -39,6 +39,7 @@ public class SellerDaoService {
     @Transactional
     @Modifying
     public String updateSeller(SellerUpdateModel sellerUpdateModel, Long id){
+
         Optional<User> seller = userRepository.findById(id);
 
         if (seller.isPresent()){

@@ -25,6 +25,7 @@ public class ProductVariation {
     private Integer quantityAvailable;
     private Double price;
     private Boolean is_active;
+    private Long imageId;
 
     @Column
     @CreatedDate
@@ -97,5 +98,13 @@ public class ProductVariation {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Long getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
     }
 }

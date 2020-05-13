@@ -11,6 +11,8 @@ import com.tothenew.project.OnlineShopping.repos.CategoryMetadataFieldRepository
 import com.tothenew.project.OnlineShopping.repos.CategoryMetadataFieldValuesRepository;
 import com.tothenew.project.OnlineShopping.repos.CategoryRepository;
 import com.tothenew.project.OnlineShopping.utils.StringToSetParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class CategoryMetadataFieldService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    Logger logger = LoggerFactory.getLogger(CategoryMetadataFieldService.class);
+
     public String addNewMetadataField(String fieldName){
         CategoryMetadataField categoryMetadataField = categoryMetadataFieldRepository.findByName(fieldName);
         if (categoryMetadataField!=null){
@@ -38,6 +42,9 @@ public class CategoryMetadataFieldService {
             CategoryMetadataField categoryMetadataField1= new CategoryMetadataField();
             categoryMetadataField1.setName(fieldName);
             categoryMetadataFieldRepository.save(categoryMetadataField1);
+
+            logger.info("********** Metadata Field Added by Admin **********");
+
             return "Category metadata field created";
         }
     }
@@ -69,16 +76,25 @@ public class CategoryMetadataFieldService {
 
                 categoryMetadataFieldValuesRepository.save(categoryFieldValues);
             }
+
+            logger.info("********** Metadata Field-Values Added for Product by Admin **********");
+
             return "Metadata field values added successfully";
         }
 
     }
 
     public List<CategoryMetadataField> findAllMetadataFields(){
+
+        logger.info("********** All Metadata Fields Retrieved **********");
+
         return categoryMetadataFieldRepository.findAll();
     }
 
     public List<CategoryMetadataFieldValues> findAllFieldValues() {
+
+        logger.info("********** All Metadata Fields-Values Retrieved **********");
+
         return categoryMetadataFieldValuesRepository.findAll();
     }
 

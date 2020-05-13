@@ -63,6 +63,9 @@ public class ProductVariationDaoService {
                     // saving the Updated values in DB too
                     productVariationRepository.save(productVariation);
 
+
+                    logger.info("********** Product-Variation Retrieved **********");
+
                     // returning Product-variation with updated values to user
                     return productVariation;
 
@@ -113,6 +116,8 @@ public class ProductVariationDaoService {
 
                     if (productVariationUpdateModel.getIs_active() != null)
                         savedVariation.setIs_active(productVariationUpdateModel.getIs_active());
+
+                    logger.info("********** Product-Variation Updated **********");
 
                     return "Product Variant Updated Successfully";
 

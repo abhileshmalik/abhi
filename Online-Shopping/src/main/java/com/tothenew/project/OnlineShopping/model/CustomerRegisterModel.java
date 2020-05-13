@@ -8,6 +8,7 @@ import com.tothenew.project.OnlineShopping.validations.Phone;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
 @PasswordMatches
@@ -112,4 +113,5 @@ public class CustomerRegisterModel {
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
+
 }

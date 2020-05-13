@@ -8,6 +8,8 @@ import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
 import com.tothenew.project.OnlineShopping.repos.ResetPasswordRepository;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
 import com.tothenew.project.OnlineShopping.tokens.ResetPasswordToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,9 @@ public class ForgotPasswordService {
 
     @Autowired
     private EmailSenderService emailSenderService;
+
+    Logger logger = LoggerFactory.getLogger(ForgotPasswordService.class);
+
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -53,6 +58,8 @@ public class ForgotPasswordService {
         String text = "To reset your password , please click here "
                 +"http://localhost:8080/reset-password?token="+resetPasswordToken.getToken();
         emailSenderService.sendEmail(emailId,subject,text);
+
+        logger.info("********** Password Reset link sent to the user **********");
 
         return "A link has been sent to your email for password reset.";
     }
@@ -86,6 +93,8 @@ public class ForgotPasswordService {
             String subject = "Password Updated !!";
             String text = "Your password has been changed successfully!!";
             emailSenderService.sendEmail(emailId, subject, text);
+
+            logger.info("********** User Password Updated **********");
 
             return "Password updated successfully!!!";
         }

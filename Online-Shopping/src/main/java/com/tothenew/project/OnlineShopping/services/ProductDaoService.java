@@ -17,6 +17,8 @@ import com.tothenew.project.OnlineShopping.product.ProductVariation;
 import com.tothenew.project.OnlineShopping.repos.*;
 import com.tothenew.project.OnlineShopping.utils.StringToSetParser;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -57,9 +59,14 @@ public class ProductDaoService {
     @Autowired
     Category category;
 
+    Logger logger = LoggerFactory.getLogger(ProductDaoService.class);
+
 
     public List<Product> findAll() {
         List<Product> products = (List<Product>) productRepository.findAll();
+
+        logger.info("********** All Products List Retrieved **********");
+
         return products;
     }
 
@@ -91,6 +98,9 @@ public class ProductDaoService {
                 products.forEach(e-> e.setDeleted(false));
 
                 productRepository.saveAll(products);
+
+                logger.info("********** Product List Saved by Seller **********");
+
                 return " Products Added Successfully ";
 
             }
@@ -144,6 +154,8 @@ public class ProductDaoService {
 
                         productVariantRepository.save(productVariant);
 
+                        logger.info("********** Product Variation Added by Seller **********");
+
 
                         return "Product Variant saved";
                     }
@@ -178,7 +190,7 @@ public class ProductDaoService {
 
         receivedFields.removeAll(actualFields);
         if(receivedFields.isEmpty()){
-            return "Invalid fields found in the data.";
+            return "Invalid value found for field Attributes ";
         }
 
         // check validity of values of fields.
@@ -212,6 +224,9 @@ public class ProductDaoService {
     // Find Product by name....
     public Product viewparticularProduct(String product_name) {
         Product p1 = productRepository.findByProductName(product_name);
+
+        logger.info("********** Product Retrieved using by Product Name **********");
+
         return p1;
     }
 
@@ -221,6 +236,9 @@ public class ProductDaoService {
         if(product.isPresent()) {
             Product p1 = product.get();
             if (p1.getIsActive() && !p1.getDeleted()) {
+
+                logger.info("********** Product Retrieved using by ProductId **********");
+
                 return p1;
             }
             else {
@@ -276,6 +294,9 @@ public class ProductDaoService {
                 mailMessage.setText("Your product has been Activated by our Team," +
                         " Customers can now view it and place orders for same.");
                 emailSenderService.sendEmail((mailMessage));
+
+                logger.info("********** Selected Product Activated by Admin **********");
+
                 return "Product Activated";
             }
             else
@@ -309,6 +330,9 @@ public class ProductDaoService {
                 mailMessage.setText("Your product has been deactivated by our Team," +
                         "Please contact our team for assistance");
                 emailSenderService.sendEmail((mailMessage));
+
+                logger.info("********** Selected Product Deactivated by Admin **********");
+
                 return "Product Deactivated";
             }
             else
@@ -347,6 +371,8 @@ public class ProductDaoService {
                 if (productUpdateModel.getReturnable() != null)
                     savedProduct.setIsReturnable(productUpdateModel.getReturnable());
 
+                logger.info("********** Product Updated by Seller **********");
+
                 return "Product Updated Successfully";
 
             }
@@ -379,6 +405,9 @@ public class ProductDaoService {
                 }
                 savedProduct.setDeleted(true);
                 productRepository.save(savedProduct);
+
+                logger.info("********** Product Deleted by Seller **********");
+
                 return "Product Deleted Successfully";
             }
             else {
@@ -400,6 +429,9 @@ public class ProductDaoService {
         if(product.isPresent()) {
             Product product1 = product.get();
             Long categoryId = product1.getCategory().getCategory_id();
+
+            logger.info("********** Similar Products Retrieved **********");
+
             return productRepository.findSimilar(categoryId, PageRequest.of(Integer.parseInt(page), Integer.parseInt(size)));
         }
         else
