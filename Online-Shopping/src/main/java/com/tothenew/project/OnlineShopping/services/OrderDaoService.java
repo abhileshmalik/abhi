@@ -141,7 +141,7 @@ public class OrderDaoService {
                                 mailMessage.setTo(customer.getEmail());
                                 mailMessage.setSubject("Order Placed");
                                 mailMessage.setFrom("online-shopping@gmail.com");
-                                mailMessage.setText("Hello customer, Thank You for choosing Online-Shopping Portal." +
+                                mailMessage.setText("Hello customer, Thank You for choosing Pro-Cart." +
                                         " Your order has been placed successfully....");
 
                                 emailSenderService.sendEmail(mailMessage);

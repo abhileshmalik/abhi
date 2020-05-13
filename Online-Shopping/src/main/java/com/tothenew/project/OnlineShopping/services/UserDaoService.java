@@ -151,7 +151,7 @@ public class UserDaoService {
                 SimpleMailMessage mailMessage = new SimpleMailMessage();
                 mailMessage.setTo(customer.getEmail());
                 mailMessage.setSubject("Complete Registration!");
-                mailMessage.setFrom("online-shopping@gmail.com");
+                mailMessage.setFrom("procart2020@gmail.com");
                 mailMessage.setText("To confirm your account, please click here : "
                         +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
 
@@ -191,8 +191,8 @@ public class UserDaoService {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(seller.getEmail());
             mailMessage.setSubject("Registration Successful!");
-            mailMessage.setFrom("online-shopping@gmail.com");
-            mailMessage.setText("Hello Seller, Thank You for choosing Online-Shopping Portal." +
+            mailMessage.setFrom("procart2020@gmail.com");
+            mailMessage.setText("Hello Seller, Thank You for choosing Pro-Cart." +
                     " Your has been registered successfully please wait for some time" +
                     " So that your account can be enabled by our team after verification ");
 

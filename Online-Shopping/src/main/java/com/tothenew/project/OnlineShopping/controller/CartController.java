@@ -35,4 +35,18 @@ public class CartController {
 
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
+
+    @ApiOperation(value = "API to add any product-variant to the wishlist")
+    @PostMapping("/add-to-wishlist/{vid}")
+    public ResponseEntity<Object> addToWishlist(@PathVariable Long vid) {
+
+        Customer customer = userDaoService.getLoggedInCustomer();
+        Long customer_id = customer.getUser_id();
+
+        String message = cartDaoService.addtoWishlist(customer_id, vid);
+
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
+    }
+
+
 }

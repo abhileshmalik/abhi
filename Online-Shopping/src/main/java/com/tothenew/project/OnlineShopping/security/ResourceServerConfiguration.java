@@ -86,6 +86,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
                 .antMatchers("/customer/**").hasAnyRole("USER")
 
+                .antMatchers("/add-to-wishlist/{vid}").hasAnyRole("USER")
                 .antMatchers("/add-to-cart/{productVariation_id}").hasAnyRole("USER")
                 .antMatchers("/order/{cart_id}").hasAnyRole("USER")
                 .antMatchers("/addreview/{product_id}").hasAnyRole("USER")

@@ -45,7 +45,7 @@ public class AdminDaoService {
                 mailMessage.setSubject("Account Activated!!");
                 mailMessage.setFrom("wishcart@gmail.com");
                 mailMessage.setText("Your account is successfully activated........ " +
-                        "Thank You for Choosing WishCart");
+                        "Thank You for Choosing Pro-Cart");
                 emailSenderService.sendEmail((mailMessage));
 
                 logger.info("********** User Account Activated by Admin **********");
@@ -76,7 +76,7 @@ public class AdminDaoService {
                 mailMessage.setSubject("Account Deactivated!!");
                 mailMessage.setFrom("wishcart@gmail.com");
                 mailMessage.setText("Your account has been deactivated due to non usage/compliance violation ........ " +
-                        "Please contact wishcart for assistance");
+                        "Please contact Pro-Cart for assistance");
                 emailSenderService.sendEmail((mailMessage));
 
                 logger.info("********** User Account Deactivated by Admin **********");

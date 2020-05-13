@@ -45,7 +45,7 @@ public class UserController {
 
     @GetMapping("/")
     public String index(){
-        return "Welcome To Online Shopping Portal";
+        return "Welcome To Pro-Cart";
     }
 
 

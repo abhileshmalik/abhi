@@ -33,7 +33,8 @@ public class DailyOrderStatusEmailService {
             Seller seller = sellerIterator.next();
             String emailId = seller.getEmail();
             String subject = "Order Updates";
-            String text = "Your order has been cancelled...";
+            String text = "Your order has been cancelled... " +
+                            "Team Pro-Cart";
             emailSenderService.sendEmail(emailId, subject, text);
 
             DailyOrderStatusEmail dailyOrderStatusEmail = new DailyOrderStatusEmail();
