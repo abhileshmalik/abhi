@@ -1,4 +1,4 @@
-package com.tothenew.project.OnlineShopping;
+package com.tothenew.project.OnlineShopping.controller;
 
 import com.tothenew.project.OnlineShopping.entities.Address;
 import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;

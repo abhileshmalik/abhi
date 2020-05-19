@@ -40,12 +40,10 @@ public class UserController {
     @Autowired
     private MessageSource messageSource;
 
-    AppUser appUser;
-
 
     @GetMapping("/")
     public String index(){
-        return "Welcome To Pro-Cart";
+        return "Welcome To The Pro-Cart";
     }
 
 

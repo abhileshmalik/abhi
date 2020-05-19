@@ -1,4 +1,4 @@
-package com.tothenew.project.OnlineShopping;
+package com.tothenew.project.OnlineShopping.controller;
 
 import com.tothenew.project.OnlineShopping.controller.UserController;
 import com.tothenew.project.OnlineShopping.entities.Address;
@@ -7,20 +7,68 @@ import com.tothenew.project.OnlineShopping.exception.ValidationException;
 import com.tothenew.project.OnlineShopping.model.*;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@SpringBootTest
+//@SpringBootTest
+@WebMvcTest(UserController.class)
 public class UserControllerTests {
 
-   // UserController userController = new UserController();
-    UserDaoService userDaoService = new UserDaoService();
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Mock
+    UserDaoService userDaoService;
+
+    @Autowired
+    private WebApplicationContext wac;
+
+
+    @BeforeEach
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+
+        // this must be called for the @Mock annotations above to be processed.
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
+    void testHomepage() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/")
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertEquals("Welcome To The Pro-Cart", result.getResponse().getContentAsString());
+    }
+
+
+    /*@Test
     void testCreateCustomer() {
 
         CustomerRegisterModel customerRegisterModel = new CustomerRegisterModel();
@@ -233,7 +281,7 @@ public class UserControllerTests {
 
         //Then
         assertThrows(ResourceNotFoundException.class, executable);
-    }
+    }*/
 
 
 

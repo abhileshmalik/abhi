@@ -23,7 +23,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -204,7 +203,7 @@ public class ImageController {
 
                             File newPath = new File(UPLOADED_FOLDER + "/products/" + pid + "/variations");
                             if (!newPath.exists()) {
-                                if (newPath.mkdir()) {
+                                if (newPath.mkdirs()) {
                                     logger.info("********** New Directory Created for Product-Variation **********");
                                 } else {
                                     logger.error("********** Failed to create directory for Product-Variation **********");
