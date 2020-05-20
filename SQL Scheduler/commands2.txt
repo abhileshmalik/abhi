@@ -1,0 +1,1 @@
+insert into student (name, age) values ('Shubham', 22)

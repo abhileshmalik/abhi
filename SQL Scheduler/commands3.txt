@@ -1,0 +1,2 @@
+insert into student (name, age) values ('Shubham Jain', 23)
+update student set age=21 where name='Shubham Jain'

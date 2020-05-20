@@ -1,0 +1,4 @@
+insert into student (name, age) values ('Abhilesh', 24)
+insert into student (name, age) values ('Sagar', 32)
+insert into student (name, age) values ('Sid', 21)
+update student set name='Abhilesh' where age = 23

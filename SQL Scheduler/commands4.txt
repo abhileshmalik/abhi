@@ -1,0 +1,5 @@
+insert into student (name, age) values ('Shubh', 34)
+insert into student (name, age) values ('nirbhay', 24)
+insert into student (name, age) values ('Sarthak', 34)
+insert into student (name, age) values ('Siddharth', 21)
+delete from student where name='sid'
