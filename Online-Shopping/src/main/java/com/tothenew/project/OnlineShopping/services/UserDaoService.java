@@ -100,7 +100,7 @@ public class UserDaoService {
     }
 
     public AppUser loadUserByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
         System.out.println(user);
         if(user!= null) {
             if (username != null) {
@@ -118,7 +118,7 @@ public class UserDaoService {
     public String saveNewCustomer(CustomerRegisterModel customerRegisterModel) {
 
         User existingEmail = userRepository.findByEmailIgnoreCase(customerRegisterModel.getEmail());
-        User existingUsername = userRepository.findByUsername(customerRegisterModel.getUsername());
+        User existingUsername = userRepository.findByUsernameIgnoreCase(customerRegisterModel.getUsername());
 
         if(existingEmail != null)
         {
@@ -166,7 +166,7 @@ public class UserDaoService {
     public String saveNewSeller(SellerRegisterModel sellerRegisterModel) {
 
         User existingEmail = userRepository.findByEmailIgnoreCase(sellerRegisterModel.getEmail());
-        User existingUsername = userRepository.findByUsername(sellerRegisterModel.getUsername());
+        User existingUsername = userRepository.findByUsernameIgnoreCase(sellerRegisterModel.getUsername());
 
         if (existingEmail != null) {
             return "This email ID is already registered with us";
@@ -268,21 +268,21 @@ public class UserDaoService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
         String username = appUser.getUsername();
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsernameIgnoreCase(username);
     }
 
     public Customer getLoggedInCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
         String username = appUser.getUsername();
-        return (Customer) userRepository.findByUsername(username);
+        return (Customer) userRepository.findByUsernameIgnoreCase(username);
     }
 
     public Seller getLoggedInSeller() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = (AppUser) authentication.getPrincipal();
         String username = appUser.getUsername();
-        return (Seller) userRepository.findByUsername(username);
+        return (Seller) userRepository.findByUsernameIgnoreCase(username);
     }
 
 
@@ -476,7 +476,7 @@ public class UserDaoService {
 
     public String updateCustomerPassword(UpdatePasswordModel updatePasswordModel, String username) {
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
 
         String oldPassword = updatePasswordModel.getOldPassword();
 

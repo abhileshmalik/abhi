@@ -22,7 +22,7 @@ public class AppUserDetailsService implements UserDetailsService {
     @Override
     public AppUser loadUserByUsername(String username) throws UsernameNotFoundException {
         //String encryptedPassword = passwordEncoder.encode("pass");
-        System.out.println("Trying to authenticate user ::" + username);
+        System.out.println("Trying to authenticate user :: " + username);
         //System.out.println("Encrypted Password ::"+encryptedPassword);
 
         if (userDao.loadUserByUsername(username)==null)
@@ -34,9 +34,6 @@ public class AppUserDetailsService implements UserDetailsService {
             appUser = userDao.loadUserByUsername(username);
             return appUser;
         }
-       // System.out.println(appUser.getUid());
-       // System.out.println(appUser.getName());
-
 
     }
 }

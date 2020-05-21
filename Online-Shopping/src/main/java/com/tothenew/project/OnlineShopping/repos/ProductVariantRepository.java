@@ -5,8 +5,8 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-//@EnableRedisRepositories
+//@Repository
+@EnableRedisRepositories
 public interface ProductVariantRepository extends CrudRepository<ProductVariant,String> {
 
 }

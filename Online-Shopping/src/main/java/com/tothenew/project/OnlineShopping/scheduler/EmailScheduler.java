@@ -18,9 +18,8 @@ public class EmailScheduler {
     @Autowired
     private ProductVariationDaoService productVariationDaoService;
 
-    @Scheduled(cron = "0 0 0 * * ?")             // It works on UTC Time Zone by default
+    @Scheduled(cron = "0 0 0 * * ?")
     //@Scheduled(initialDelay = 1000,fixedDelay = 5000)
-    ///@Scheduled(cron = "51 3 * * * ?", zone = "Indian/Maldives")
     public void run(){
 
         // Task 1 (Sending daily Order Update Emails to seller)

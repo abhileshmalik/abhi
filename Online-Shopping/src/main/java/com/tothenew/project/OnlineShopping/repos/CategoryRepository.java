@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends CrudRepository<Category, Long> {
 
-    Optional<Category> findByName(String name);
+    Optional<Category> findByNameIgnoreCase(String name);
 
     @Query(value = "select name from category where name=:cname", nativeQuery = true)
     String findByCatName(@Param("cname") String cname);

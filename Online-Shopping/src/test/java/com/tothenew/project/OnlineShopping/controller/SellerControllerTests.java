@@ -5,62 +5,129 @@ import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
 import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
 import com.tothenew.project.OnlineShopping.exception.ValidationException;
 import com.tothenew.project.OnlineShopping.model.*;
+import com.tothenew.project.OnlineShopping.repos.AddressRepository;
+import com.tothenew.project.OnlineShopping.repos.ConfirmationTokenRepository;
+import com.tothenew.project.OnlineShopping.repos.UserRepository;
+import com.tothenew.project.OnlineShopping.services.EmailSenderService;
 import com.tothenew.project.OnlineShopping.services.ProductDaoService;
 import com.tothenew.project.OnlineShopping.services.SellerDaoService;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.MessageSource;
+import org.springframework.http.MediaType;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@AutoConfigureMockMvc
+@ContextConfiguration(classes = {SellerController.class, SellerDaoService.class, UserDaoService.class, EmailSenderService.class})
+@WebMvcTest(SellerController.class)
 public class SellerControllerTests {
 
-    UserDaoService userDaoService = new UserDaoService();
-    SellerDaoService sellerDaoService = new SellerDaoService();
-    ProductDaoService productDaoService= new ProductDaoService();
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean(name = "tokenStore")
+    private TokenStore tokenStore;
+
+    @MockBean(name = "messageSource")
+    MessageSource messageSource;
+
+    @MockBean(name = "javaMailSender")
+    JavaMailSenderImpl javaMailSender;
+
+    @MockBean(name = "userRepository")                          // use to Mockout that module/controller or repository
+    private UserRepository userRepository;
+
+    @MockBean(name = "addressRepository")
+    private AddressRepository addressRepository;
+
+    @MockBean(name = "confirmationTokenRepository")
+    ConfirmationTokenRepository confirmationTokenRepository;
 
 
     @Test
-    void testCreateSeller() {
+    void testCreateSeller() throws Exception {
 
-        SellerRegisterModel sellerRegisterModel = new SellerRegisterModel();
+        Mockito.when(javaMailSender.getHost()).thenReturn("qwertyuiop");
+        Mockito.when(javaMailSender.getPort()).thenReturn(10000);
+        Mockito.when(javaMailSender.getUsername()).thenReturn("qwertyui");
+        Mockito.when(javaMailSender.getPassword()).thenReturn("qwertyui");
 
         //Given
-        sellerRegisterModel.setUsername("sidd");
-        sellerRegisterModel.setFirstName("siddharth");
-        sellerRegisterModel.setMiddleName("k");
-        sellerRegisterModel.setLastName("testing");
-        sellerRegisterModel.setEmail("siddharth.bhatia@tothenew.com");
-        sellerRegisterModel.setPassword("Abhi$9156");
-        sellerRegisterModel.setConfirmPassword("Abhi$9156");
-        sellerRegisterModel.setCompanyContact("9897654321");
-        sellerRegisterModel.setCompanyName("TestingComp");
-        sellerRegisterModel.setGstin("79ACXCE3618Q1ZX");
 
-        Address address1 = new Address();
-        address1.setAddressLine("Rohini");
-        address1.setCity("New Delhi");
-        address1.setState("Delhi");
-        address1.setCountry("India");
-        address1.setZipCode("147001");
-        address1.setLabel("Home");
+        List addresses = new ArrayList();
 
-        //sellerRegisterModel.setAddresses();
+        addresses.add(new JSONObject().put("addressLine", "Rohini")
+                .put("city","New Delhi")
+                .put("state","Delhi")
+                .put("country","India")
+                .put("zipCode","110027")
+                .put("label","Home"));
 
-        String expected = "Registration Successful";
+        String jsonString = new JSONObject()
+                .put("email", "siddharth.bhatia@tothenew.com")
+                .put("firstName", "siddharth")
+                .put("middleName", "K")
+                .put("lastName", "testing")
+                .put("username", "sidd")
+                .put("password", "Abhi$9156")
+                .put("confirmPassword", "Abhi$9156")
+                .put("companyName", "TestingComp")
+                .put("companyContact", "9897654321")
+                .put("gstin", "18AABCT3518Q1ZV")
+                /*.put("addresses", new JSONObject().put("addressLine", "Rohini")
+                                                        .put("city","New Delhi")
+                                                        .put("state","Delhi")
+                                                        .put("country","India")
+                                                        .put("zipCode","110027")
+                                                        .put("label","Home"))*/
+                .toString();
 
+        System.out.println(jsonString);
 
         //When
-        String actual = userDaoService.saveNewSeller(sellerRegisterModel);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/sellerregistration").content(jsonString)
+                .contentType(MediaType.APPLICATION_JSON)
+                //.header("","")
+                .with(SecurityMockMvcRequestPostProcessors.user("abc"))
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .accept(MediaType.APPLICATION_JSON);
+
 
         //Then
-        assertEquals(expected,actual,"Seller Added");
+        ResultActions resultAction =  mockMvc.perform(requestBuilder);
+        MvcResult result = resultAction
+                .andExpect(status().isCreated())
+                .andReturn();
+        assertEquals("Registration Successful", result.getResponse().getContentAsString());
 
     }
 
-    @Test
+   /* @Test
     void testUpdateSellerProfile() {
 
         SellerUpdateModel sellerUpdateModel = new SellerUpdateModel();
@@ -277,7 +344,7 @@ public class SellerControllerTests {
         //Then
         assertThrows(ResourceNotFoundException.class, executable);
 
-    }
+    }*/
 
 
 }

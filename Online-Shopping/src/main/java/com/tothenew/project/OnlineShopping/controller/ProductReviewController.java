@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@Api(value="Product Review APIs")
+@Api(value="Product Review API")
 @RestController
 public class ProductReviewController {
 

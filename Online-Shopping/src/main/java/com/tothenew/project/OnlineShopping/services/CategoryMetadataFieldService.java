@@ -34,7 +34,7 @@ public class CategoryMetadataFieldService {
     Logger logger = LoggerFactory.getLogger(CategoryMetadataFieldService.class);
 
     public String addNewMetadataField(String fieldName){
-        CategoryMetadataField categoryMetadataField = categoryMetadataFieldRepository.findByName(fieldName);
+        CategoryMetadataField categoryMetadataField = categoryMetadataFieldRepository.findByNameIgnoreCase(fieldName);
         if (categoryMetadataField!=null){
             throw new BadRequestException("Metadata field already exists");
         }
@@ -49,24 +49,23 @@ public class CategoryMetadataFieldService {
         }
     }
 
-    public String addNewMetadataFieldValues(MetadataFieldValueInsertModel fieldValueDtos, Long categoryId, Long metaFieldId){
+    public String addNewMetadataFieldValues(MetadataFieldValueInsertModel metadataFieldValueInsertModel, Long categoryId, Long metaFieldId){
 
         Optional<Category> category= categoryRepository.findById(categoryId);
         Optional<CategoryMetadataField> categoryMetadataField= categoryMetadataFieldRepository.findById(metaFieldId);
+
         if (!category.isPresent())
             throw new ResourceNotFoundException("Category does not exists");
         else if (!categoryMetadataField.isPresent())
             throw new ResourceNotFoundException("Metadata field does not exists");
         else{
-            Category category1= new Category();
-            category1= category.get();
+            Category category1= category.get();
 
-            CategoryMetadataField categoryMetadataField1= new CategoryMetadataField();
-            categoryMetadataField1= categoryMetadataField.get();
+            CategoryMetadataField categoryMetadataField1= categoryMetadataField.get();
 
             CategoryMetadataFieldValues categoryFieldValues = new CategoryMetadataFieldValues();
 
-            for(CategoryMetadataFieldModel fieldValuePair : fieldValueDtos.getFieldValues()){
+            for(CategoryMetadataFieldModel fieldValuePair : metadataFieldValueInsertModel.getFieldValues()){
 
                 String values = StringToSetParser.toCommaSeparatedString(fieldValuePair.getValues());
 

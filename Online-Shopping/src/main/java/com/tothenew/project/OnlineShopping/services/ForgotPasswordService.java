@@ -41,7 +41,6 @@ public class ForgotPasswordService {
         if(user == null)
             throw new UserNotFoundException("User not found");
 
-        //user = userRepository.findByEmail(email);
         ResetPasswordToken resetPasswordToken = new ResetPasswordToken();
         resetPasswordToken = resetPasswordRepository.findByUser(user);
         if(resetPasswordToken!=null) {
@@ -80,24 +79,26 @@ public class ForgotPasswordService {
 
             if(forgotPasswordModel.getPassword().matches(forgotPasswordModel.getConfirmPassword())) {
 
+                String pass = forgotPasswordModel.getPassword();
+                user.setPassword(passwordEncoder.encode(pass));
+                user.setEnabled(true);
+                user.setNonLocked(true);
+                userRepository.save(user);
+                String emailId = user.getEmail();
+                String subject = "Password Updated !!";
+                String text = "Your password has been changed successfully!!";
+                emailSenderService.sendEmail(emailId, subject, text);
+
+                logger.info("********** User Password Updated **********");
+
+                return "Password updated successfully!!!";
+
             }
             else {
                 throw new ValidationException("password and confirm password not matched !");
             }
-            String pass = forgotPasswordModel.getPassword();
-            user.setPassword(passwordEncoder.encode(pass));
-            user.setEnabled(true);
-            user.setNonLocked(true);
-            userRepository.save(user);
-            String emailId = user.getEmail();
-            String subject = "Password Updated !!";
-            String text = "Your password has been changed successfully!!";
-            emailSenderService.sendEmail(emailId, subject, text);
-
-            logger.info("********** User Password Updated **********");
-
-            return "Password updated successfully!!!";
         }
-
     }
+
+
 }

@@ -51,7 +51,7 @@ public class CategoryDaoService {
     }
 
     public String saveNewCategory(CategoryModel categoryModel) {
-        Optional<Category> category= categoryRepository.findByName(categoryModel.getName());
+        Optional<Category> category= categoryRepository.findByNameIgnoreCase(categoryModel.getName());
         if (category.isPresent())
             return "Category already exists";
         else {
@@ -82,7 +82,7 @@ public class CategoryDaoService {
     }
 
     public String saveNewSubCategory(String parentCategory, List<CategoryModel> subCategories){
-        Optional<Category> parent_Category=categoryRepository.findByName(parentCategory);
+        Optional<Category> parent_Category=categoryRepository.findByNameIgnoreCase(parentCategory);
 
         if (parent_Category.isPresent()){
             ModelMapper modelMapper = new ModelMapper();
@@ -108,7 +108,7 @@ public class CategoryDaoService {
     }
 
     public String updateCategory(CategoryModel categoryModel, String category){
-        Optional<Category> category1=categoryRepository.findByName(category);
+        Optional<Category> category1=categoryRepository.findByNameIgnoreCase(category);
 
         if (category1.isPresent()){
             ModelMapper modelMapper = new ModelMapper();

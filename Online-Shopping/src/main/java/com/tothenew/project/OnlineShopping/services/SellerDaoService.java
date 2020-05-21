@@ -129,7 +129,7 @@ public class SellerDaoService {
 
     public String updateSellerPassword(UpdatePasswordModel updatePasswordModel, String username) {
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
 
         String oldPassword = updatePasswordModel.getOldPassword();
 

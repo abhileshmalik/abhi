@@ -9,7 +9,6 @@ import com.tothenew.project.OnlineShopping.exception.ResourceNotFoundException;
 import com.tothenew.project.OnlineShopping.exception.UserNotFoundException;
 import com.tothenew.project.OnlineShopping.model.ProductUpdateModel;
 import com.tothenew.project.OnlineShopping.model.ProductVariationModel;
-import com.tothenew.project.OnlineShopping.model.ProductViewModel;
 import com.tothenew.project.OnlineShopping.product.Category;
 import com.tothenew.project.OnlineShopping.product.Product;
 import com.tothenew.project.OnlineShopping.product.ProductVariant;
@@ -19,7 +18,6 @@ import com.tothenew.project.OnlineShopping.utils.StringToSetParser;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
@@ -87,7 +85,7 @@ public class ProductDaoService {
             Seller finalSeller = seller2;
             products.forEach(e -> e.setSeller(finalSeller));
 
-            Optional<Category> category1 = categoryRepository.findByName(category_name);
+            Optional<Category> category1 = categoryRepository.findByNameIgnoreCase(category_name);
             if (category1.isPresent()) {
                 category = category1.get();       // get is function of Optional
 
@@ -198,7 +196,7 @@ public class ProductDaoService {
 
         for (String receivedField : receivedFieldsCopy) {
 
-            CategoryMetadataField field = categoryMetadataFieldRepository.findByName(receivedField);
+            CategoryMetadataField field = categoryMetadataFieldRepository.findByNameIgnoreCase(receivedField);
 
             List<Object> savedValues = categoryMetadataFieldValuesRepository.findAllValuesOfCategoryField(category.getCategory_id(),field.getId());
 
@@ -400,7 +398,8 @@ public class ProductDaoService {
 
                 while(variationIterator.hasNext()){
                     ProductVariation productVariation = variationIterator.next();
-                    productVariation.setIs_active(true);
+                    // when a product is deleted by seller and will change the status of its variants as well to change isActive to false...
+                    productVariation.setIs_active(false);
                     productVariationRepository.save(productVariation);
                 }
                 savedProduct.setDeleted(true);

@@ -12,8 +12,6 @@ import org.springframework.security.authentication.event.AuthenticationSuccessEv
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-
 @Component
 public class LockAuthenticationManager implements ApplicationListener<AbstractAuthenticationEvent> {
 
@@ -39,7 +37,7 @@ public class LockAuthenticationManager implements ApplicationListener<AbstractAu
             // for example, counting the number of login failure attempts and storing it in db
             // this count can be used to lock or disable any user account as per business requirements
             String username = (String) event.getAuthentication().getPrincipal();
-            User user = userRepository.findByUsername(username);
+            User user = userRepository.findByUsernameIgnoreCase(username);
             if (user != null) {
                 if (user.getAttempts() >= 2) {
                     user.setNonLocked(false);

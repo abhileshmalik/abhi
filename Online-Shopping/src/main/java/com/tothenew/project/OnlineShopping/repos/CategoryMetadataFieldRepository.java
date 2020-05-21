@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface CategoryMetadataFieldRepository extends CrudRepository<CategoryMetadataField, Long> {
 
-    CategoryMetadataField findByName(String fieldName);
+    CategoryMetadataField findByNameIgnoreCase(String fieldName);
 
     List<CategoryMetadataField> findAll();
 

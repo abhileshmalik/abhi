@@ -26,7 +26,7 @@ public class AccountUnlockService {
 
     public String unlockAccount(String username){
 
-        User user=userRepository.findByUsername(username);
+        User user=userRepository.findByUsernameIgnoreCase(username);
         if(user==null)
             throw new UserNotFoundException("User not found !!");
 
@@ -46,7 +46,7 @@ public class AccountUnlockService {
     @Modifying
     public String unlockAccountSuccess(String username){
 
-        User user=userRepository.findByUsername(username);
+        User user=userRepository.findByUsernameIgnoreCase(username);
         if(user==null)
             throw new UserNotFoundException("User not found !!");
 
