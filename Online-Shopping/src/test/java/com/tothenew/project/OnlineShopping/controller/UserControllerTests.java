@@ -10,6 +10,7 @@ import com.tothenew.project.OnlineShopping.model.*;
 import com.tothenew.project.OnlineShopping.repos.AddressRepository;
 import com.tothenew.project.OnlineShopping.repos.ConfirmationTokenRepository;
 import com.tothenew.project.OnlineShopping.repos.UserRepository;
+import com.tothenew.project.OnlineShopping.security.AuthenticationManagerProvider;
 import com.tothenew.project.OnlineShopping.services.EmailSenderService;
 import com.tothenew.project.OnlineShopping.services.UserDaoService;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,10 +30,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -53,21 +58,25 @@ import java.util.List;
 import java.util.Set;
 
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = {UserController.class, UserDaoService.class, EmailSenderService.class})
+@ContextConfiguration(classes = {UserController.class, UserDaoService.class, EmailSenderService.class,
+        ClientCredentialsTokenEndpointFilter.class, AuthenticationManagerProvider.class, WebSecurityConfigurerAdapter.class})
 @WebMvcTest(UserController.class)
 public class UserControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean(name = "authenticationManager")
+    AuthenticationManager authenticationManager;
+
     @MockBean(name = "tokenStore")
     private TokenStore tokenStore;
 
     @MockBean(name = "messageSource")
-    MessageSource messageSource;
+    private MessageSource messageSource;
 
     @MockBean(name = "javaMailSender")
-    JavaMailSenderImpl javaMailSender;
+    private JavaMailSenderImpl javaMailSender;
 
     @MockBean(name = "userRepository")                          // use to Mockout that module/controller or repository
     private UserRepository userRepository;
@@ -76,7 +85,7 @@ public class UserControllerTests {
     private AddressRepository addressRepository;
 
     @MockBean(name = "confirmationTokenRepository")
-    ConfirmationTokenRepository confirmationTokenRepository;
+    private ConfirmationTokenRepository confirmationTokenRepository;
 
 
     @Test
@@ -87,7 +96,7 @@ public class UserControllerTests {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/")
-                //.header("","")
+                //.header("Authorization","Bearer (Token)")
                 .with(SecurityMockMvcRequestPostProcessors.user("abc"))
                 .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .accept(MediaType.APPLICATION_JSON);
@@ -100,6 +109,36 @@ public class UserControllerTests {
         assertEquals("Welcome To The Pro-Cart", result.getResponse().getContentAsString());
     }
 
+
+     String createToken() throws Exception {
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/oauth/token")
+                .param("grant_type", "password")
+                .param("client_id", "live-test")
+                .param("username", "nirbhay")
+                .param("password", "Avenger$8971")
+                .param("client_secret", "abcde")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+
+                //.header("","")
+                .with(SecurityMockMvcRequestPostProcessors.user("nirbhay"))
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .accept(MediaType.APPLICATION_JSON);
+
+
+        ResultActions resultAction =  mockMvc.perform(requestBuilder);
+        MvcResult result = resultAction
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String token =  result.getResponse().getContentAsString();
+
+        System.out.println(token);
+
+        return token;
+
+    }
 
     @Test
     void testCreateCustomer() throws Exception {
@@ -158,8 +197,33 @@ public class UserControllerTests {
 
     }
 
-    /* @Test
-    void testUpdateCustomerProfile() {
+    @Test
+    void testCustomerHomepage() throws Exception {
+
+        //given
+        String Token = createToken();
+
+        //When
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/customer/home/")
+                .header("Authorization","Bearer "+Token)
+                .with(SecurityMockMvcRequestPostProcessors.user("nirbhay"))
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .accept(MediaType.APPLICATION_JSON);
+
+        //Then
+        ResultActions resultAction =  mockMvc.perform(requestBuilder);
+        MvcResult result = resultAction
+                .andExpect(status().isOk())
+                .andReturn();
+        assertEquals("Welcome Nirbhay, To Pro-Cart", result.getResponse().getContentAsString());
+
+    }
+
+     @Test
+    void testUpdateCustomerProfile() throws Exception {
+
+        String Token = createToken();
 
         CustomerUpdateModel customerUpdateModel = new CustomerUpdateModel();
 
@@ -170,15 +234,15 @@ public class UserControllerTests {
 
         String expected = "Profile updated successfully";
 
-        //When
+       /* //When
         String actual = userDaoService.updateCustomer(customerUpdateModel,id);
 
         //Then
-        assertEquals(expected,actual,"Customer Profile Updated");
+        assertEquals(expected,actual,"Customer Profile Updated");*/
 
     }
 
-    @Test
+    /* @Test
     void testUpdateCustomerAddress() {
 
         AddressModel addressModel = new AddressModel();

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +33,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Autowired
     UserDetailsService userDetailsService;
+
+    @Autowired
+    private RedisConnectionFactory connectionFactory;
 
     public AuthorizationServerConfiguration() {
         super();
@@ -65,8 +69,12 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Bean
     public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
-        //return new RedisTokenStore();
+        //return new InMemoryTokenStore();
+
+        // Persist token in Redis instead of InMemory
+        RedisTokenStore redis = new RedisTokenStore(connectionFactory);
+        return redis;
+
         //return new JwtTokenStore(accessTokenConverter());
     }
 

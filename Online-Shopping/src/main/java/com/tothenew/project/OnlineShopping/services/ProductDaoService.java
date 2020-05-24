@@ -398,7 +398,7 @@ public class ProductDaoService {
 
                 while(variationIterator.hasNext()){
                     ProductVariation productVariation = variationIterator.next();
-                    // when a product is deleted by seller and will change the status of its variants as well to change isActive to false...
+                    // when a product is deleted by seller it will change the status of its associated variants as well "isActive" as false...
                     productVariation.setIs_active(false);
                     productVariationRepository.save(productVariation);
                 }
