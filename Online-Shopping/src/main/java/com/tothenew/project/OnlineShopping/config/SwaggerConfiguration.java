@@ -18,10 +18,10 @@ public class SwaggerConfiguration {
 
 
     public static final Contact DEFAULT_CONTACT = new Contact(
-            "Abhilesh Malik", "http://www.online-shopping.com", "abhilesh.malik@tothenew.com");
+            "Abhilesh Malik", "http://www.procart.com", "abhilesh.malik@tothenew.com");
 
     public static final ApiInfo DEFAULT = new ApiInfo(
-            "Online-Shopping Portal", "It gives description about all APIs ", "1.0",
+            "Pro Cart", "It gives description about all APIs ", "1.0",
             "urn:tos", DEFAULT_CONTACT,
             "Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0",
 

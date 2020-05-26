@@ -26,7 +26,7 @@ public class SellerRegisterModel {
     @Email
     private String email;
 
-    @NotNull
+    //@NotNull
     @Size(max = 1, message = "Only one address is required")
     private Set<Address> addresses;
 
